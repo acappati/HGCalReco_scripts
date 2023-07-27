@@ -25,7 +25,7 @@ def doPlots(out_dir):
     inFile = '/data_CMS/cms/cappati/ThreePhoton_200PU/step3/step3_370.root'
     key = 'ana/hgc'
 
-    branches = [u'vtx_x','vtx_y','vtx_z']
+    branches = [u'vtx_x','vtx_y','vtx_z','cluster2d_eta']
 
     ttree = uproot3.open(inFile)[key]
     df = ttree.pandas.df(branches, entrystop=5000)
@@ -53,6 +53,18 @@ def doPlots(out_dir):
     plt.savefig(os.path.join(out_dir, 'test.png'), dpi=300)
     print('float variables plotted')
 
+
+    # plot vector variables
+    # 
+    # better to use root. But, in case:
+    # - one method is to use iloc[i] to get a certain row using the pandas row position
+    # - other method is to use series and indexes
+    fig1, axs1 = plt.subplots(nrows=1, ncols=1, figsize=(8,5))
+
+    axs1.hist(df['cluster2d_eta'].iloc[0], bins=50)
+
+    plt.savefig(os.path.join(out_dir, 'test1.png'), dpi=300)
+    print('vector variables plotted')
 
 
 
