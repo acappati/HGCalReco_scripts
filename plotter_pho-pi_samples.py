@@ -5,27 +5,28 @@
 #  run with: python3 plotter_pho-pi_samples.py
 ## ---
 
-import numpy as np
-from tqdm import tqdm as tqdm
+import glob
+import math
+import optparse
+import os
+import os.path as osp
+import sys
+from datetime import date
+
 import matplotlib.pyplot as plt
 import mplhep as hep
-import os
-import optparse
-import os.path as osp
-import math
-import torch_geometric
+import numpy as np
 import torch
-import sys
-from tqdm import tqdm as tqdm
+import torch_geometric
 #import pandas as pd
 from torch_geometric.data import Data
-import glob
-from datetime import date
+from tqdm import tqdm as tqdm
 
 plt.style.use(hep.style.CMS)
 
 
 
+# --- function to open files
 def openFiles(input_file_path, data_list):
     
     filenamelist = [ filename for filename in glob.glob( input_file_path + 'data_*.pt' )]
