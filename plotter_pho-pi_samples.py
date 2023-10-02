@@ -12,6 +12,7 @@ import os
 import os.path as osp
 import sys
 from datetime import date
+from typing import List
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
@@ -29,15 +30,29 @@ mpl.use('agg')
 
 
 
-def openFiles(input_file_path, data_list):
+def openFiles(path: str, desc: str = 'Opening files') -> List[Data]:
     """
-    function to open files
-    """
+    Function to open files
 
-    filenamelist = [ filename for filename in glob.glob( input_file_path + 'data_*.pt' )]
-    for i in tqdm( filenamelist ):
+    Arguments
+    ---------
+    path : str
+        Path to the input files
+    desc : str
+        Description for the tqdm progress bar
+
+    Returns
+    -------
+    data_list : List[Data]
+        List of Data objects
+    """
+    data_list = []
+    filename_list = [f for f in glob.glob(path + 'data_*.pt')]
+    filename_list = tqdm(filename_list, desc=desc, unit='file(s)')
+    for i in filename_list:
         idx = torch.load(i)
         data_list.append(idx)
+    return data_list
 
 
 
@@ -601,149 +616,184 @@ def doHisto(data_list_pho, data_list_pi, out_dir):
     plt.savefig(os.path.join(out_dir, 'maxL_en.png')) #save plot
     plt.close(fig4)
 
+def _energy_profile(data_list: List[Data], n_layers: int = 48) -> np.ndarray:
+    pass #TODO implement a function to generate the energy fraction matrix
 
 
-
-def doENprofile(data_list_pho, data_list_pi, out_dir):
+def doENprofile(data_list_pho: List[Data], data_list_pi: List[Data], out_dir: str, n_layers: int = 48) -> None:
     """
     function to compute the energy profile
     """
     ### PHOTONS
-    # energy array for each Layer of all LC for photons
-    # create an array of 48 empty arrays
-    en_arr_pho = [[] for i in range(48)]
-
+    
     # create an array of 48 entries for the energy mean for each LC
-    en_mean_arr_pho = [0 for i in range(48)]
+    #en_mean_arr_pho = [0 for i in range(48)]
 
     # create an array of 48 entries for the energy median for each LC
-    en_median_arr_pho = [0 for i in range(48)]
+    #en_median_arr_pho = [0 for i in range(48)]
+
+    #TODO en_arr_frac_pho_matrix = _energy_profile(...)
+
+    en_arr_frac_pho_list = [] # matrix of arrays of energy fraction per layer
     
     # loop over files in data list
     for i_file_pho in data_list_pho:
         # loop over all events in one file
         for i_evt_pho in i_file_pho:
 
+            # energy array for each Layer of all LC for photons
+            # create an array of 48 empty arrays
+            en_arr_pho = [[] for _ in range(n_layers)]
+
             # --- read 2D objects
-            # layerClusterMatrix = matrix of all the LayerClusters in the file (number of rows) 
-            #                      with their features (number of columns)
+            # layerClusterMatrix = matrix of all the LayerClusters in the file
             # LayerCluster features: clusX,clusY,clusZ,clusE,clusT,clusL
+            # (number of rows) 
+            # with their features (number of columns)
             # there is one matrix of this kind for each event of the loadfile_pi
             layerClusterMatrix_pho = i_evt_pho.clus2d_feat.numpy() # transform the tensor in numpy array
 
-            # need to read the energy of each LayerCluster
-            # the energy is in the 4th column of the matrix layerClusterMatrix_pho [:,3] 
-            # need to cycle over all the rows of the matrix
-            # then fill an array with the energy of each layer
-            # and then compute the mean or the median of the array
-            # and plot the energy profile
-            # do the same for pions
+            # --- read 3D objects
+            # the clus3d_feat is a tensor of only 6 features: 
+            # trkcluseta,trkclusphi,trkclusen,trkclustime, min(clusL),max(clusL)
+            trackster_pho = i_evt_pho.clus3d_feat.numpy() # transform the tensor in numpy array
+
+            # loop over LC of the event
             for i_LC in range(len(layerClusterMatrix_pho)): #loop over matrix rows
                 en_arr_pho[int(layerClusterMatrix_pho[i_LC,5])].append(layerClusterMatrix_pho[i_LC,3]) # fill array of all energies of all LCs in all events. there is one array per Layer
+
+            # compute the sum of the energy of all LC per Layer
+            en_sum_perL_arr_pho = [sum(i) for i in en_arr_pho]
+
+            # compute the energy fraction per layer 
+            # divide by the total energy of the trackster
+            en_frac_arr_pho = [i/trackster_pho[2] for i in en_sum_perL_arr_pho] # there is an energy fraction per each layer
+            en_arr_frac_pho_list.append(en_frac_arr_pho) # append the array of energy fraction per layer to the list of arrays
+
+    en_arr_frac_pho_list = np.array(en_arr_frac_pho_list) # convert the list of arrays in a matrix of arrays (THE ULTIMATE MATRIX!)
+
+    #TODO plots!
+
+
+
+
+
             
+
+       
+          
+
+
+
+
+
+
+
+
+
     # compute the mean and median of the energy array off all the LC for each Layer
-    for i in range(len(en_arr_pho)):
+   # for i in range(len(en_arr_pho)):
         # compute the mean if the array is not empty
-        en_mean_arr_pho[i] = np.mean(en_arr_pho[i] if len(en_arr_pho[i]) > 0 else [0])
+    #    en_mean_arr_pho[i] = np.mean(en_arr_pho[i] if len(en_arr_pho[i]) > 0 else [0])
         # compute the median if the array is not empty  
-        en_median_arr_pho[i] = np.median(en_arr_pho[i] if len(en_arr_pho[i]) > 0 else [0])
+     #   en_median_arr_pho[i] = np.median(en_arr_pho[i] if len(en_arr_pho[i]) > 0 else [0])
 
     # plot the heatmap of energy of layer clusters per layer number (pad with zeros if not same length)
     # create a matrix of zeros with 48 rows and the number of columns of the longest array
     # then fill the matrix with the energy arrays
     # then plot the matrix
     # pad the arrays with zeros to have the same length
-    max_len = max(len(i) for i in en_arr_pho) # find the length of the longest array
-    en_arr_pho_pad = np.array([i + [0]*(max_len-len(i)) for i in en_arr_pho]) # pad the arrays with zeros to have the same length
-    en_arr_pho_pad = en_arr_pho_pad.T  # .T is the transpose of the matrix
+    #max_len = max(len(i) for i in en_arr_pho) # find the length of the longest array
+    #en_arr_pho_pad = np.array([i + [0]*(max_len-len(i)) for i in en_arr_pho]) # pad the arrays with zeros to have the same length
+    #en_arr_pho_pad = en_arr_pho_pad.T  # .T is the transpose of the matrix
     # plot the heatmap
-    fig1, ax1 = plt.subplots(figsize=(20,10), dpi=80, tight_layout=True)
-    im1 = ax1.imshow(en_arr_pho_pad, cmap='turbo', interpolation='nearest', aspect='auto')
-    ax1.invert_yaxis()
-    ax1.set_xlabel('Layer Number')
-    ax1.set_ylabel('LayerCluster')
-    fig1.colorbar(im1, ax=ax1, label='Energy [GeV]')
-    plt.savefig(os.path.join(out_dir, 'en_heatmap_pho.png')) #save plot
-    plt.close(fig1)
+    #fig1, ax1 = plt.subplots(figsize=(20,10), dpi=80, tight_layout=True)
+    #im1 = ax1.imshow(en_arr_pho_pad, cmap='turbo', interpolation='nearest', aspect='auto')
+    #ax1.invert_yaxis()
+    #ax1.set_xlabel('Layer Number')
+    #ax1.set_ylabel('LayerCluster')
+    #fig1.colorbar(im1, ax=ax1, label='Energy [GeV]')
+    #plt.savefig(os.path.join(out_dir, 'en_heatmap_pho.png')) #save plot
+    #plt.close(fig1)
     
 
     
     ### PIONS
     # energy array for each LC for photons
     # create an array of 48 empty arrays
-    en_arr_pi = [[] for i in range(48)]
+    #en_arr_pi = [[] for i in range(48)]
 
     # create an array of 48 entries for the energy mean for each LC
-    en_mean_arr_pi = [0 for i in range(48)]
+    #en_mean_arr_pi = [0 for i in range(48)]
 
     # create an array of 48 entries for the energy median for each LC
-    en_median_arr_pi = [0 for i in range(48)]
+    #en_median_arr_pi = [0 for i in range(48)]
     
     # loop over files in data list
-    for i_file_pi in data_list_pi:
+    #for i_file_pi in data_list_pi:
         # loop over all events in one file
-        for i_evt_pi in i_file_pi:
+     #   for i_evt_pi in i_file_pi:
 
-            layerClusterMatrix_pi = i_evt_pi.clus2d_feat.numpy() # transform the tensor in numpy array
+      #      layerClusterMatrix_pi = i_evt_pi.clus2d_feat.numpy() # transform the tensor in numpy array
 
-            for i_LC in range(len(layerClusterMatrix_pi)):
-                en_arr_pi[int(layerClusterMatrix_pi[i_LC,5])].append(layerClusterMatrix_pi[i_LC,3]) # fill array of all energies of all LCs in all events
+       #     for i_LC in range(len(layerClusterMatrix_pi)):
+        #        en_arr_pi[int(layerClusterMatrix_pi[i_LC,5])].append(layerClusterMatrix_pi[i_LC,3]) # fill array of all energies of all LCs in all events
             
     # compute the mean and median of the energy array for each LC
-    for i in range(len(en_arr_pi)):
+    #for i in range(len(en_arr_pi)):
         # compute the mean if the array is not empty
-        en_mean_arr_pi[i] = np.mean(en_arr_pi[i] if len(en_arr_pi[i]) > 0 else [0])
+     #   en_mean_arr_pi[i] = np.mean(en_arr_pi[i] if len(en_arr_pi[i]) > 0 else [0])
         # compute the median if the array is not empty  
-        en_median_arr_pi[i] = np.median(en_arr_pi[i] if len(en_arr_pi[i]) > 0 else [0])
+      #  en_median_arr_pi[i] = np.median(en_arr_pi[i] if len(en_arr_pi[i]) > 0 else [0])
 
     # plot the heatmap of energy of layer clusters per layer number (pad with zeros if not same length)
     # create a matrix of zeros with 48 rows and the number of columns of the longest array
     # then fill the matrix with the energy arrays
     # then plot the matrix
     # pad the arrays with zeros to have the same length
-    max_len = max(len(i) for i in en_arr_pi) # find the length of the longest array
-    en_arr_pi_pad = np.array([i + [0]*(max_len-len(i)) for i in en_arr_pi]) # pad the arrays with zeros to have the same length
-    en_arr_pi_pad = en_arr_pi_pad.T  # .T is the transpose of the matrix
+    #max_len = max(len(i) for i in en_arr_pi) # find the length of the longest array
+    #en_arr_pi_pad = np.array([i + [0]*(max_len-len(i)) for i in en_arr_pi]) # pad the arrays with zeros to have the same length
+    #en_arr_pi_pad = en_arr_pi_pad.T  # .T is the transpose of the matrix
     # plot the heatmap
-    fig2, ax2 = plt.subplots(figsize=(20,10), dpi=80, tight_layout=True)
-    im1 = ax2.imshow(en_arr_pi_pad, cmap='turbo', interpolation='nearest', aspect='auto')
-    ax2.invert_yaxis()
-    ax2.set_xlabel('Layer Number')
-    ax2.set_ylabel('LayerCluster')
-    fig2.colorbar(im1, ax=ax2, label='Energy [GeV]')
-    plt.savefig(os.path.join(out_dir, 'en_heatmap_pi.png')) #save plot
-    plt.close(fig2)
+    #fig2, ax2 = plt.subplots(figsize=(20,10), dpi=80, tight_layout=True)
+    #im1 = ax2.imshow(en_arr_pi_pad, cmap='turbo', interpolation='nearest', aspect='auto')
+    #ax2.invert_yaxis()
+    #ax2.set_xlabel('Layer Number')
+    #ax2.set_ylabel('LayerCluster')
+    #fig2.colorbar(im1, ax=ax2, label='Energy [GeV]')
+    #plt.savefig(os.path.join(out_dir, 'en_heatmap_pi.png')) #save plot
+    #plt.close(fig2)
         
 
     # compute the fraction of the energy in the hadronic part: the last 22 layers
     # sum of the energies in the last 22 layers divided by the sum of all the energies
     # consider all the rows and sum all the columns from the 27th to the last
-    fracH_pho = en_arr_pho_pad[:,27:].sum()/en_arr_pho_pad.sum() 
-    fracH_pi = en_arr_pi_pad[:,27:].sum()/en_arr_pi_pad.sum()
+    #fracH_pho = en_arr_pho_pad[:,27:].sum()/en_arr_pho_pad.sum() 
+    #fracH_pi = en_arr_pi_pad[:,27:].sum()/en_arr_pi_pad.sum()
 
 
     # plot the energy profile
-    fig, axs = plt.subplots(1, 2, figsize=(20,10), dpi=80, tight_layout=True)
-    binEdges_list = np.arange(0, 48) # this way I have 49 bins from 0 to 48 : 48 bins = 48 layers   
+    #fig, axs = plt.subplots(1, 2, figsize=(20,10), dpi=80, tight_layout=True)
+    #binEdges_list = np.arange(0, 48) # this way I have 49 bins from 0 to 48 : 48 bins = 48 layers   
 
-    axs[0].plot(binEdges_list, en_mean_arr_pho, linewidth=4, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs[0].plot(binEdges_list, en_mean_arr_pi, linewidth=4, color='green', alpha=0.4, label=r'$\pi$')
-    axs[0].legend()
-    axs[0].set_xlabel('Layer Number')
-    axs[0].set_ylabel('Energy mean')
+    #axs[0].plot(binEdges_list, en_mean_arr_pho, linewidth=4, color='orange', alpha=0.4, label=r'$\gamma$')
+    #axs[0].plot(binEdges_list, en_mean_arr_pi, linewidth=4, color='green', alpha=0.4, label=r'$\pi$')
+    #axs[0].legend()
+    #axs[0].set_xlabel('Layer Number')
+    #axs[0].set_ylabel('Energy mean')
 
-    axs[1].plot(binEdges_list, en_median_arr_pho, linewidth=4, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs[1].plot(binEdges_list, en_median_arr_pi, linewidth=4, color='green', alpha=0.4, label=r'$\pi$')
-    axs[1].legend()
-    axs[1].set_xlabel('Layer Number')
-    axs[1].set_ylabel('Energy median')
+    #axs[1].plot(binEdges_list, en_median_arr_pho, linewidth=4, color='orange', alpha=0.4, label=r'$\gamma$')
+    #axs[1].plot(binEdges_list, en_median_arr_pi, linewidth=4, color='green', alpha=0.4, label=r'$\pi$')
+    #axs[1].legend()
+    #axs[1].set_xlabel('Layer Number')
+    #axs[1].set_ylabel('Energy median')
 
     # add a box containing the fraction of energy in the hadronic part
-    axs[0].text(0.6, 0.75, 
-                f'fracH_pho = {fracH_pho:.4f}\nfracH_pi = {fracH_pi:.4f}', transform=axs[0].transAxes, fontsize=18, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    #axs[0].text(0.6, 0.75, 
+     #           f'fracH_pho = {fracH_pho:.4f}\nfracH_pi = {fracH_pi:.4f}', transform=axs[0].transAxes, fontsize=18, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
     
-    plt.savefig(os.path.join(out_dir, 'en_profile.png')) #save plot
-    plt.close(fig)
+    #plt.savefig(os.path.join(out_dir, 'en_profile.png')) #save plot
+    #plt.close(fig)
     
 
     
@@ -755,24 +805,20 @@ if __name__ == "__main__" :
 
     ## output directory
     today = date.today()
-    print('creating output dir...')
+    print('Creating output dir...')
     out_dir = str(today)+'_plots'
-    os.makedirs(out_dir,exist_ok=True) #check if output dir exist
+    os.makedirs(out_dir, exist_ok=True) #check if output dir exist
 
     ## input files photons
     inpath_pho = '/grid_mnt/data__data.polcms/cms/sghosh/NEWPID_DATA/ntup_pho_frac0p8/'
-    data_list_pho = []
-    print('loading photon files...')
-    openFiles(inpath_pho, data_list_pho)
+    data_list_pho = openFiles(inpath_pho, desc='Loading photon files')
 
     ## input files pions
     inpath_pi = '/grid_mnt/data__data.polcms/cms/sghosh/NEWPID_DATA/ntup_pi_frac0p8/'
-    data_list_pi = []
-    print('loading pions files...')
-    openFiles(inpath_pi, data_list_pi)
+    data_list_pi = openFiles(inpath_pi, desc='Loading pions files')
 
     ## plots
     print('doing plots...')
-    doHisto(data_list_pho, data_list_pi, out_dir)
+    # doHisto(data_list_pho, data_list_pi, out_dir)
 
     doENprofile(data_list_pho, data_list_pi, out_dir)
