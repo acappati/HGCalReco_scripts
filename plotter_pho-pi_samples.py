@@ -55,8 +55,76 @@ def openFiles(path: str, desc: str = 'Opening files') -> List[Data]:
     return data_list
 
 
+def _divide_eta_categ(trackster_eta, n_eta_cat : int =8) -> int:
+    """
+    function to divide in eta bins
+    """
+    # define list of eta bins numbers from 0 to n_eta_cat-1
+    bin_n = [i for i in range(n_eta_cat)]
+    
+    # boundary between low and high density: 2.15 eta
+    # 5 high density eta bins: 1.5 - 1.63 - 1.76 - 1.89 - 2.02 - 2.15 
+    # 3 low density eta bins: 2.15 - 2.48 - 2.81 - 3.14
+    # define list of eta bins boundaries
+    bin_ed_list = [1.5, 1.63, 1.76, 1.89, 2.02, 2.15, 2.48, 2.81, 3.14]
 
-def doHisto(data_list_pho, data_list_pi, out_dir):
+    if trackster_eta >= bin_ed_list[0] and trackster_eta < bin_ed_list[1]:
+        return bin_n[0]
+    elif trackster_eta >= bin_ed_list[1] and trackster_eta < bin_ed_list[2]:
+        return bin_n[1]
+    elif trackster_eta >= bin_ed_list[2] and trackster_eta < bin_ed_list[3]:
+        return bin_n[2]
+    elif trackster_eta >= bin_ed_list[3] and trackster_eta < bin_ed_list[4]:
+        return bin_n[3]
+    elif trackster_eta >= bin_ed_list[4] and trackster_eta <= bin_ed_list[5]:
+        return bin_n[4]
+    elif trackster_eta > bin_ed_list[5] and trackster_eta < bin_ed_list[6]:
+        return bin_n[5]
+    elif trackster_eta >= bin_ed_list[6] and trackster_eta < bin_ed_list[7]:
+        return bin_n[6]
+    elif trackster_eta >= bin_ed_list[7] and trackster_eta <= bin_ed_list[8]:
+        return bin_n[7]
+    else:
+        print('ERROR: eta out of range')
+        return -1
+    
+
+def _divide_en_categ(trackster_en, n_en_cat : int =9) -> int:
+    """
+    function to divide in energy bins
+    """
+    # define list of energy bins numbers from 0 to n_en_cat-1
+    bin_n = [i for i in range(n_en_cat)]
+
+    # boundary every 100 GeV
+    # energy bins: 0 - 100 - 200 - 300 - 400 - 500 - 600 - 700 - 800 - inf
+    bin_ed_list = [0, 100, 200, 300, 400, 500, 600, 700, 800]
+
+    if trackster_en >= bin_ed_list[0] and trackster_en < bin_ed_list[1]:
+        return bin_n[0]
+    elif trackster_en >= bin_ed_list[1] and trackster_en < bin_ed_list[2]:
+        return bin_n[1]
+    elif trackster_en >= bin_ed_list[2] and trackster_en < bin_ed_list[3]:
+        return bin_n[2]
+    elif trackster_en >= bin_ed_list[3] and trackster_en < bin_ed_list[4]:
+        return bin_n[3]
+    elif trackster_en >= bin_ed_list[4] and trackster_en < bin_ed_list[5]:
+        return bin_n[4]
+    elif trackster_en >= bin_ed_list[5] and trackster_en < bin_ed_list[6]:
+        return bin_n[5]
+    elif trackster_en >= bin_ed_list[6] and trackster_en < bin_ed_list[7]:
+        return bin_n[6]
+    elif trackster_en >= bin_ed_list[7] and trackster_en < bin_ed_list[8]:
+        return bin_n[7]
+    elif trackster_en >= bin_ed_list[8]:
+        return bin_n[8]
+    else:
+        print('ERROR: energy out of range')
+        return -1
+       
+
+
+def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat : int =9):
     """
     function to do histograms from the training samples
     """
@@ -66,12 +134,12 @@ def doHisto(data_list_pho, data_list_pi, out_dir):
     max_clusL_arr_pho = [] # array of all max_clusL
 
     # define array of min_clusL and max_clusL for each eta bin
-    min_clusL_arr_cat_eta_pho = [[] for i in range(8)]
-    max_clusL_arr_cat_eta_pho = [[] for i in range(8)]
+    min_clusL_arr_cat_eta_pho = [[] for i in range(n_eta_cat)]
+    max_clusL_arr_cat_eta_pho = [[] for i in range(n_eta_cat)]
 
     # define array of min_clusL and max_clusL for each pT bin
-    min_clusL_arr_cat_en_pho = [[] for i in range(10)]
-    max_clusL_arr_cat_en_pho = [[] for i in range(10)]
+    min_clusL_arr_cat_en_pho = [[] for i in range(n_en_cat)]
+    max_clusL_arr_cat_en_pho = [[] for i in range(n_en_cat)]
 
 
     # loop over files in data list
@@ -79,102 +147,40 @@ def doHisto(data_list_pho, data_list_pi, out_dir):
         # loop over all events in one file
         for i_evt_pho in i_file_pho:
 
-            # --- read 2D objects
-            # layerClusterMatrix = matrix of all the LayerClusters in the file (number of rows) 
-            #                      with their features (number of columns)
-            # LayerCluster features: clusX,clusY,clusZ,clusE,clusT,clusL
-            # there is one matrix of this kind for each event of the loadfile_pi
-            layerClusterMatrix_pho = i_evt_pho.clus2d_feat
-
-
             # --- read 3D objects
             # the clus3d_feat is a tensor of only 6 features: 
             # trkcluseta,trkclusphi,trkclusen,trkclustime, min(clusL),max(clusL)
             trackster_pho = i_evt_pho.clus3d_feat.numpy() # transform the tensor in numpy array
 
-            min_clusL_arr_pho.append(trackster_pho[4]) # fill array of all min cluster Layer
-            max_clusL_arr_pho.append(trackster_pho[5]) # fill array of all max cluster Layer
+            # fill array of all min and max cluster Layer
+            min_clusL_arr_pho.append(trackster_pho[4]) 
+            max_clusL_arr_pho.append(trackster_pho[5])
             
+            # get the eta category number
+            cat_eta_n_pho = _divide_eta_categ(trackster_pho[0]) 
             # divide in eta bins
-            # boundary between low and high density: 2.15 eta
-            # 5 high density eta bins: 1.5 - 1.63 - 1.76 - 1.89 - 2.02 - 2.15 
-            # 3 low density eta bins: 2.15 - 2.48 - 2.81 - 3.14
-            if trackster_pho[0] >= 1.5 and trackster_pho[0] < 1.63:
-                min_clusL_arr_cat_eta_pho[0].append(trackster_pho[4])
-                max_clusL_arr_cat_eta_pho[0].append(trackster_pho[5])
-            elif trackster_pho[0] >= 1.63 and trackster_pho[0] < 1.76:
-                min_clusL_arr_cat_eta_pho[1].append(trackster_pho[4])
-                max_clusL_arr_cat_eta_pho[1].append(trackster_pho[5])
-            elif trackster_pho[0] >= 1.76 and trackster_pho[0] < 1.89:
-                min_clusL_arr_cat_eta_pho[2].append(trackster_pho[4])
-                max_clusL_arr_cat_eta_pho[2].append(trackster_pho[5])
-            elif trackster_pho[0] >= 1.89 and trackster_pho[0] < 2.02:
-                min_clusL_arr_cat_eta_pho[3].append(trackster_pho[4])
-                max_clusL_arr_cat_eta_pho[3].append(trackster_pho[5])
-            elif trackster_pho[0] >= 2.02 and trackster_pho[0] <= 2.15:
-                min_clusL_arr_cat_eta_pho[4].append(trackster_pho[4])
-                max_clusL_arr_cat_eta_pho[4].append(trackster_pho[5])
-            elif trackster_pho[0] > 2.15 and trackster_pho[0] < 2.48:
-                min_clusL_arr_cat_eta_pho[5].append(trackster_pho[4])
-                max_clusL_arr_cat_eta_pho[5].append(trackster_pho[5])
-            elif trackster_pho[0] >= 2.48 and trackster_pho[0] < 2.81:
-                min_clusL_arr_cat_eta_pho[6].append(trackster_pho[4])
-                max_clusL_arr_cat_eta_pho[6].append(trackster_pho[5])
-            elif trackster_pho[0] >= 2.81 and trackster_pho[0] <= 3.14:
-                min_clusL_arr_cat_eta_pho[7].append(trackster_pho[4])
-                max_clusL_arr_cat_eta_pho[7].append(trackster_pho[5])
-            else:
-                print('ERROR: eta out of range')
+            min_clusL_arr_cat_eta_pho[cat_eta_n_pho].append(trackster_pho[4])
+            max_clusL_arr_cat_eta_pho[cat_eta_n_pho].append(trackster_pho[5])
+            
+            # get the energy category number
+            cat_en_n_pho = _divide_en_categ(trackster_pho[2])
+            # divide in energy bins
+            min_clusL_arr_cat_en_pho[cat_en_n_pho].append(trackster_pho[4])
+            max_clusL_arr_cat_en_pho[cat_en_n_pho].append(trackster_pho[5])
 
-            # divide in pT bins (energy bins) - trkclusen
-            # boundary every 100 GeV
-            # 5 pT bins: 0 - 100 - 200 - 300 - 400 - 500 - 600 - 700 - 800 - 900 - inf
-            if trackster_pho[2] >= 0 and trackster_pho[2] < 100:
-                min_clusL_arr_cat_en_pho[0].append(trackster_pho[4])
-                max_clusL_arr_cat_en_pho[0].append(trackster_pho[5])
-            elif trackster_pho[2] >= 100 and trackster_pho[2] < 200:
-                min_clusL_arr_cat_en_pho[1].append(trackster_pho[4])
-                max_clusL_arr_cat_en_pho[1].append(trackster_pho[5])
-            elif trackster_pho[2] >= 200 and trackster_pho[2] < 300:
-                min_clusL_arr_cat_en_pho[2].append(trackster_pho[4])
-                max_clusL_arr_cat_en_pho[2].append(trackster_pho[5])
-            elif trackster_pho[2] >= 300 and trackster_pho[2] < 400:
-                min_clusL_arr_cat_en_pho[3].append(trackster_pho[4])
-                max_clusL_arr_cat_en_pho[3].append(trackster_pho[5])
-            elif trackster_pho[2] >= 400 and trackster_pho[2] < 500:
-                min_clusL_arr_cat_en_pho[4].append(trackster_pho[4])
-                max_clusL_arr_cat_en_pho[4].append(trackster_pho[5])
-            elif trackster_pho[2] >= 500 and trackster_pho[2] < 600:
-                min_clusL_arr_cat_en_pho[5].append(trackster_pho[4])
-                max_clusL_arr_cat_en_pho[5].append(trackster_pho[5])
-            elif trackster_pho[2] >= 600 and trackster_pho[2] < 700:
-                min_clusL_arr_cat_en_pho[6].append(trackster_pho[4])
-                max_clusL_arr_cat_en_pho[6].append(trackster_pho[5])
-            elif trackster_pho[2] >= 700 and trackster_pho[2] < 800:
-                min_clusL_arr_cat_en_pho[7].append(trackster_pho[4])
-                max_clusL_arr_cat_en_pho[7].append(trackster_pho[5])
-            elif trackster_pho[2] >= 800 and trackster_pho[2] < 900:
-                min_clusL_arr_cat_en_pho[8].append(trackster_pho[4])
-                max_clusL_arr_cat_en_pho[8].append(trackster_pho[5])
-            elif trackster_pho[2] >= 900:
-                min_clusL_arr_cat_en_pho[9].append(trackster_pho[4])
-                max_clusL_arr_cat_en_pho[9].append(trackster_pho[5])    
-            else:
-                print('ERROR: energy out of range')
-
-
+            
     
     ### PIONS
     min_clusL_arr_pi = [] # array of all min_clusL
     max_clusL_arr_pi = [] # array of all max_clusL
 
     # define array of min_clusL and max_clusL for each eta bin
-    min_clusL_arr_cat_pi = [[] for i in range(8)]
-    max_clusL_arr_cat_pi = [[] for i in range(8)]
+    min_clusL_arr_cat_eta_pi = [[] for i in range(n_eta_cat)]
+    max_clusL_arr_cat_eta_pi = [[] for i in range(n_eta_cat)]
 
     # define array of min_clusL and max_clusL for each pT bin
-    min_clusL_arr_cat_en_pi = [[] for i in range(10)]
-    max_clusL_arr_cat_en_pi = [[] for i in range(10)]
+    min_clusL_arr_cat_en_pi = [[] for i in range(n_en_cat)]
+    max_clusL_arr_cat_en_pi = [[] for i in range(n_en_cat)]
 
 
     # loop over files in data list
@@ -182,88 +188,27 @@ def doHisto(data_list_pho, data_list_pi, out_dir):
         # loop over all events in one file
         for i_evt_pi in i_file_pi:
 
-            # --- read 2D objects
-            # layerClusterMatrix = matrix of all the LayerClusters in the file (number of rows) 
-            #                      with their features (number of columns)
-            # LayerCluster features: clusX,clusY,clusZ,clusE,clusT,clusL
-            # there is one matrix of this kind for each event of the loadfile_pi
-            layerClusterMatrix_pi = i_evt_pi.clus2d_feat
-
-
             # --- read 3D objects
             # the clus3d_feat is a tensor of only 6 features: 
             # trkcluseta,trkclusphi,trkclusen,trkclustime, min(clusL),max(clusL)
             trackster_pi = i_evt_pi.clus3d_feat.numpy() # transform the tensor in numpy array
 
-            min_clusL_arr_pi.append(trackster_pi[4]) # fill array of all min cluster Layer
-            max_clusL_arr_pi.append(trackster_pi[5]) # fill array of all max cluster Layer
+             # fill array of all min and max cluster Layer
+            min_clusL_arr_pi.append(trackster_pi[4]) 
+            max_clusL_arr_pi.append(trackster_pi[5])
             
+            # get the eta category number
+            cat_eta_n_pi = _divide_eta_categ(trackster_pi[0]) 
             # divide in eta bins
-            # boundary between low and high density: 2.15 eta
-            # 5 high density eta bins: 1.5 - 1.63 - 1.76 - 1.89 - 2.02 - 2.15 
-            # 3 low density eta bins: 2.15 - 2.48 - 2.81 - 3.14
-            if trackster_pi[0] >= 1.5 and trackster_pi[0] < 1.63:
-                min_clusL_arr_cat_pi[0].append(trackster_pi[4])
-                max_clusL_arr_cat_pi[0].append(trackster_pi[5])
-            elif trackster_pi[0] >= 1.63 and trackster_pi[0] < 1.76:
-                min_clusL_arr_cat_pi[1].append(trackster_pi[4])
-                max_clusL_arr_cat_pi[1].append(trackster_pi[5])
-            elif trackster_pi[0] >= 1.76 and trackster_pi[0] < 1.89:
-                min_clusL_arr_cat_pi[2].append(trackster_pi[4])
-                max_clusL_arr_cat_pi[2].append(trackster_pi[5])
-            elif trackster_pi[0] >= 1.89 and trackster_pi[0] < 2.02:
-                min_clusL_arr_cat_pi[3].append(trackster_pi[4])
-                max_clusL_arr_cat_pi[3].append(trackster_pi[5])
-            elif trackster_pi[0] >= 2.02 and trackster_pi[0] <= 2.15:
-                min_clusL_arr_cat_pi[4].append(trackster_pi[4])
-                max_clusL_arr_cat_pi[4].append(trackster_pi[5])
-            elif trackster_pi[0] > 2.15 and trackster_pi[0] < 2.48:
-                min_clusL_arr_cat_pi[5].append(trackster_pi[4])
-                max_clusL_arr_cat_pi[5].append(trackster_pi[5])
-            elif trackster_pi[0] >= 2.48 and trackster_pi[0] < 2.81:
-                min_clusL_arr_cat_pi[6].append(trackster_pi[4])
-                max_clusL_arr_cat_pi[6].append(trackster_pi[5])
-            elif trackster_pi[0] >= 2.81 and trackster_pi[0] <= 3.14:
-                min_clusL_arr_cat_pi[7].append(trackster_pi[4])
-                max_clusL_arr_cat_pi[7].append(trackster_pi[5])
-            else:
-                print('ERROR: eta out of range')
-                
-            # divide in pT bins (energy bins) - trkclusen
-            # boundary every 100 GeV
-            # 5 pT bins: 0 - 100 - 200 - 300 - 400 - 500 - 600 - 700 - 800 - 900 - inf
-            if trackster_pi[2] >= 0 and trackster_pi[2] < 100:
-                min_clusL_arr_cat_en_pi[0].append(trackster_pi[4])
-                max_clusL_arr_cat_en_pi[0].append(trackster_pi[5])
-            elif trackster_pi[2] >= 100 and trackster_pi[2] < 200:
-                min_clusL_arr_cat_en_pi[1].append(trackster_pi[4])
-                max_clusL_arr_cat_en_pi[1].append(trackster_pi[5])
-            elif trackster_pi[2] >= 200 and trackster_pi[2] < 300:
-                min_clusL_arr_cat_en_pi[2].append(trackster_pi[4])
-                max_clusL_arr_cat_en_pi[2].append(trackster_pi[5])
-            elif trackster_pi[2] >= 300 and trackster_pi[2] < 400:
-                min_clusL_arr_cat_en_pi[3].append(trackster_pi[4])
-                max_clusL_arr_cat_en_pi[3].append(trackster_pi[5])
-            elif trackster_pi[2] >= 400 and trackster_pi[2] < 500:
-                min_clusL_arr_cat_en_pi[4].append(trackster_pi[4])
-                max_clusL_arr_cat_en_pi[4].append(trackster_pi[5])
-            elif trackster_pi[2] >= 500 and trackster_pi[2] < 600:
-                min_clusL_arr_cat_en_pi[5].append(trackster_pi[4])
-                max_clusL_arr_cat_en_pi[5].append(trackster_pi[5])
-            elif trackster_pi[2] >= 600 and trackster_pi[2] < 700:
-                min_clusL_arr_cat_en_pi[6].append(trackster_pi[4])
-                max_clusL_arr_cat_en_pi[6].append(trackster_pi[5])
-            elif trackster_pi[2] >= 700 and trackster_pi[2] < 800:
-                min_clusL_arr_cat_en_pi[7].append(trackster_pi[4])
-                max_clusL_arr_cat_en_pi[7].append(trackster_pi[5])
-            elif trackster_pi[2] >= 800 and trackster_pi[2] < 900:
-                min_clusL_arr_cat_en_pi[8].append(trackster_pi[4])
-                max_clusL_arr_cat_en_pi[8].append(trackster_pi[5])
-            elif trackster_pi[2] >= 900:
-                min_clusL_arr_cat_en_pi[9].append(trackster_pi[4])
-                max_clusL_arr_cat_en_pi[9].append(trackster_pi[5])    
-            else:
-                print('ERROR: energy out of range')
+            min_clusL_arr_cat_eta_pi[cat_eta_n_pi].append(trackster_pi[4])
+            max_clusL_arr_cat_eta_pi[cat_eta_n_pi].append(trackster_pi[5])
+            
+            # get the energy category number
+            cat_en_n_pi = _divide_en_categ(trackster_pi[2])
+            # divide in energy bins
+            min_clusL_arr_cat_en_pi[cat_en_n_pi].append(trackster_pi[4])
+            max_clusL_arr_cat_en_pi[cat_en_n_pi].append(trackster_pi[5])
+
 
 
 
@@ -318,68 +263,68 @@ def doHisto(data_list_pho, data_list_pi, out_dir):
     fig1, axs1 = plt.subplots(4, 2, figsize=(20,20), dpi=80, tight_layout=True)
     
     axs1[0][0].hist(min_clusL_arr_cat_eta_pho[0], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs1[0][0].hist(min_clusL_arr_cat_pi[0], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
+    axs1[0][0].hist(min_clusL_arr_cat_eta_pi[0], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
     axs1[0][0].legend()
     axs1[0][0].set_xlabel('min clusL')
     axs1[0][0].set_ylabel('# trk')
     # add a box containing the eta range
-    axs1[0][0].text(0.05, 0.95, '1.5 < eta < 1.63', transform=axs1[0][0].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs1[0][0].text(0.05, 0.95, '1.5 < eta < 1.63', transform=axs1[0][0].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     axs1[0][1].hist(min_clusL_arr_cat_eta_pho[1], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs1[0][1].hist(min_clusL_arr_cat_pi[1], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
+    axs1[0][1].hist(min_clusL_arr_cat_eta_pi[1], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
     axs1[0][1].legend()
     axs1[0][1].set_xlabel('min clusL')
     axs1[0][1].set_ylabel('# trk')
     # add a box containing the eta range
-    axs1[0][1].text(0.05, 0.95, '1.63 < eta < 1.76', transform=axs1[0][1].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs1[0][1].text(0.05, 0.95, '1.63 < eta < 1.76', transform=axs1[0][1].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     axs1[1][0].hist(min_clusL_arr_cat_eta_pho[2], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs1[1][0].hist(min_clusL_arr_cat_pi[2], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
+    axs1[1][0].hist(min_clusL_arr_cat_eta_pi[2], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
     axs1[1][0].legend()
     axs1[1][0].set_xlabel('min clusL')
     axs1[1][0].set_ylabel('# trk')
     # add a box containing the eta range
-    axs1[1][0].text(0.05, 0.95, '1.76 < eta < 1.89', transform=axs1[1][0].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs1[1][0].text(0.05, 0.95, '1.76 < eta < 1.89', transform=axs1[1][0].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     axs1[1][1].hist(min_clusL_arr_cat_eta_pho[3], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs1[1][1].hist(min_clusL_arr_cat_pi[3], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
+    axs1[1][1].hist(min_clusL_arr_cat_eta_pi[3], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
     axs1[1][1].legend()
     axs1[1][1].set_xlabel('min clusL')
     axs1[1][1].set_ylabel('# trk')
     # add a box containing the eta range
-    axs1[1][1].text(0.05, 0.95, '1.89 < eta < 2.02', transform=axs1[1][1].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs1[1][1].text(0.05, 0.95, '1.89 < eta < 2.02', transform=axs1[1][1].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     axs1[2][0].hist(min_clusL_arr_cat_eta_pho[4], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs1[2][0].hist(min_clusL_arr_cat_pi[4], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
+    axs1[2][0].hist(min_clusL_arr_cat_eta_pi[4], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
     axs1[2][0].legend()
     axs1[2][0].set_xlabel('min clusL')
     axs1[2][0].set_ylabel('# trk')
     # add a box containing the eta range
-    axs1[2][0].text(0.05, 0.95, '2.02 < eta < 2.15', transform=axs1[2][0].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs1[2][0].text(0.05, 0.95, '2.02 < eta < 2.15', transform=axs1[2][0].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     axs1[2][1].hist(min_clusL_arr_cat_eta_pho[5], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs1[2][1].hist(min_clusL_arr_cat_pi[5], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
+    axs1[2][1].hist(min_clusL_arr_cat_eta_pi[5], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
     axs1[2][1].legend()
     axs1[2][1].set_xlabel('min clusL')
     axs1[2][1].set_ylabel('# trk')
     # add a box containing the eta range
-    axs1[2][1].text(0.05, 0.95, '2.15 < eta < 2.48', transform=axs1[2][1].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs1[2][1].text(0.05, 0.95, '2.15 < eta < 2.48', transform=axs1[2][1].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     axs1[3][0].hist(min_clusL_arr_cat_eta_pho[6], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs1[3][0].hist(min_clusL_arr_cat_pi[6], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
+    axs1[3][0].hist(min_clusL_arr_cat_eta_pi[6], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
     axs1[3][0].legend()
     axs1[3][0].set_xlabel('min clusL')
     axs1[3][0].set_ylabel('# trk')
     # add a box containing the eta range
-    axs1[3][0].text(0.05, 0.95, '2.48 < eta < 2.81', transform=axs1[3][0].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs1[3][0].text(0.05, 0.95, '2.48 < eta < 2.81', transform=axs1[3][0].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     axs1[3][1].hist(min_clusL_arr_cat_eta_pho[7], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs1[3][1].hist(min_clusL_arr_cat_pi[7], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
+    axs1[3][1].hist(min_clusL_arr_cat_eta_pi[7], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
     axs1[3][1].legend()
     axs1[3][1].set_xlabel('min clusL')
     axs1[3][1].set_ylabel('# trk')
     # add a box containing the eta range
-    axs1[3][1].text(0.05, 0.95, '2.81 < eta < 3.14', transform=axs1[3][1].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs1[3][1].text(0.05, 0.95, '2.81 < eta < 3.14', transform=axs1[3][1].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     plt.savefig(os.path.join(out_dir, 'minL_eta.png')) #save plot
     plt.close(fig1)
@@ -390,68 +335,68 @@ def doHisto(data_list_pho, data_list_pi, out_dir):
     fig2, axs2 = plt.subplots(4, 2, figsize=(20,20), dpi=80, tight_layout=True)
     
     axs2[0][0].hist(max_clusL_arr_cat_eta_pho[0], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs2[0][0].hist(max_clusL_arr_cat_pi[0], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
+    axs2[0][0].hist(max_clusL_arr_cat_eta_pi[0], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
     axs2[0][0].legend()
     axs2[0][0].set_xlabel('max clusL')
     axs2[0][0].set_ylabel('# trk')
     # add a box containing the eta range
-    axs2[0][0].text(0.05, 0.95, '1.5 < eta < 1.63', transform=axs2[0][0].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs2[0][0].text(0.05, 0.95, '1.5 < eta < 1.63', transform=axs2[0][0].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     axs2[0][1].hist(max_clusL_arr_cat_eta_pho[1], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs2[0][1].hist(max_clusL_arr_cat_pi[1], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
+    axs2[0][1].hist(max_clusL_arr_cat_eta_pi[1], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
     axs2[0][1].legend()
     axs2[0][1].set_xlabel('max clusL')
     axs2[0][1].set_ylabel('# trk')
     # add a box containing the eta range
-    axs2[0][1].text(0.05, 0.95, '1.63 < eta < 1.76', transform=axs2[0][1].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs2[0][1].text(0.05, 0.95, '1.63 < eta < 1.76', transform=axs2[0][1].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     axs2[1][0].hist(max_clusL_arr_cat_eta_pho[2], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs2[1][0].hist(max_clusL_arr_cat_pi[2], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
+    axs2[1][0].hist(max_clusL_arr_cat_eta_pi[2], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
     axs2[1][0].legend()
     axs2[1][0].set_xlabel('max clusL')
     axs2[1][0].set_ylabel('# trk')
     # add a box containing the eta range
-    axs2[1][0].text(0.05, 0.95, '1.76 < eta < 1.89', transform=axs2[1][0].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs2[1][0].text(0.05, 0.95, '1.76 < eta < 1.89', transform=axs2[1][0].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     axs2[1][1].hist(max_clusL_arr_cat_eta_pho[3], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs2[1][1].hist(max_clusL_arr_cat_pi[3], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
+    axs2[1][1].hist(max_clusL_arr_cat_eta_pi[3], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
     axs2[1][1].legend()
     axs2[1][1].set_xlabel('max clusL')
     axs2[1][1].set_ylabel('# trk')
     # add a box containing the eta range
-    axs2[1][1].text(0.05, 0.95, '1.89 < eta < 2.02', transform=axs2[1][1].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs2[1][1].text(0.05, 0.95, '1.89 < eta < 2.02', transform=axs2[1][1].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     axs2[2][0].hist(max_clusL_arr_cat_eta_pho[4], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs2[2][0].hist(max_clusL_arr_cat_pi[4], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
+    axs2[2][0].hist(max_clusL_arr_cat_eta_pi[4], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
     axs2[2][0].legend()
     axs2[2][0].set_xlabel('max clusL')
     axs2[2][0].set_ylabel('# trk')
     # add a box containing the eta range
-    axs2[2][0].text(0.05, 0.95, '2.02 < eta < 2.15', transform=axs2[2][0].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs2[2][0].text(0.05, 0.95, '2.02 < eta < 2.15', transform=axs2[2][0].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     axs2[2][1].hist(max_clusL_arr_cat_eta_pho[5], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs2[2][1].hist(max_clusL_arr_cat_pi[5], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
+    axs2[2][1].hist(max_clusL_arr_cat_eta_pi[5], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
     axs2[2][1].legend()
     axs2[2][1].set_xlabel('max clusL')
     axs2[2][1].set_ylabel('# trk')
     # add a box containing the eta range
-    axs2[2][1].text(0.05, 0.95, '2.15 < eta < 2.48', transform=axs2[2][1].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs2[2][1].text(0.05, 0.95, '2.15 < eta < 2.48', transform=axs2[2][1].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     axs2[3][0].hist(max_clusL_arr_cat_eta_pho[6], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs2[3][0].hist(max_clusL_arr_cat_pi[6], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
+    axs2[3][0].hist(max_clusL_arr_cat_eta_pi[6], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
     axs2[3][0].legend()
     axs2[3][0].set_xlabel('max clusL')
     axs2[3][0].set_ylabel('# trk')
     # add a box containing the eta range
-    axs2[3][0].text(0.05, 0.95, '2.48 < eta < 2.81', transform=axs2[3][0].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs2[3][0].text(0.05, 0.95, '2.48 < eta < 2.81', transform=axs2[3][0].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     axs2[3][1].hist(max_clusL_arr_cat_eta_pho[7], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs2[3][1].hist(max_clusL_arr_cat_pi[7], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
+    axs2[3][1].hist(max_clusL_arr_cat_eta_pi[7], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
     axs2[3][1].legend()
     axs2[3][1].set_xlabel('max clusL')
     axs2[3][1].set_ylabel('# trk')
     # add a box containing the eta range
-    axs2[3][1].text(0.05, 0.95, '2.81 < eta < 3.14', transform=axs2[3][1].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs2[3][1].text(0.05, 0.95, '2.81 < eta < 3.14', transform=axs2[3][1].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     plt.savefig(os.path.join(out_dir, 'maxL_eta.png')) #save plot
     plt.close(fig2)
