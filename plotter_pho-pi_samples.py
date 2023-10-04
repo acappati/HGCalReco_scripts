@@ -141,6 +141,11 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     min_clusL_arr_cat_en_pho = [[] for i in range(n_en_cat)]
     max_clusL_arr_cat_en_pho = [[] for i in range(n_en_cat)]
 
+    # define array of strings for eta bins
+    eta_bin_str = ['1.5 < eta < 1.63', '1.63 < eta < 1.76', '1.76 < eta < 1.89', '1.89 < eta < 2.02', '2.02 < eta < 2.15', '2.15 < eta < 2.48', '2.48 < eta < 2.81', '2.81 < eta < 3.14']
+    # define array of strings for energy bins
+    en_bin_str = ['0 < E < 100 GeV', '100 < E < 200 GeV', '200 < E < 300 GeV', '300 < E < 400 GeV', '400 < E < 500 GeV', '500 < E < 600 GeV', '600 < E < 700 GeV', '700 < E < 800 GeV', 'E > 800 GeV']
+
 
     # loop over files in data list
     for i_file_pho in data_list_pho:
@@ -213,46 +218,22 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
 
 
     # histos min-max L - inclusive
-    fig, axs = plt.subplots(3, 2, figsize=(20,20), dpi=80, tight_layout=True)
+    fig, axs = plt.subplots(1, 2, figsize=(20,12), dpi=80, tight_layout=True)
     binEdges_list = np.arange(0, 47) # this way I have 48 bins from 0 to 47 : 48 bins = 48 layers 
 
-    # hist of min_clusL photons
-    axs[0][0].hist(min_clusL_arr_pho, bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$') 
-    axs[0][0].legend()        
-    axs[0][0].set_xlabel('min clusL')
-    axs[0][0].set_ylabel('# trk')
-
-    # hist of min_clusL pions
-    axs[1][0].hist(min_clusL_arr_pi, bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
-    axs[1][0].legend()        
-    axs[1][0].set_xlabel('min clusL')
-    axs[1][0].set_ylabel('# trk')
-
     # hist of min_clusL both
-    axs[2][0].hist(min_clusL_arr_pi, bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
-    axs[2][0].hist(min_clusL_arr_pho, bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs[2][0].legend()        
-    axs[2][0].set_xlabel('min clusL')
-    axs[2][0].set_ylabel('# trk')
-
-    # hist of max_clusL photons
-    axs[0][1].hist(max_clusL_arr_pho, bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs[0][1].legend()        
-    axs[0][1].set_xlabel('max clusL')
-    axs[0][1].set_ylabel('# trk')
-
-    # hist of max_clusL pions
-    axs[1][1].hist(max_clusL_arr_pi, bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
-    axs[1][1].legend()        
-    axs[1][1].set_xlabel('max clusL')
-    axs[1][1].set_ylabel('# trk')
+    axs[0].hist(min_clusL_arr_pi, bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
+    axs[0].hist(min_clusL_arr_pho, bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
+    axs[0].legend()        
+    axs[0].set_xlabel('min clusL')
+    axs[0].set_ylabel('# trk')
 
     # hist of max_clusL both
-    axs[2][1].hist(max_clusL_arr_pi, bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
-    axs[2][1].hist(max_clusL_arr_pho, bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs[2][1].legend()        
-    axs[2][1].set_xlabel('max clusL')
-    axs[2][1].set_ylabel('# trk')
+    axs[1].hist(max_clusL_arr_pi, bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
+    axs[1].hist(max_clusL_arr_pho, bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
+    axs[1].legend()        
+    axs[1].set_xlabel('max clusL')
+    axs[1].set_ylabel('# trk')
     
     plt.savefig(os.path.join(out_dir, 'minmaxL.png')) #save plot
     plt.close(fig)
@@ -268,7 +249,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     axs1[0][0].set_xlabel('min clusL')
     axs1[0][0].set_ylabel('# trk')
     # add a box containing the eta range
-    axs1[0][0].text(0.05, 0.95, '1.5 < eta < 1.63', transform=axs1[0][0].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs1[0][0].text(0.7, 0.6, eta_bin_str[0], transform=axs1[0][0].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     axs1[0][1].hist(min_clusL_arr_cat_eta_pho[1], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
     axs1[0][1].hist(min_clusL_arr_cat_eta_pi[1], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
@@ -276,7 +257,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     axs1[0][1].set_xlabel('min clusL')
     axs1[0][1].set_ylabel('# trk')
     # add a box containing the eta range
-    axs1[0][1].text(0.05, 0.95, '1.63 < eta < 1.76', transform=axs1[0][1].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs1[0][1].text(0.7, 0.6, eta_bin_str[1], transform=axs1[0][1].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     axs1[1][0].hist(min_clusL_arr_cat_eta_pho[2], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
     axs1[1][0].hist(min_clusL_arr_cat_eta_pi[2], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
@@ -284,7 +265,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     axs1[1][0].set_xlabel('min clusL')
     axs1[1][0].set_ylabel('# trk')
     # add a box containing the eta range
-    axs1[1][0].text(0.05, 0.95, '1.76 < eta < 1.89', transform=axs1[1][0].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs1[1][0].text(0.7, 0.6, eta_bin_str[2], transform=axs1[1][0].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     axs1[1][1].hist(min_clusL_arr_cat_eta_pho[3], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
     axs1[1][1].hist(min_clusL_arr_cat_eta_pi[3], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
@@ -292,7 +273,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     axs1[1][1].set_xlabel('min clusL')
     axs1[1][1].set_ylabel('# trk')
     # add a box containing the eta range
-    axs1[1][1].text(0.05, 0.95, '1.89 < eta < 2.02', transform=axs1[1][1].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs1[1][1].text(0.7, 0.6, eta_bin_str[3], transform=axs1[1][1].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     axs1[2][0].hist(min_clusL_arr_cat_eta_pho[4], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
     axs1[2][0].hist(min_clusL_arr_cat_eta_pi[4], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
@@ -300,7 +281,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     axs1[2][0].set_xlabel('min clusL')
     axs1[2][0].set_ylabel('# trk')
     # add a box containing the eta range
-    axs1[2][0].text(0.05, 0.95, '2.02 < eta < 2.15', transform=axs1[2][0].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs1[2][0].text(0.7, 0.6, eta_bin_str[4], transform=axs1[2][0].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     axs1[2][1].hist(min_clusL_arr_cat_eta_pho[5], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
     axs1[2][1].hist(min_clusL_arr_cat_eta_pi[5], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
@@ -308,7 +289,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     axs1[2][1].set_xlabel('min clusL')
     axs1[2][1].set_ylabel('# trk')
     # add a box containing the eta range
-    axs1[2][1].text(0.05, 0.95, '2.15 < eta < 2.48', transform=axs1[2][1].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs1[2][1].text(0.7, 0.6, eta_bin_str[5], transform=axs1[2][1].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     axs1[3][0].hist(min_clusL_arr_cat_eta_pho[6], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
     axs1[3][0].hist(min_clusL_arr_cat_eta_pi[6], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
@@ -316,7 +297,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     axs1[3][0].set_xlabel('min clusL')
     axs1[3][0].set_ylabel('# trk')
     # add a box containing the eta range
-    axs1[3][0].text(0.05, 0.95, '2.48 < eta < 2.81', transform=axs1[3][0].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs1[3][0].text(0.7, 0.6, eta_bin_str[6], transform=axs1[3][0].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     axs1[3][1].hist(min_clusL_arr_cat_eta_pho[7], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
     axs1[3][1].hist(min_clusL_arr_cat_eta_pi[7], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
@@ -324,7 +305,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     axs1[3][1].set_xlabel('min clusL')
     axs1[3][1].set_ylabel('# trk')
     # add a box containing the eta range
-    axs1[3][1].text(0.05, 0.95, '2.81 < eta < 3.14', transform=axs1[3][1].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs1[3][1].text(0.7, 0.6, eta_bin_str[7], transform=axs1[3][1].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     plt.savefig(os.path.join(out_dir, 'minL_eta.png')) #save plot
     plt.close(fig1)
@@ -340,7 +321,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     axs2[0][0].set_xlabel('max clusL')
     axs2[0][0].set_ylabel('# trk')
     # add a box containing the eta range
-    axs2[0][0].text(0.05, 0.95, '1.5 < eta < 1.63', transform=axs2[0][0].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs2[0][0].text(0.7, 0.6, eta_bin_str[0], transform=axs2[0][0].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     axs2[0][1].hist(max_clusL_arr_cat_eta_pho[1], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
     axs2[0][1].hist(max_clusL_arr_cat_eta_pi[1], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
@@ -348,7 +329,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     axs2[0][1].set_xlabel('max clusL')
     axs2[0][1].set_ylabel('# trk')
     # add a box containing the eta range
-    axs2[0][1].text(0.05, 0.95, '1.63 < eta < 1.76', transform=axs2[0][1].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs2[0][1].text(0.7, 0.6, eta_bin_str[1], transform=axs2[0][1].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     axs2[1][0].hist(max_clusL_arr_cat_eta_pho[2], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
     axs2[1][0].hist(max_clusL_arr_cat_eta_pi[2], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
@@ -356,7 +337,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     axs2[1][0].set_xlabel('max clusL')
     axs2[1][0].set_ylabel('# trk')
     # add a box containing the eta range
-    axs2[1][0].text(0.05, 0.95, '1.76 < eta < 1.89', transform=axs2[1][0].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs2[1][0].text(0.7, 0.6, eta_bin_str[2], transform=axs2[1][0].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     axs2[1][1].hist(max_clusL_arr_cat_eta_pho[3], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
     axs2[1][1].hist(max_clusL_arr_cat_eta_pi[3], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
@@ -364,7 +345,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     axs2[1][1].set_xlabel('max clusL')
     axs2[1][1].set_ylabel('# trk')
     # add a box containing the eta range
-    axs2[1][1].text(0.05, 0.95, '1.89 < eta < 2.02', transform=axs2[1][1].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs2[1][1].text(0.7, 0.6, eta_bin_str[3], transform=axs2[1][1].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     axs2[2][0].hist(max_clusL_arr_cat_eta_pho[4], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
     axs2[2][0].hist(max_clusL_arr_cat_eta_pi[4], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
@@ -372,7 +353,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     axs2[2][0].set_xlabel('max clusL')
     axs2[2][0].set_ylabel('# trk')
     # add a box containing the eta range
-    axs2[2][0].text(0.05, 0.95, '2.02 < eta < 2.15', transform=axs2[2][0].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs2[2][0].text(0.7, 0.6, eta_bin_str[4], transform=axs2[2][0].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     axs2[2][1].hist(max_clusL_arr_cat_eta_pho[5], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
     axs2[2][1].hist(max_clusL_arr_cat_eta_pi[5], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
@@ -380,7 +361,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     axs2[2][1].set_xlabel('max clusL')
     axs2[2][1].set_ylabel('# trk')
     # add a box containing the eta range
-    axs2[2][1].text(0.05, 0.95, '2.15 < eta < 2.48', transform=axs2[2][1].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs2[2][1].text(0.7, 0.6, eta_bin_str[5], transform=axs2[2][1].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     axs2[3][0].hist(max_clusL_arr_cat_eta_pho[6], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
     axs2[3][0].hist(max_clusL_arr_cat_eta_pi[6], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
@@ -388,7 +369,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     axs2[3][0].set_xlabel('max clusL')
     axs2[3][0].set_ylabel('# trk')
     # add a box containing the eta range
-    axs2[3][0].text(0.05, 0.95, '2.48 < eta < 2.81', transform=axs2[3][0].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs2[3][0].text(0.7, 0.6, eta_bin_str[6], transform=axs2[3][0].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     axs2[3][1].hist(max_clusL_arr_cat_eta_pho[7], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
     axs2[3][1].hist(max_clusL_arr_cat_eta_pi[7], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
@@ -396,7 +377,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     axs2[3][1].set_xlabel('max clusL')
     axs2[3][1].set_ylabel('# trk')
     # add a box containing the eta range
-    axs2[3][1].text(0.05, 0.95, '2.81 < eta < 3.14', transform=axs2[3][1].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs2[3][1].text(0.7, 0.6, eta_bin_str[7], transform=axs2[3][1].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     plt.savefig(os.path.join(out_dir, 'maxL_eta.png')) #save plot
     plt.close(fig2)
@@ -412,7 +393,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     axs3[0][0].set_xlabel('min clusL')
     axs3[0][0].set_ylabel('# trk')
     # add a box containing the energy range
-    axs3[0][0].text(0.05, 0.95, '0 < E < 100 GeV', transform=axs3[0][0].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs3[0][0].text(0.6, 0.6, en_bin_str[0], transform=axs3[0][0].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     axs3[0][1].hist(min_clusL_arr_cat_en_pho[1], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
     axs3[0][1].hist(min_clusL_arr_cat_en_pi[1], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
@@ -420,7 +401,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     axs3[0][1].set_xlabel('min clusL')
     axs3[0][1].set_ylabel('# trk')
     # add a box containing the energy range
-    axs3[0][1].text(0.05, 0.95, '100 < E < 200 GeV', transform=axs3[0][1].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs3[0][1].text(0.6, 0.6, en_bin_str[1], transform=axs3[0][1].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     axs3[0][2].hist(min_clusL_arr_cat_en_pho[2], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
     axs3[0][2].hist(min_clusL_arr_cat_en_pi[2], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
@@ -428,7 +409,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     axs3[0][2].set_xlabel('min clusL')
     axs3[0][2].set_ylabel('# trk')
     # add a box containing the energy range
-    axs3[0][2].text(0.05, 0.95, '200 < E < 300 GeV', transform=axs3[0][2].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs3[0][2].text(0.6, 0.6, en_bin_str[2], transform=axs3[0][2].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     axs3[1][0].hist(min_clusL_arr_cat_en_pho[3], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
     axs3[1][0].hist(min_clusL_arr_cat_en_pi[3], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
@@ -436,7 +417,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     axs3[1][0].set_xlabel('min clusL')
     axs3[1][0].set_ylabel('# trk')
     # add a box containing the energy range
-    axs3[1][0].text(0.05, 0.95, '300 < E < 400 GeV', transform=axs3[1][0].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs3[1][0].text(0.6, 0.6, en_bin_str[3], transform=axs3[1][0].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     axs3[1][1].hist(min_clusL_arr_cat_en_pho[4], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
     axs3[1][1].hist(min_clusL_arr_cat_en_pi[4], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
@@ -444,7 +425,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     axs3[1][1].set_xlabel('min clusL')
     axs3[1][1].set_ylabel('# trk')
     # add a box containing the energy range
-    axs3[1][1].text(0.05, 0.95, '400 < E < 500 GeV', transform=axs3[1][1].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs3[1][1].text(0.6, 0.6, en_bin_str[4], transform=axs3[1][1].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     axs3[1][2].hist(min_clusL_arr_cat_en_pho[5], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
     axs3[1][2].hist(min_clusL_arr_cat_en_pi[5], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
@@ -452,7 +433,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     axs3[1][2].set_xlabel('min clusL')
     axs3[1][2].set_ylabel('# trk')
     # add a box containing the energy range
-    axs3[1][2].text(0.05, 0.95, '500 < E < 600 GeV', transform=axs3[1][2].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs3[1][2].text(0.6, 0.6, en_bin_str[5], transform=axs3[1][2].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     axs3[2][0].hist(min_clusL_arr_cat_en_pho[6], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
     axs3[2][0].hist(min_clusL_arr_cat_en_pi[6], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
@@ -460,7 +441,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     axs3[2][0].set_xlabel('min clusL')
     axs3[2][0].set_ylabel('# trk')
     # add a box containing the energy range
-    axs3[2][0].text(0.05, 0.95, '600 < E < 700 GeV', transform=axs3[2][0].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs3[2][0].text(0.6, 0.6, en_bin_str[6], transform=axs3[2][0].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     axs3[2][1].hist(min_clusL_arr_cat_en_pho[7], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
     axs3[2][1].hist(min_clusL_arr_cat_en_pi[7], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
@@ -468,7 +449,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     axs3[2][1].set_xlabel('min clusL')
     axs3[2][1].set_ylabel('# trk')
     # add a box containing the energy range
-    axs3[2][1].text(0.05, 0.95, '700 < E < 800 GeV', transform=axs3[2][1].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs3[2][1].text(0.6, 0.6, en_bin_str[7], transform=axs3[2][1].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     axs3[2][2].hist(min_clusL_arr_cat_en_pho[8], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
     axs3[2][2].hist(min_clusL_arr_cat_en_pi[8], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
@@ -476,7 +457,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     axs3[2][2].set_xlabel('min clusL')
     axs3[2][2].set_ylabel('# trk')
     # add a box containing the energy range
-    axs3[2][2].text(0.05, 0.95, '800 < E < 900 GeV', transform=axs3[2][2].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs3[2][2].text(0.6, 0.6, en_bin_str[8], transform=axs3[2][2].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     plt.savefig(os.path.join(out_dir, 'minL_en.png')) #save plot
     plt.close(fig3)
@@ -492,7 +473,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     axs4[0][0].set_xlabel('max clusL')
     axs4[0][0].set_ylabel('# trk')
     # add a box containing the energy range
-    axs4[0][0].text(0.05, 0.95, '0 < E < 100 GeV', transform=axs4[0][0].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs4[0][0].text(0.6, 0.6, en_bin_str[0], transform=axs4[0][0].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     axs4[0][1].hist(max_clusL_arr_cat_en_pho[1], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
     axs4[0][1].hist(max_clusL_arr_cat_en_pi[1], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
@@ -500,7 +481,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     axs4[0][1].set_xlabel('max clusL')
     axs4[0][1].set_ylabel('# trk')
     # add a box containing the energy range
-    axs4[0][1].text(0.05, 0.95, '100 < E < 200 GeV', transform=axs4[0][1].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs4[0][1].text(0.6, 0.6, en_bin_str[1], transform=axs4[0][1].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     axs4[0][2].hist(max_clusL_arr_cat_en_pho[2], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
     axs4[0][2].hist(max_clusL_arr_cat_en_pi[2], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
@@ -508,7 +489,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     axs4[0][2].set_xlabel('max clusL')
     axs4[0][2].set_ylabel('# trk')
     # add a box containing the energy range
-    axs4[0][2].text(0.05, 0.95, '200 < E < 300 GeV', transform=axs4[0][2].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs4[0][2].text(0.6, 0.6, en_bin_str[2], transform=axs4[0][2].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     axs4[1][0].hist(max_clusL_arr_cat_en_pho[3], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
     axs4[1][0].hist(max_clusL_arr_cat_en_pi[3], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
@@ -516,7 +497,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     axs4[1][0].set_xlabel('max clusL')
     axs4[1][0].set_ylabel('# trk')
     # add a box containing the energy range
-    axs4[1][0].text(0.05, 0.95, '300 < E < 400 GeV', transform=axs4[1][0].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs4[1][0].text(0.6, 0.6, en_bin_str[3], transform=axs4[1][0].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     axs4[1][1].hist(max_clusL_arr_cat_en_pho[4], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
     axs4[1][1].hist(max_clusL_arr_cat_en_pi[4], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
@@ -524,7 +505,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     axs4[1][1].set_xlabel('max clusL')
     axs4[1][1].set_ylabel('# trk')
     # add a box containing the energy range
-    axs4[1][1].text(0.05, 0.95, '400 < E < 500 GeV', transform=axs4[1][1].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs4[1][1].text(0.6, 0.6, en_bin_str[4], transform=axs4[1][1].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     axs4[1][2].hist(max_clusL_arr_cat_en_pho[5], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
     axs4[1][2].hist(max_clusL_arr_cat_en_pi[5], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
@@ -532,7 +513,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     axs4[1][2].set_xlabel('max clusL')
     axs4[1][2].set_ylabel('# trk')
     # add a box containing the energy range
-    axs4[1][2].text(0.05, 0.95, '500 < E < 600 GeV', transform=axs4[1][2].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs4[1][2].text(0.6, 0.6, en_bin_str[5], transform=axs4[1][2].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     axs4[2][0].hist(max_clusL_arr_cat_en_pho[6], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
     axs4[2][0].hist(max_clusL_arr_cat_en_pi[6], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
@@ -540,7 +521,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     axs4[2][0].set_xlabel('max clusL')
     axs4[2][0].set_ylabel('# trk')
     # add a box containing the energy range
-    axs4[2][0].text(0.05, 0.95, '600 < E < 700 GeV', transform=axs4[2][0].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs4[2][0].text(0.6, 0.6, en_bin_str[6], transform=axs4[2][0].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     axs4[2][1].hist(max_clusL_arr_cat_en_pho[7], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
     axs4[2][1].hist(max_clusL_arr_cat_en_pi[7], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
@@ -548,7 +529,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     axs4[2][1].set_xlabel('max clusL')
     axs4[2][1].set_ylabel('# trk')
     # add a box containing the energy range
-    axs4[2][1].text(0.05, 0.95, '700 < E < 800 GeV', transform=axs4[2][1].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs4[2][1].text(0.6, 0.6, en_bin_str[7], transform=axs4[2][1].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     axs4[2][2].hist(max_clusL_arr_cat_en_pho[8], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
     axs4[2][2].hist(max_clusL_arr_cat_en_pi[8], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
@@ -556,7 +537,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     axs4[2][2].set_xlabel('max clusL')
     axs4[2][2].set_ylabel('# trk')
     # add a box containing the energy range
-    axs4[2][2].text(0.05, 0.95, '800 < E < 900 GeV', transform=axs4[2][2].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    axs4[2][2].text(0.6, 0.6, en_bin_str[8], transform=axs4[2][2].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     plt.savefig(os.path.join(out_dir, 'maxL_en.png')) #save plot
     plt.close(fig4)
