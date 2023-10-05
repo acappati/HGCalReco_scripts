@@ -63,10 +63,10 @@ def _divide_eta_categ(trackster_eta, n_eta_cat : int =8) -> int:
     bin_n = [i for i in range(n_eta_cat)]
     
     # boundary between low and high density: 2.15 eta
-    # 5 high density eta bins: 1.5 - 1.63 - 1.76 - 1.89 - 2.02 - 2.15 
-    # 3 low density eta bins: 2.15 - 2.48 - 2.81 - 3.14
+    # 5 high density eta bins: 1.65 - 1.75 - 1.85 - 1.95 - 2.05 - 2.15  
+    # 3 low density eta bins: 2.15 - 2.35 - 2.55 - 2.75
     # define list of eta bins boundaries
-    bin_ed_list = [1.5, 1.63, 1.76, 1.89, 2.02, 2.15, 2.48, 2.81, 3.14]
+    bin_ed_list = [1.65, 1.75, 1.85, 1.95, 2.05, 2.15, 2.35, 2.55, 2.75]
 
     if trackster_eta >= bin_ed_list[0] and trackster_eta < bin_ed_list[1]:
         return bin_n[0]
@@ -85,7 +85,7 @@ def _divide_eta_categ(trackster_eta, n_eta_cat : int =8) -> int:
     elif trackster_eta >= bin_ed_list[7] and trackster_eta <= bin_ed_list[8]:
         return bin_n[7]
     else:
-        print('ERROR: eta out of range')
+        #print('ERROR: eta out of range')
         return -1
     
 
@@ -142,7 +142,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     max_clusL_arr_cat_en_pho = [[] for i in range(n_en_cat)]
 
     # define array of strings for eta bins
-    eta_bin_str = ['1.5 < eta < 1.63', '1.63 < eta < 1.76', '1.76 < eta < 1.89', '1.89 < eta < 2.02', '2.02 < eta < 2.15', '2.15 < eta < 2.48', '2.48 < eta < 2.81', '2.81 < eta < 3.14']
+    eta_bin_str = ['1.65 < eta < 1.75', '1.75 < eta < 1.85', '1.85 < eta < 1.95', '1.95 < eta < 2.05', '2.05 < eta < 2.15', '2.15 < eta < 2.35', '2.35 < eta < 2.55', '2.55 < eta < 2.75']
     # define array of strings for energy bins
     en_bin_str = ['0 < E < 100 GeV', '100 < E < 200 GeV', '200 < E < 300 GeV', '300 < E < 400 GeV', '400 < E < 500 GeV', '500 < E < 600 GeV', '600 < E < 700 GeV', '700 < E < 800 GeV', 'E > 800 GeV']
 
@@ -218,7 +218,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
 
 
     # histos min-max L - inclusive
-    fig, axs = plt.subplots(1, 2, figsize=(20,12), dpi=80, tight_layout=True)
+    fig, axs = plt.subplots(1, 2, figsize=(20,10), dpi=80, tight_layout=True)
     binEdges_list = np.arange(0, 47) # this way I have 48 bins from 0 to 47 : 48 bins = 48 layers 
 
     # hist of min_clusL both
@@ -242,71 +242,17 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     ### do plots in bins of eta: min_clusL
     # boundary between low and high density: 2.15 eta
     fig1, axs1 = plt.subplots(4, 2, figsize=(20,20), dpi=80, tight_layout=True)
+    axs1.flatten()
+
+    for cat in range(n_eta_cat):
+        axs1.flatten()[cat].hist(min_clusL_arr_cat_eta_pi[cat], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
+        axs1.flatten()[cat].hist(min_clusL_arr_cat_eta_pho[cat], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
+        axs1.flatten()[cat].legend()
+        axs1.flatten()[cat].set_xlabel('min clusL')
+        axs1.flatten()[cat].set_ylabel('# trk')
+        # add a box containing the eta range
+        axs1.flatten()[cat].text(0.7, 0.6, eta_bin_str[cat], transform=axs1.flatten()[cat].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
     
-    axs1[0][0].hist(min_clusL_arr_cat_eta_pho[0], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs1[0][0].hist(min_clusL_arr_cat_eta_pi[0], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
-    axs1[0][0].legend()
-    axs1[0][0].set_xlabel('min clusL')
-    axs1[0][0].set_ylabel('# trk')
-    # add a box containing the eta range
-    axs1[0][0].text(0.7, 0.6, eta_bin_str[0], transform=axs1[0][0].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
-
-    axs1[0][1].hist(min_clusL_arr_cat_eta_pho[1], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs1[0][1].hist(min_clusL_arr_cat_eta_pi[1], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
-    axs1[0][1].legend()
-    axs1[0][1].set_xlabel('min clusL')
-    axs1[0][1].set_ylabel('# trk')
-    # add a box containing the eta range
-    axs1[0][1].text(0.7, 0.6, eta_bin_str[1], transform=axs1[0][1].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
-
-    axs1[1][0].hist(min_clusL_arr_cat_eta_pho[2], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs1[1][0].hist(min_clusL_arr_cat_eta_pi[2], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
-    axs1[1][0].legend()
-    axs1[1][0].set_xlabel('min clusL')
-    axs1[1][0].set_ylabel('# trk')
-    # add a box containing the eta range
-    axs1[1][0].text(0.7, 0.6, eta_bin_str[2], transform=axs1[1][0].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
-
-    axs1[1][1].hist(min_clusL_arr_cat_eta_pho[3], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs1[1][1].hist(min_clusL_arr_cat_eta_pi[3], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
-    axs1[1][1].legend()
-    axs1[1][1].set_xlabel('min clusL')
-    axs1[1][1].set_ylabel('# trk')
-    # add a box containing the eta range
-    axs1[1][1].text(0.7, 0.6, eta_bin_str[3], transform=axs1[1][1].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
-
-    axs1[2][0].hist(min_clusL_arr_cat_eta_pho[4], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs1[2][0].hist(min_clusL_arr_cat_eta_pi[4], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
-    axs1[2][0].legend()
-    axs1[2][0].set_xlabel('min clusL')
-    axs1[2][0].set_ylabel('# trk')
-    # add a box containing the eta range
-    axs1[2][0].text(0.7, 0.6, eta_bin_str[4], transform=axs1[2][0].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
-
-    axs1[2][1].hist(min_clusL_arr_cat_eta_pho[5], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs1[2][1].hist(min_clusL_arr_cat_eta_pi[5], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
-    axs1[2][1].legend()
-    axs1[2][1].set_xlabel('min clusL')
-    axs1[2][1].set_ylabel('# trk')
-    # add a box containing the eta range
-    axs1[2][1].text(0.7, 0.6, eta_bin_str[5], transform=axs1[2][1].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
-
-    axs1[3][0].hist(min_clusL_arr_cat_eta_pho[6], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs1[3][0].hist(min_clusL_arr_cat_eta_pi[6], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
-    axs1[3][0].legend()
-    axs1[3][0].set_xlabel('min clusL')
-    axs1[3][0].set_ylabel('# trk')
-    # add a box containing the eta range
-    axs1[3][0].text(0.7, 0.6, eta_bin_str[6], transform=axs1[3][0].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
-
-    axs1[3][1].hist(min_clusL_arr_cat_eta_pho[7], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs1[3][1].hist(min_clusL_arr_cat_eta_pi[7], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
-    axs1[3][1].legend()
-    axs1[3][1].set_xlabel('min clusL')
-    axs1[3][1].set_ylabel('# trk')
-    # add a box containing the eta range
-    axs1[3][1].text(0.7, 0.6, eta_bin_str[7], transform=axs1[3][1].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
-
     plt.savefig(os.path.join(out_dir, 'minL_eta.png')) #save plot
     plt.close(fig1)
 
@@ -314,71 +260,17 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     ### do plots in bins of eta: max_clusL
     # boundary between low and high density: 2.15 eta
     fig2, axs2 = plt.subplots(4, 2, figsize=(20,20), dpi=80, tight_layout=True)
+    axs2.flatten()
+
+    for cat in range(n_eta_cat):
+        axs2.flatten()[cat].hist(max_clusL_arr_cat_eta_pi[cat], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
+        axs2.flatten()[cat].hist(max_clusL_arr_cat_eta_pho[cat], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
+        axs2.flatten()[cat].legend()
+        axs2.flatten()[cat].set_xlabel('max clusL')
+        axs2.flatten()[cat].set_ylabel('# trk')
+        # add a box containing the eta range
+        axs2.flatten()[cat].text(0.7, 0.6, eta_bin_str[cat], transform=axs2.flatten()[cat].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
     
-    axs2[0][0].hist(max_clusL_arr_cat_eta_pho[0], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs2[0][0].hist(max_clusL_arr_cat_eta_pi[0], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
-    axs2[0][0].legend()
-    axs2[0][0].set_xlabel('max clusL')
-    axs2[0][0].set_ylabel('# trk')
-    # add a box containing the eta range
-    axs2[0][0].text(0.7, 0.6, eta_bin_str[0], transform=axs2[0][0].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
-
-    axs2[0][1].hist(max_clusL_arr_cat_eta_pho[1], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs2[0][1].hist(max_clusL_arr_cat_eta_pi[1], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
-    axs2[0][1].legend()
-    axs2[0][1].set_xlabel('max clusL')
-    axs2[0][1].set_ylabel('# trk')
-    # add a box containing the eta range
-    axs2[0][1].text(0.7, 0.6, eta_bin_str[1], transform=axs2[0][1].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
-
-    axs2[1][0].hist(max_clusL_arr_cat_eta_pho[2], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs2[1][0].hist(max_clusL_arr_cat_eta_pi[2], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
-    axs2[1][0].legend()
-    axs2[1][0].set_xlabel('max clusL')
-    axs2[1][0].set_ylabel('# trk')
-    # add a box containing the eta range
-    axs2[1][0].text(0.7, 0.6, eta_bin_str[2], transform=axs2[1][0].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
-
-    axs2[1][1].hist(max_clusL_arr_cat_eta_pho[3], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs2[1][1].hist(max_clusL_arr_cat_eta_pi[3], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
-    axs2[1][1].legend()
-    axs2[1][1].set_xlabel('max clusL')
-    axs2[1][1].set_ylabel('# trk')
-    # add a box containing the eta range
-    axs2[1][1].text(0.7, 0.6, eta_bin_str[3], transform=axs2[1][1].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
-
-    axs2[2][0].hist(max_clusL_arr_cat_eta_pho[4], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs2[2][0].hist(max_clusL_arr_cat_eta_pi[4], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
-    axs2[2][0].legend()
-    axs2[2][0].set_xlabel('max clusL')
-    axs2[2][0].set_ylabel('# trk')
-    # add a box containing the eta range
-    axs2[2][0].text(0.7, 0.6, eta_bin_str[4], transform=axs2[2][0].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
-
-    axs2[2][1].hist(max_clusL_arr_cat_eta_pho[5], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs2[2][1].hist(max_clusL_arr_cat_eta_pi[5], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
-    axs2[2][1].legend()
-    axs2[2][1].set_xlabel('max clusL')
-    axs2[2][1].set_ylabel('# trk')
-    # add a box containing the eta range
-    axs2[2][1].text(0.7, 0.6, eta_bin_str[5], transform=axs2[2][1].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
-
-    axs2[3][0].hist(max_clusL_arr_cat_eta_pho[6], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs2[3][0].hist(max_clusL_arr_cat_eta_pi[6], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
-    axs2[3][0].legend()
-    axs2[3][0].set_xlabel('max clusL')
-    axs2[3][0].set_ylabel('# trk')
-    # add a box containing the eta range
-    axs2[3][0].text(0.7, 0.6, eta_bin_str[6], transform=axs2[3][0].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
-
-    axs2[3][1].hist(max_clusL_arr_cat_eta_pho[7], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs2[3][1].hist(max_clusL_arr_cat_eta_pi[7], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
-    axs2[3][1].legend()
-    axs2[3][1].set_xlabel('max clusL')
-    axs2[3][1].set_ylabel('# trk')
-    # add a box containing the eta range
-    axs2[3][1].text(0.7, 0.6, eta_bin_str[7], transform=axs2[3][1].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
-
     plt.savefig(os.path.join(out_dir, 'maxL_eta.png')) #save plot
     plt.close(fig2)
 
@@ -386,79 +278,17 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     # do plots in bins of energy: min_clusL
     # boundary every 100 GeV
     fig3, axs3 = plt.subplots(3, 3, figsize=(20,20), dpi=80, tight_layout=True)
+    axs3.flatten()
 
-    axs3[0][0].hist(min_clusL_arr_cat_en_pho[0], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs3[0][0].hist(min_clusL_arr_cat_en_pi[0], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
-    axs3[0][0].legend()
-    axs3[0][0].set_xlabel('min clusL')
-    axs3[0][0].set_ylabel('# trk')
-    # add a box containing the energy range
-    axs3[0][0].text(0.6, 0.6, en_bin_str[0], transform=axs3[0][0].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
-
-    axs3[0][1].hist(min_clusL_arr_cat_en_pho[1], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs3[0][1].hist(min_clusL_arr_cat_en_pi[1], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
-    axs3[0][1].legend()
-    axs3[0][1].set_xlabel('min clusL')
-    axs3[0][1].set_ylabel('# trk')
-    # add a box containing the energy range
-    axs3[0][1].text(0.6, 0.6, en_bin_str[1], transform=axs3[0][1].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
-
-    axs3[0][2].hist(min_clusL_arr_cat_en_pho[2], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs3[0][2].hist(min_clusL_arr_cat_en_pi[2], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
-    axs3[0][2].legend()
-    axs3[0][2].set_xlabel('min clusL')
-    axs3[0][2].set_ylabel('# trk')
-    # add a box containing the energy range
-    axs3[0][2].text(0.6, 0.6, en_bin_str[2], transform=axs3[0][2].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
-
-    axs3[1][0].hist(min_clusL_arr_cat_en_pho[3], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs3[1][0].hist(min_clusL_arr_cat_en_pi[3], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
-    axs3[1][0].legend()
-    axs3[1][0].set_xlabel('min clusL')
-    axs3[1][0].set_ylabel('# trk')
-    # add a box containing the energy range
-    axs3[1][0].text(0.6, 0.6, en_bin_str[3], transform=axs3[1][0].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
-
-    axs3[1][1].hist(min_clusL_arr_cat_en_pho[4], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs3[1][1].hist(min_clusL_arr_cat_en_pi[4], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
-    axs3[1][1].legend()
-    axs3[1][1].set_xlabel('min clusL')
-    axs3[1][1].set_ylabel('# trk')
-    # add a box containing the energy range
-    axs3[1][1].text(0.6, 0.6, en_bin_str[4], transform=axs3[1][1].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
-
-    axs3[1][2].hist(min_clusL_arr_cat_en_pho[5], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs3[1][2].hist(min_clusL_arr_cat_en_pi[5], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
-    axs3[1][2].legend()
-    axs3[1][2].set_xlabel('min clusL')
-    axs3[1][2].set_ylabel('# trk')
-    # add a box containing the energy range
-    axs3[1][2].text(0.6, 0.6, en_bin_str[5], transform=axs3[1][2].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
-
-    axs3[2][0].hist(min_clusL_arr_cat_en_pho[6], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs3[2][0].hist(min_clusL_arr_cat_en_pi[6], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
-    axs3[2][0].legend()
-    axs3[2][0].set_xlabel('min clusL')
-    axs3[2][0].set_ylabel('# trk')
-    # add a box containing the energy range
-    axs3[2][0].text(0.6, 0.6, en_bin_str[6], transform=axs3[2][0].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
-
-    axs3[2][1].hist(min_clusL_arr_cat_en_pho[7], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs3[2][1].hist(min_clusL_arr_cat_en_pi[7], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
-    axs3[2][1].legend()
-    axs3[2][1].set_xlabel('min clusL')
-    axs3[2][1].set_ylabel('# trk')
-    # add a box containing the energy range
-    axs3[2][1].text(0.6, 0.6, en_bin_str[7], transform=axs3[2][1].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
-
-    axs3[2][2].hist(min_clusL_arr_cat_en_pho[8], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs3[2][2].hist(min_clusL_arr_cat_en_pi[8], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
-    axs3[2][2].legend()
-    axs3[2][2].set_xlabel('min clusL')
-    axs3[2][2].set_ylabel('# trk')
-    # add a box containing the energy range
-    axs3[2][2].text(0.6, 0.6, en_bin_str[8], transform=axs3[2][2].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
-
+    for cat in range(n_en_cat):
+        axs3.flatten()[cat].hist(min_clusL_arr_cat_en_pi[cat], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
+        axs3.flatten()[cat].hist(min_clusL_arr_cat_en_pho[cat], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
+        axs3.flatten()[cat].legend()
+        axs3.flatten()[cat].set_xlabel('min clusL')
+        axs3.flatten()[cat].set_ylabel('# trk')
+        # add a box containing the energy range
+        axs3.flatten()[cat].text(0.6, 0.6, en_bin_str[cat], transform=axs3.flatten()[cat].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    
     plt.savefig(os.path.join(out_dir, 'minL_en.png')) #save plot
     plt.close(fig3)
 
@@ -466,78 +296,16 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     # do plots in bins of energy: max_clusL
     # boundary every 100 GeV
     fig4, axs4 = plt.subplots(3, 3, figsize=(20,20), dpi=80, tight_layout=True)
+    axs4.flatten()
 
-    axs4[0][0].hist(max_clusL_arr_cat_en_pho[0], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs4[0][0].hist(max_clusL_arr_cat_en_pi[0], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
-    axs4[0][0].legend()
-    axs4[0][0].set_xlabel('max clusL')
-    axs4[0][0].set_ylabel('# trk')
-    # add a box containing the energy range
-    axs4[0][0].text(0.6, 0.6, en_bin_str[0], transform=axs4[0][0].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
-
-    axs4[0][1].hist(max_clusL_arr_cat_en_pho[1], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs4[0][1].hist(max_clusL_arr_cat_en_pi[1], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
-    axs4[0][1].legend()
-    axs4[0][1].set_xlabel('max clusL')
-    axs4[0][1].set_ylabel('# trk')
-    # add a box containing the energy range
-    axs4[0][1].text(0.6, 0.6, en_bin_str[1], transform=axs4[0][1].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
-
-    axs4[0][2].hist(max_clusL_arr_cat_en_pho[2], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs4[0][2].hist(max_clusL_arr_cat_en_pi[2], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
-    axs4[0][2].legend()
-    axs4[0][2].set_xlabel('max clusL')
-    axs4[0][2].set_ylabel('# trk')
-    # add a box containing the energy range
-    axs4[0][2].text(0.6, 0.6, en_bin_str[2], transform=axs4[0][2].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
-
-    axs4[1][0].hist(max_clusL_arr_cat_en_pho[3], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs4[1][0].hist(max_clusL_arr_cat_en_pi[3], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
-    axs4[1][0].legend()
-    axs4[1][0].set_xlabel('max clusL')
-    axs4[1][0].set_ylabel('# trk')
-    # add a box containing the energy range
-    axs4[1][0].text(0.6, 0.6, en_bin_str[3], transform=axs4[1][0].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
-
-    axs4[1][1].hist(max_clusL_arr_cat_en_pho[4], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs4[1][1].hist(max_clusL_arr_cat_en_pi[4], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
-    axs4[1][1].legend()
-    axs4[1][1].set_xlabel('max clusL')
-    axs4[1][1].set_ylabel('# trk')
-    # add a box containing the energy range
-    axs4[1][1].text(0.6, 0.6, en_bin_str[4], transform=axs4[1][1].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
-
-    axs4[1][2].hist(max_clusL_arr_cat_en_pho[5], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs4[1][2].hist(max_clusL_arr_cat_en_pi[5], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
-    axs4[1][2].legend()
-    axs4[1][2].set_xlabel('max clusL')
-    axs4[1][2].set_ylabel('# trk')
-    # add a box containing the energy range
-    axs4[1][2].text(0.6, 0.6, en_bin_str[5], transform=axs4[1][2].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
-
-    axs4[2][0].hist(max_clusL_arr_cat_en_pho[6], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs4[2][0].hist(max_clusL_arr_cat_en_pi[6], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
-    axs4[2][0].legend()
-    axs4[2][0].set_xlabel('max clusL')
-    axs4[2][0].set_ylabel('# trk')
-    # add a box containing the energy range
-    axs4[2][0].text(0.6, 0.6, en_bin_str[6], transform=axs4[2][0].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
-
-    axs4[2][1].hist(max_clusL_arr_cat_en_pho[7], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs4[2][1].hist(max_clusL_arr_cat_en_pi[7], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
-    axs4[2][1].legend()
-    axs4[2][1].set_xlabel('max clusL')
-    axs4[2][1].set_ylabel('# trk')
-    # add a box containing the energy range
-    axs4[2][1].text(0.6, 0.6, en_bin_str[7], transform=axs4[2][1].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
-
-    axs4[2][2].hist(max_clusL_arr_cat_en_pho[8], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs4[2][2].hist(max_clusL_arr_cat_en_pi[8], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
-    axs4[2][2].legend()
-    axs4[2][2].set_xlabel('max clusL')
-    axs4[2][2].set_ylabel('# trk')
-    # add a box containing the energy range
-    axs4[2][2].text(0.6, 0.6, en_bin_str[8], transform=axs4[2][2].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    for cat in range(n_en_cat):
+        axs4.flatten()[cat].hist(max_clusL_arr_cat_en_pi[cat], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
+        axs4.flatten()[cat].hist(max_clusL_arr_cat_en_pho[cat], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
+        axs4.flatten()[cat].legend()
+        axs4.flatten()[cat].set_xlabel('max clusL')
+        axs4.flatten()[cat].set_ylabel('# trk')
+        # add a box containing the energy range
+        axs4.flatten()[cat].text(0.6, 0.6, en_bin_str[cat], transform=axs4.flatten()[cat].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     plt.savefig(os.path.join(out_dir, 'maxL_en.png')) #save plot
     plt.close(fig4)
@@ -574,7 +342,7 @@ def _energy_profile(data_list: List[Data], n_layers: int = 48) -> np.ndarray:
                 en_arr[int(layerClusterMatrix[i_LC,5])].append(layerClusterMatrix[i_LC,3]) # fill array of all energies of all LCs in all events. there is one array per Layer
 
             # compute the sum of the energy of all LC per Layer
-            en_sum_perL_arr = [sum(i) for i in en_arr]
+            en_sum_perL_arr = [np.sum(i, dtype=np.float32) for i in en_arr]
 
             # compute the energy fraction per layer 
             # divide by the total energy of the trackster
@@ -585,7 +353,66 @@ def _energy_profile(data_list: List[Data], n_layers: int = 48) -> np.ndarray:
     return np.array(en_arr_frac_matrix) # convert the list of arrays in a numpy object (THE ULTIMATE MATRIX!)
 
 
-def doENprofile(data_list_pho: List[Data], data_list_pi: List[Data], out_dir: str, n_layers: int = 48) -> None:
+def _energy_profile_per_cat(data_list: List[Data], cat_type: str, n_cat: int, n_layers: int = 48) -> np.ndarray:
+
+    # define array of energy fraction per layer per each category
+    en_arr_frac_matrix = [[] for _ in range(n_cat)]
+
+    # loop over files in data list
+    for i_file in data_list:
+        # loop over all events in one file
+        for i_evt in i_file:
+
+            # energy array for each Layer of all LC
+            # create an array of 48 empty arrays
+            en_arr = [[] for _ in range(n_layers)]
+
+            # --- read 2D objects
+            layerClusterMatrix = i_evt.clus2d_feat.numpy() # transform the tensor in numpy array
+
+            # --- read 3D objects
+            # the clus3d_feat is a tensor of only 6 features: 
+            # trkcluseta,trkclusphi,trkclusen,trkclustime, min(clusL),max(clusL)
+            trackster = i_evt.clus3d_feat.numpy() # transform the tensor in numpy array
+
+            # get the category number
+            if cat_type == 'eta_categ':
+                cat_number = _divide_eta_categ(trackster[0])
+            elif cat_type == 'en_categ':
+                cat_number = _divide_en_categ(trackster[2])
+            else:
+                raise Exception('category type not recognized')
+            
+
+            # loop over LC of the event
+            for i_LC in range(len(layerClusterMatrix)): #loop over matrix rows
+                en_arr[int(layerClusterMatrix[i_LC,5])].append(layerClusterMatrix[i_LC,3]) # fill array of all energies of all LCs in all events. there is one array per Layer
+
+            # compute the sum of the energy of all LC per Layer
+            en_sum_perL_arr = [np.sum(i, dtype=np.float32) for i in en_arr]
+
+            # compute the energy fraction per layer 
+            # divide by the total energy of the trackster
+            en_frac_arr = [i/trackster[2] for i in en_sum_perL_arr] # there is an energy fraction per each layer
+            
+            en_arr_frac_matrix[cat_number].append(en_frac_arr) # append the array of energy fraction per layer to the list of arrays per each category
+
+    # pad the arrays such that the final shape is n_cat x n_events x n_layers,
+    # where n_events is the maximum number of events in a category
+    max_n_events = max([len(i) for i in en_arr_frac_matrix]) # maximum number of events in a category
+    en_arr_frac_matrix_np = np.zeros((n_cat, max_n_events, n_layers)) # create a numpy array of zeros with the final shape
+    for n, cat_matrix in enumerate(en_arr_frac_matrix):
+
+        if len(cat_matrix) == 0:
+            continue
+
+        M = np.pad(cat_matrix, ((0,max_n_events-len(cat_matrix)),(0,0)), 'constant', constant_values=(0,0)) # pad the arrays with zeros to have the max number of events as rows. leave the layer dimension intact
+        en_arr_frac_matrix_np[n] = M # fill the numpy array
+
+    return en_arr_frac_matrix_np # (THE ULTIMATE MATRIX per category!)
+
+
+def doENprofile(data_list_pho: List[Data], data_list_pi: List[Data], out_dir: str, n_layers: int = 48, n_eta_cat : int =8, n_en_cat : int =9) -> None:
     """
     function to compute the energy profile
     """
@@ -604,7 +431,7 @@ def doENprofile(data_list_pho: List[Data], data_list_pi: List[Data], out_dir: st
 
     # plot energy profile
     fig, ax = plt.subplots(figsize=(17,10), dpi=80, tight_layout=True)
-    binEdges_list = np.arange(0, 48) # this way I have 49 bins from 0 to 48 : 48 bins = 48 layers
+    binEdges_list = np.arange(0, n_layers) # this way I have 49 bins from 0 to 48 : 48 bins = 48 layers
     ax.plot(binEdges_list, en_mean_arr_pi, linewidth=4, color='green', alpha=0.4, label=r'$\pi$')
     ax.plot(binEdges_list, en_mean_arr_pho, linewidth=4, color='orange', alpha=0.4, label=r'$\gamma$')
     ax.legend()
@@ -634,7 +461,58 @@ def doENprofile(data_list_pho: List[Data], data_list_pi: List[Data], out_dir: st
     plt.close(fig1)
    
 
+    # energy profile per CATEGORY
+    en_arr_frac_pho_matrix_cat_eta = _energy_profile_per_cat(data_list_pho, 'eta_categ', n_eta_cat)
+    en_arr_frac_pho_matrix_cat_en = _energy_profile_per_cat(data_list_pho, 'en_categ', n_en_cat)
+    
+    en_arr_frac_pi_matrix_cat_eta = _energy_profile_per_cat(data_list_pi, 'eta_categ', n_eta_cat)
+    en_arr_frac_pi_matrix_cat_en = _energy_profile_per_cat(data_list_pi, 'en_categ', n_en_cat)
 
+    # compute the mean of the energy fraction over the tracksters
+    # sum over the events axis
+    # (this object has shape [ncat][nevents][nlayer])
+    # the most left index is the most internal (thus =0)
+    print('creating fraction matrix for category...')
+    en_mean_arr_pho_cat_eta = en_arr_frac_pho_matrix_cat_eta.mean(axis=1)
+    en_mean_arr_pi_cat_eta = en_arr_frac_pi_matrix_cat_eta.mean(axis=1)
+    en_mean_arr_pho_cat_en = en_arr_frac_pho_matrix_cat_en.mean(axis=1)
+    en_mean_arr_pi_cat_en = en_arr_frac_pi_matrix_cat_en.mean(axis=1)
+
+    # plot per category
+    # define array of strings for eta bins
+    eta_bin_str = ['1.65 < eta < 1.75', '1.75 < eta < 1.85', '1.85 < eta < 1.95', '1.95 < eta < 2.05', '2.05 < eta < 2.15', '2.15 < eta < 2.35', '2.35 < eta < 2.55', '2.55 < eta < 2.75']
+    # define array of strings for energy bins
+    en_bin_str = ['0 < E < 100 GeV', '100 < E < 200 GeV', '200 < E < 300 GeV', '300 < E < 400 GeV', '400 < E < 500 GeV', '500 < E < 600 GeV', '600 < E < 700 GeV', '700 < E < 800 GeV', 'E > 800 GeV']
+
+    # eta categories
+    fig2, axs2 = plt.subplots(4, 2, figsize=(20,20), dpi=80, tight_layout=True)
+    axs2.flatten()
+    for cat in range(n_eta_cat):
+        axs2.flatten()[cat].plot(binEdges_list, en_mean_arr_pi_cat_eta[cat], linewidth=4, color='green', alpha=0.4, label=r'$\pi$')
+        axs2.flatten()[cat].plot(binEdges_list, en_mean_arr_pho_cat_eta[cat], linewidth=4, color='orange', alpha=0.4, label=r'$\gamma$')
+        axs2.flatten()[cat].legend()
+        axs2.flatten()[cat].set_xlabel('Layer Number')
+        axs2.flatten()[cat].set_ylabel('Energy fraction mean')
+        # add a box containing the eta range
+        axs2.flatten()[cat].text(0.7, 0.6, eta_bin_str[cat], transform=axs2.flatten()[cat].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+
+    plt.savefig(os.path.join(out_dir, 'en_profile_eta.png')) #save plot
+    plt.close(fig2)
+
+    # energy categories
+    fig3, axs3 = plt.subplots(3, 3, figsize=(20,20), dpi=80, tight_layout=True)
+    axs3.flatten()
+    for cat in range(n_en_cat):
+        axs3.flatten()[cat].plot(binEdges_list, en_mean_arr_pi_cat_en[cat], linewidth=4, color='green', alpha=0.4, label=r'$\pi$')
+        axs3.flatten()[cat].plot(binEdges_list, en_mean_arr_pho_cat_en[cat], linewidth=4, color='orange', alpha=0.4, label=r'$\gamma$')
+        axs3.flatten()[cat].legend()
+        axs3.flatten()[cat].set_xlabel('Layer Number')
+        axs3.flatten()[cat].set_ylabel('Energy fraction mean')
+        # add a box containing the energy range
+        axs3.flatten()[cat].text(0.6, 0.6, en_bin_str[cat], transform=axs3.flatten()[cat].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+
+    plt.savefig(os.path.join(out_dir, 'en_profile_en.png')) #save plot
+    plt.close(fig3)
 
 
 if __name__ == "__main__" :
