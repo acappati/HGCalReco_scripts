@@ -238,7 +238,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
 
 
     # histos min-max L - inclusive
-    fig, axs = plt.subplots(1, 3, figsize=(20,10), dpi=80, tight_layout=True)
+    fig, axs = plt.subplots(1, 2, figsize=(20,10), dpi=80, tight_layout=True)
     binEdges_list = np.arange(0, 47) # this way I have 48 bins from 0 to 47 : 48 bins = 48 layers 
 
     # hist of min_clusL both
@@ -254,16 +254,23 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     axs[1].legend()        
     axs[1].set_xlabel('max clusL')
     axs[1].set_ylabel('# trk')
-
-    # hist of shower extension both
-    axs[2].hist(extShower_arr_pi, bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$') 
-    axs[2].hist(extShower_arr_pho, bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs[2].legend()
-    axs[2].set_xlabel('shower extension')
-    axs[2].set_ylabel('# trk')
     
     plt.savefig(os.path.join(out_dir, 'minmaxL.png')) #save plot
     plt.close(fig)
+
+
+
+    # hist of shower extension both - inclusive
+    fig0, axs0 = plt.subplots(1, 1, figsize=(20,10), dpi=80, tight_layout=True)
+    axs0.hist(extShower_arr_pi, bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$') 
+    axs0.hist(extShower_arr_pho, bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
+    axs0.legend()
+    axs0.set_xlabel('shower extension')
+    axs0.set_ylabel('# trk')
+    plt.savefig(os.path.join(out_dir, 'extShower.png')) #save plot
+    plt.close(fig0)
+    
+   
 
 
     ### do plots in bins of eta: min_clusL
@@ -391,7 +398,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     # do 2D histo for shower extension vs energy
     # in bins of eta
     # photons
-    fig8, axs8 = plt.subplots(4, 2, figsize=(20,12), dpi=80, tight_layout=True)
+    fig8, axs8 = plt.subplots(4, 2, figsize=(20,20), dpi=80, tight_layout=True)
     axs8.flatten()
     for cat in range(n_eta_cat):
         axs8.flatten()[cat].hist2d(showerEn_arr_cat_eta_pho[cat], extShower_arr_cat_eta_pho[cat], bins=30, cmap='Oranges')
@@ -621,6 +628,60 @@ def doENprofile(data_list_pho: List[Data], data_list_pi: List[Data], out_dir: st
     plt.close(fig3)
 
 
+# function to plot features of the gun
+# trkguneta,trkgunphi,trkgunen : Gun properties eta,phi,energy
+def doGunPlots(data_list_pho: List[Data], data_list_pi: List[Data], out_dir: str) -> None: 
+
+    # pions
+    gun_matrix_pi = []
+    for i_file in data_list_pi:
+        for i_evt in i_file:
+            gun_matrix_pi.append(i_evt.gun_feat.numpy())
+
+    gun_matrix_pi = np.vstack(gun_matrix_pi)
+    print(gun_matrix_pi.shape)
+
+    # photons
+    gun_matrix_pho = []
+    for i_file in data_list_pho:
+        for i_evt in i_file:
+            gun_matrix_pho.append(i_evt.gun_feat.numpy())
+    
+    gun_matrix_pho = np.vstack(gun_matrix_pho)
+    print(gun_matrix_pho.shape)
+
+    fig, axs = plt.subplots(1, 3, figsize=(20,12), dpi=80, tight_layout=True)
+    # plot eta
+    axs[0].hist(gun_matrix_pi[:,0], bins=50, range=(1.2,3.2),
+                color='green', alpha=0.4, label=r'$\pi$')
+    axs[0].hist(gun_matrix_pho[:,0], bins=50, range=(1.2,3.2),
+                color='orange', alpha=0.4, label=r'$\gamma$')
+    axs[0].legend()
+    axs[0].set_xlabel('eta')
+    axs[0].set_ylabel('# trk')
+    # plot phi
+    axs[1].hist(gun_matrix_pi[:,1], bins=50, range=(-4.,4.), 
+                color='green', alpha=0.4, label=r'$\pi$')
+    axs[1].hist(gun_matrix_pho[:,1], bins=50, range=(-4.,4.),
+                color='orange', alpha=0.4, label=r'$\gamma$')
+    axs[1].legend()
+    axs[1].set_xlabel('phi')
+    axs[1].set_ylabel('# trk')
+    # plot energy
+    axs[2].hist(gun_matrix_pi[:,2], bins=50, range=(0.,1200.),
+                color='green', alpha=0.4, label=r'$\pi$')
+    axs[2].hist(gun_matrix_pho[:,2], bins=50, range=(0.,1200.),
+                color='orange', alpha=0.4, label=r'$\gamma$')
+    axs[2].legend()
+    axs[2].set_xlabel('energy')
+    axs[2].set_ylabel('# trk')
+
+    plt.savefig(os.path.join(out_dir, 'gunFeats.png')) #save plot
+    plt.close(fig)
+    
+
+
+
 if __name__ == "__main__" :
 
     ## output directory
@@ -642,3 +703,5 @@ if __name__ == "__main__" :
     doHisto(data_list_pho, data_list_pi, out_dir)
 
     doENprofile(data_list_pho, data_list_pi, out_dir)
+
+    doGunPlots(data_list_pho, data_list_pi, out_dir)
