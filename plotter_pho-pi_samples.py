@@ -680,6 +680,87 @@ def doGunPlots(data_list_pho: List[Data], data_list_pi: List[Data], out_dir: str
     plt.close(fig)
     
 
+# function to plot LC multiplicity
+# we want the average multiplicity of LC per layer
+def doMultiplicityPlots(data_list_pho: List[Data], data_list_pi: List[Data], out_dir: str, n_layers: int = 48) -> None: 
+
+    # --- pions
+    mult_matrix_pi = [[] for _ in range(n_layers)] # array of arrays of multiplicity per layer
+    mult_arr_pi = [] # array of multiplicity per layer
+    
+    for i_file in data_list_pi:
+        for i_evt in i_file:
+            
+            # create array for each Layer 
+            counter_arr_pi = [0 for _ in range(n_layers)] # array of zeros of length n_layers
+
+            # --- read 2D objects
+            # layerClusterMatrix = matrix of all the LayerClusters in the file
+            # LayerCluster features: clusX,clusY,clusZ,clusE,clusT,clusL
+            # (number of rows) 
+            # with their features (number of columns)
+            # there is one matrix of this kind for each event of the loadfile_pi
+            layerClusterMatrix_pi = i_evt.clus2d_feat.numpy()
+
+            # loop over the LC of the event
+            for i_LC in range(len(layerClusterMatrix_pi)):
+                counter_arr_pi[int(layerClusterMatrix_pi[i_LC,5])] += 1 # count how many LC per layer; there is one element per layer
+
+            # append the array of multiplicity per layer to the list of arrays
+            for i_L in range(n_layers):
+                mult_matrix_pi[i_L].append(counter_arr_pi[i_L])
+
+    mult_matrix_pi = np.array(mult_matrix_pi)
+    print(mult_matrix_pi.shape)    
+
+    for i_L in range(n_layers):
+        mult_arr_pi.append(np.mean(mult_matrix_pi[i_L]))
+
+    print(mult_arr_pi)
+
+
+    # --- photons
+    mult_matrix_pho = [[] for _ in range(n_layers)] # array of arrays of multiplicity per layer
+    mult_arr_pho = [] # array of multiplicity per layer
+
+    for i_file in data_list_pho:
+        for i_evt in i_file:
+            
+            # create array for each Layer 
+            counter_arr_pho = [0 for _ in range(n_layers)] # array of zeros of length n_layers
+
+            # --- read 2D objects
+            layerClusterMatrix_pho = i_evt.clus2d_feat.numpy()
+
+            # loop over the LC of the event
+            for i_LC in range(len(layerClusterMatrix_pho)):
+                counter_arr_pho[int(layerClusterMatrix_pho[i_LC,5])] += 1 # count how many LC per layer; there is one element per layer
+
+            # append the array of multiplicity per layer to the list of arrays
+            for i_L in range(n_layers):
+                mult_matrix_pho[i_L].append(counter_arr_pho[i_L])
+
+    mult_matrix_pho = np.array(mult_matrix_pho)
+    print(mult_matrix_pho.shape)
+
+    for i_L in range(n_layers):
+        mult_arr_pho.append(np.mean(mult_matrix_pho[i_L]))
+
+    print(mult_arr_pho)
+
+
+    # plot multiplicity
+    fig, ax = plt.subplots(figsize=(17,10), dpi=80, tight_layout=True)
+    layer_list = np.arange(0, n_layers) # this way I have 48 bins from 0 to 48 : 48 bins = 48 layers 
+    ax.plot(layer_list, mult_arr_pi, linewidth=4, color='green', alpha=0.4, label=r'$\pi$')
+    ax.plot(layer_list, mult_arr_pho, linewidth=4, color='orange', alpha=0.4, label=r'$\gamma$')
+    ax.legend()
+    ax.set_xlabel('Layer Number')
+    ax.set_ylabel('Multiplicity mean')
+
+    plt.savefig(os.path.join(out_dir, 'mult.png')) #save plot
+    plt.close(fig)
+
 
 
 if __name__ == "__main__" :
@@ -705,3 +786,5 @@ if __name__ == "__main__" :
     doENprofile(data_list_pho, data_list_pi, out_dir)
 
     doGunPlots(data_list_pho, data_list_pi, out_dir)
+
+    doMultiplicityPlots(data_list_pho, data_list_pi, out_dir)
