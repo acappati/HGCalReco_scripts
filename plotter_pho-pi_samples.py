@@ -685,7 +685,7 @@ def doGunPlots(data_list_pho: List[Data], data_list_pi: List[Data], out_dir: str
 def doMultiplicityPlots(data_list_pho: List[Data], data_list_pi: List[Data], out_dir: str, n_layers: int = 48) -> None: 
 
     # --- pions
-    mult_matrix_pi = [[] for _ in range(n_layers)] # array of arrays of multiplicity per layer
+    mult_matrix_pi = [[] for _ in range(n_layers)] # array of arrays of multiplicity per layer (per each event)
     mult_arr_pi = [] # array of multiplicity per layer
     
     for i_file in data_list_pi:
@@ -720,7 +720,7 @@ def doMultiplicityPlots(data_list_pho: List[Data], data_list_pi: List[Data], out
 
 
     # --- photons
-    mult_matrix_pho = [[] for _ in range(n_layers)] # array of arrays of multiplicity per layer
+    mult_matrix_pho = [[] for _ in range(n_layers)] # array of arrays of multiplicity per layer (per each event)
     mult_arr_pho = [] # array of multiplicity per layer
 
     for i_file in data_list_pho:
@@ -760,6 +760,20 @@ def doMultiplicityPlots(data_list_pho: List[Data], data_list_pi: List[Data], out
 
     plt.savefig(os.path.join(out_dir, 'mult.png')) #save plot
     plt.close(fig)
+
+
+    # plot multiplicity per layer
+    for i_L in range(n_layers):
+        fig1, ax1 = plt.subplots(figsize=(12,8), dpi=80, tight_layout=True)
+        ax1.hist(mult_matrix_pi[i_L], color='green', alpha=0.4, label=r'$\pi$')
+        ax1.hist(mult_matrix_pho[i_L], color='orange', alpha=0.4, label=r'$\gamma$')
+        ax1.legend()
+        ax1.set_xlabel('Multiplicity')
+        ax1.set_ylabel('# LC')
+        ax1.set_title('Layer '+str(i_L))
+
+        plt.savefig(os.path.join(out_dir, 'mult_layer'+str(i_L)+'.png')) #save plot
+        plt.close(fig1)
 
 
 
