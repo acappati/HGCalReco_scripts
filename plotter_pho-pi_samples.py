@@ -239,18 +239,18 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
 
     # histos min-max L - inclusive
     fig, axs = plt.subplots(1, 2, figsize=(20,10), dpi=80, tight_layout=True)
-    binEdges_list = np.arange(0, 47) # this way I have 48 bins from 0 to 47 : 48 bins = 48 layers 
+    binEdges_list = np.arange(0, 48, 1) # this way I have 48 bins from 0 to 47 : 48 bins = 48 layers 
 
     # hist of min_clusL both
-    axs[0].hist(min_clusL_arr_pi, bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
-    axs[0].hist(min_clusL_arr_pho, bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
+    axs[0].hist(min_clusL_arr_pi, bins=binEdges_list, range=(0,48), color='green', alpha=0.4, label=r'$\pi$')
+    axs[0].hist(min_clusL_arr_pho, bins=binEdges_list, range=(0,48), color='orange', alpha=0.4, label=r'$\gamma$')
     axs[0].legend()        
     axs[0].set_xlabel('min clusL')
     axs[0].set_ylabel('# trk')
 
     # hist of max_clusL both
-    axs[1].hist(max_clusL_arr_pi, bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
-    axs[1].hist(max_clusL_arr_pho, bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
+    axs[1].hist(max_clusL_arr_pi, bins=binEdges_list, range=(0,48), color='green', alpha=0.4, label=r'$\pi$')
+    axs[1].hist(max_clusL_arr_pho, bins=binEdges_list, range=(0,48), color='orange', alpha=0.4, label=r'$\gamma$')
     axs[1].legend()        
     axs[1].set_xlabel('max clusL')
     axs[1].set_ylabel('# trk')
@@ -262,8 +262,8 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
 
     # hist of shower extension both - inclusive
     fig0, axs0 = plt.subplots(1, 1, figsize=(20,10), dpi=80, tight_layout=True)
-    axs0.hist(extShower_arr_pi, bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$') 
-    axs0.hist(extShower_arr_pho, bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
+    axs0.hist(extShower_arr_pi, bins=binEdges_list, range=(0,48), color='green', alpha=0.4, label=r'$\pi$') 
+    axs0.hist(extShower_arr_pho, bins=binEdges_list, range=(0,48), color='orange', alpha=0.4, label=r'$\gamma$')
     axs0.legend()
     axs0.set_xlabel('shower extension')
     axs0.set_ylabel('# trk')
@@ -279,8 +279,8 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     axs1.flatten()
 
     for cat in range(n_eta_cat):
-        axs1.flatten()[cat].hist(min_clusL_arr_cat_eta_pi[cat], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
-        axs1.flatten()[cat].hist(min_clusL_arr_cat_eta_pho[cat], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
+        axs1.flatten()[cat].hist(min_clusL_arr_cat_eta_pi[cat], bins=binEdges_list, range=(0,48), color='green', alpha=0.4, label=r'$\pi$')
+        axs1.flatten()[cat].hist(min_clusL_arr_cat_eta_pho[cat], bins=binEdges_list, range=(0,48), color='orange', alpha=0.4, label=r'$\gamma$')
         axs1.flatten()[cat].legend()
         axs1.flatten()[cat].set_xlabel('min clusL')
         axs1.flatten()[cat].set_ylabel('# trk')
@@ -297,8 +297,8 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     axs2.flatten()
 
     for cat in range(n_eta_cat):
-        axs2.flatten()[cat].hist(max_clusL_arr_cat_eta_pi[cat], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
-        axs2.flatten()[cat].hist(max_clusL_arr_cat_eta_pho[cat], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
+        axs2.flatten()[cat].hist(max_clusL_arr_cat_eta_pi[cat], bins=binEdges_list, range=(0,48), color='green', alpha=0.4, label=r'$\pi$')
+        axs2.flatten()[cat].hist(max_clusL_arr_cat_eta_pho[cat], bins=binEdges_list, range=(0,48), color='orange', alpha=0.4, label=r'$\gamma$')
         axs2.flatten()[cat].legend()
         axs2.flatten()[cat].set_xlabel('max clusL')
         axs2.flatten()[cat].set_ylabel('# trk')
@@ -315,8 +315,8 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     axs3.flatten()
 
     for cat in range(n_eta_cat):
-        axs3.flatten()[cat].hist(extShower_arr_cat_eta_pi[cat], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
-        axs3.flatten()[cat].hist(extShower_arr_cat_eta_pho[cat], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
+        axs3.flatten()[cat].hist(extShower_arr_cat_eta_pi[cat], bins=binEdges_list, range=(0,48), color='green', alpha=0.4, label=r'$\pi$')
+        axs3.flatten()[cat].hist(extShower_arr_cat_eta_pho[cat], bins=binEdges_list, range=(0,48), color='orange', alpha=0.4, label=r'$\gamma$')
         axs3.flatten()[cat].legend()
         axs3.flatten()[cat].set_xlabel('shower extension')
         axs3.flatten()[cat].set_ylabel('# trk')
@@ -333,8 +333,8 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     axs4.flatten()
 
     for cat in range(n_en_cat):
-        axs4.flatten()[cat].hist(min_clusL_arr_cat_en_pi[cat], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
-        axs4.flatten()[cat].hist(min_clusL_arr_cat_en_pho[cat], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
+        axs4.flatten()[cat].hist(min_clusL_arr_cat_en_pi[cat], bins=binEdges_list, range=(0,48), color='green', alpha=0.4, label=r'$\pi$')
+        axs4.flatten()[cat].hist(min_clusL_arr_cat_en_pho[cat], bins=binEdges_list, range=(0,48), color='orange', alpha=0.4, label=r'$\gamma$')
         axs4.flatten()[cat].legend()
         axs4.flatten()[cat].set_xlabel('min clusL')
         axs4.flatten()[cat].set_ylabel('# trk')
@@ -351,8 +351,8 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     axs5.flatten()
 
     for cat in range(n_en_cat):
-        axs5.flatten()[cat].hist(max_clusL_arr_cat_en_pi[cat], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
-        axs5.flatten()[cat].hist(max_clusL_arr_cat_en_pho[cat], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
+        axs5.flatten()[cat].hist(max_clusL_arr_cat_en_pi[cat], bins=binEdges_list, range=(0,48), color='green', alpha=0.4, label=r'$\pi$')
+        axs5.flatten()[cat].hist(max_clusL_arr_cat_en_pho[cat], bins=binEdges_list, range=(0,48), color='orange', alpha=0.4, label=r'$\gamma$')
         axs5.flatten()[cat].legend()
         axs5.flatten()[cat].set_xlabel('max clusL')
         axs5.flatten()[cat].set_ylabel('# trk')
@@ -369,8 +369,8 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     axs6.flatten()
 
     for cat in range(n_en_cat):
-        axs6.flatten()[cat].hist(extShower_arr_cat_en_pi[cat], bins=binEdges_list, color='green', alpha=0.4, label=r'$\pi$')
-        axs6.flatten()[cat].hist(extShower_arr_cat_en_pho[cat], bins=binEdges_list, color='orange', alpha=0.4, label=r'$\gamma$')
+        axs6.flatten()[cat].hist(extShower_arr_cat_en_pi[cat], bins=binEdges_list, range=(0,48), color='green', alpha=0.4, label=r'$\pi$')
+        axs6.flatten()[cat].hist(extShower_arr_cat_en_pho[cat], bins=binEdges_list, range=(0,48), color='orange', alpha=0.4, label=r'$\gamma$')
         axs6.flatten()[cat].legend()
         axs6.flatten()[cat].set_xlabel('shower extension')
         axs6.flatten()[cat].set_ylabel('# trk')
@@ -544,7 +544,7 @@ def doENprofile(data_list_pho: List[Data], data_list_pi: List[Data], out_dir: st
 
     # plot energy profile
     fig, ax = plt.subplots(figsize=(17,10), dpi=80, tight_layout=True)
-    binEdges_list = np.arange(0, n_layers) # this way I have 49 bins from 0 to 48 : 48 bins = 48 layers
+    binEdges_list = np.arange(0, n_layers, 1) # this way I have 48 bins from 0 to 48 : 48 bins = 48 layers
     ax.plot(binEdges_list, en_mean_arr_pi, linewidth=4, color='green', alpha=0.4, label=r'$\pi$')
     ax.plot(binEdges_list, en_mean_arr_pho, linewidth=4, color='orange', alpha=0.4, label=r'$\gamma$')
     ax.legend()
@@ -563,8 +563,8 @@ def doENprofile(data_list_pho: List[Data], data_list_pi: List[Data], out_dir: st
 
     # plot energy fraction in the hadronic part
     fig1, ax1 = plt.subplots(figsize=(12,8), dpi=80, tight_layout=True)
-    ax1.hist(fracH_arr_pi, bins=50, color='green', alpha=0.4, label=r'$\pi$')
-    ax1.hist(fracH_arr_pho, bins=50, color='orange', alpha=0.4, label=r'$\gamma$')
+    ax1.hist(fracH_arr_pi, bins=50, range=(0.,0.21), color='green', alpha=0.4, label=r'$\pi$')
+    ax1.hist(fracH_arr_pho, bins=50, range=(0.,0.21), color='orange', alpha=0.4, label=r'$\gamma$')
     ax1.legend()
     ax1.set_yscale('log')
     ax1.set_xlabel('Energy fraction in CEH')
@@ -686,13 +686,15 @@ def doMultiplicityPlots(data_list_pho: List[Data], data_list_pi: List[Data], out
 
     # --- pions
     mult_matrix_pi = [[] for _ in range(n_layers)] # array of arrays of multiplicity per layer (per each event)
-    mult_arr_pi = [] # array of multiplicity per layer
     
     for i_file in data_list_pi:
         for i_evt in i_file:
             
-            # create array for each Layer 
-            counter_arr_pi = [0 for _ in range(n_layers)] # array of zeros of length n_layers
+            # create array for each Layer
+            counter_arr_pi = np.zeros((n_layers,), dtype=int) # array of zeros of length n_layers (one element per layer)
+            # shape of the array: (48,) - array of 48 components
+            # same thing of the following but faster
+            # counter_arr_pi = [0 for _ in range(n_layers)]
 
             # --- read 2D objects
             # layerClusterMatrix = matrix of all the LayerClusters in the file
@@ -703,77 +705,112 @@ def doMultiplicityPlots(data_list_pho: List[Data], data_list_pi: List[Data], out
             layerClusterMatrix_pi = i_evt.clus2d_feat.numpy()
 
             # loop over the LC of the event
-            for i_LC in range(len(layerClusterMatrix_pi)):
+            # shape of the matrix: (number of LC, 6)
+            # number of LC = number of rows -> cycle on shape[0]
+            for i_LC in range(layerClusterMatrix_pi.shape[0]):
                 counter_arr_pi[int(layerClusterMatrix_pi[i_LC,5])] += 1 # count how many LC per layer; there is one element per layer
 
             # append the array of multiplicity per layer to the list of arrays
             for i_L in range(n_layers):
                 mult_matrix_pi[i_L].append(counter_arr_pi[i_L])
 
+    # multiplicity matrix
     mult_matrix_pi = np.array(mult_matrix_pi)
     print(mult_matrix_pi.shape)    
 
-    for i_L in range(n_layers):
-        mult_arr_pi.append(np.mean(mult_matrix_pi[i_L]))
+    # array with mean per layer of the multiplicity
+    # define array that contains mean of multiplicity per layer
+    # do the mean per each layer, meaning per each row of the matrix
+    # axis=1 means that we take the mean of each row
+    mult_arr_pi = np.mean(mult_matrix_pi, axis=1)
+    # It would be the same as doing the following, but it's faster
+    # mult_arr_pi = [] # array of multiplicity per layer
+    # for i_L in range(n_layers):
+    #     mult_arr_pi.append(np.mean(mult_matrix_pi[i_L]))
+    #print(mult_arr_pi)
 
-    print(mult_arr_pi)
+    # array with 95% quantile per layer of the multiplicity
+    # define array that contains 95% quantile of multiplicity per layer
+    # do the 95% quantile per each layer, meaning per each row of the matrix
+    # axis=1 means that we take the 95% quantile of each row
+    mult_arr_pi_95 = np.quantile(mult_matrix_pi, 0.95, axis=1)
+    # It would be the same as doing the following, but it's faster
+    # mult_arr_pi_95 = []
+    # for i_L in range(n_layers):
+    #     mult_arr_pi_95.append(np.quantile(mult_matrix_pi[i_L], 0.95))
+    # print(mult_arr_pi_95)
 
 
     # --- photons
     mult_matrix_pho = [[] for _ in range(n_layers)] # array of arrays of multiplicity per layer (per each event)
-    mult_arr_pho = [] # array of multiplicity per layer
 
     for i_file in data_list_pho:
         for i_evt in i_file:
             
             # create array for each Layer 
-            counter_arr_pho = [0 for _ in range(n_layers)] # array of zeros of length n_layers
+            counter_arr_pho = np.zeros((n_layers,), dtype=int) # array of zeros of length n_layers (one element per layer)
 
             # --- read 2D objects
             layerClusterMatrix_pho = i_evt.clus2d_feat.numpy()
 
             # loop over the LC of the event
-            for i_LC in range(len(layerClusterMatrix_pho)):
+            for i_LC in range(layerClusterMatrix_pho.shape[0]):
                 counter_arr_pho[int(layerClusterMatrix_pho[i_LC,5])] += 1 # count how many LC per layer; there is one element per layer
 
             # append the array of multiplicity per layer to the list of arrays
             for i_L in range(n_layers):
                 mult_matrix_pho[i_L].append(counter_arr_pho[i_L])
 
+    # multiplicity matrix
     mult_matrix_pho = np.array(mult_matrix_pho)
     print(mult_matrix_pho.shape)
 
+    # array with mean per layer of the multiplicity
+    mult_arr_pho = np.mean(mult_matrix_pho, axis=1)
+    #print(mult_arr_pho)
+
+    # array with 95% quantile per layer of the multiplicity
+    mult_arr_pho_95 = np.quantile(mult_matrix_pho, 0.95, axis=1)
+    #print(mult_arr_pho_95)
+
+    # plot multiplicity per layer
+    x_ticks = np.arange(0, 21, 2, dtype=int) # ticks for x axis - from 0 to 21 (excluded) with step 2
     for i_L in range(n_layers):
-        mult_arr_pho.append(np.mean(mult_matrix_pho[i_L]))
+        fig1, ax1 = plt.subplots(figsize=(12,10), tight_layout=True)
+        ax1.hist(mult_matrix_pi[i_L], bins=20, range=(0,20), density=True, color='green', alpha=0.4, label=r'$\pi$')
+        ax1.hist(mult_matrix_pho[i_L], bins=20, range=(0,20), density=True, color='orange', alpha=0.4, label=r'$\gamma$')
+        ax1.legend()
+        ax1.set_xticks(x_ticks)
+        ax1.set_xlabel('Multiplicity')
+        ax1.set_ylabel('# LC')
+        ax1.set_title('Layer '+str(i_L))
+        plt.savefig(os.path.join(out_dir, 'mult_layer'+str(i_L)+'.png')) #save plot
+        plt.close(fig1)
 
-    print(mult_arr_pho)
 
-
-    # plot multiplicity
-    fig, ax = plt.subplots(figsize=(17,10), dpi=80, tight_layout=True)
-    layer_list = np.arange(0, n_layers) # this way I have 48 bins from 0 to 48 : 48 bins = 48 layers 
+    # plot multiplicity mean
+    fig, ax = plt.subplots(figsize=(16,10), dpi=80, tight_layout=True)
+    layer_list = np.arange(0, n_layers, 1) 
     ax.plot(layer_list, mult_arr_pi, linewidth=4, color='green', alpha=0.4, label=r'$\pi$')
     ax.plot(layer_list, mult_arr_pho, linewidth=4, color='orange', alpha=0.4, label=r'$\gamma$')
     ax.legend()
     ax.set_xlabel('Layer Number')
     ax.set_ylabel('Multiplicity mean')
-
     plt.savefig(os.path.join(out_dir, 'mult.png')) #save plot
     plt.close(fig)
 
+    # plot multiplicity 95% quantile
+    fig, ax = plt.subplots(figsize=(16,10), dpi=80, tight_layout=True)
+    layer_list = np.arange(0, n_layers, 1)
+    ax.plot(layer_list, mult_arr_pi_95, linewidth=4, color='green', alpha=0.4, label=r'$\pi$')
+    ax.plot(layer_list, mult_arr_pho_95, linewidth=4, color='orange', alpha=0.4, label=r'$\gamma$')
+    ax.legend()
+    ax.set_xlabel('Layer Number')
+    ax.set_ylabel('Multiplicity 95% quantile')
+    plt.savefig(os.path.join(out_dir, 'mult_95.png')) #save plot
+    plt.close(fig)
 
-    # plot multiplicity per layer
-    for i_L in range(n_layers):
-        fig1, ax1 = plt.subplots(figsize=(12,8), dpi=80, tight_layout=True)
-        ax1.hist(mult_matrix_pi[i_L], color='green', alpha=0.4, label=r'$\pi$')
-        ax1.hist(mult_matrix_pho[i_L], color='orange', alpha=0.4, label=r'$\gamma$')
-        ax1.legend()
-        ax1.set_xlabel('Multiplicity')
-        ax1.set_ylabel('# LC')
-        ax1.set_title('Layer '+str(i_L))
 
-        plt.savefig(os.path.join(out_dir, 'mult_layer'+str(i_L)+'.png')) #save plot
-        plt.close(fig1)
 
 
 
@@ -795,10 +832,10 @@ if __name__ == "__main__" :
 
     ## plots
     print('doing plots...')
-    doHisto(data_list_pho, data_list_pi, out_dir)
+    #doHisto(data_list_pho, data_list_pi, out_dir)
 
-    doENprofile(data_list_pho, data_list_pi, out_dir)
+    #doENprofile(data_list_pho, data_list_pi, out_dir)
 
-    doGunPlots(data_list_pho, data_list_pi, out_dir)
+    #doGunPlots(data_list_pho, data_list_pi, out_dir)
 
     doMultiplicityPlots(data_list_pho, data_list_pi, out_dir)
