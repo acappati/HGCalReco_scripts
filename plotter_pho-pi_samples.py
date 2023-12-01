@@ -242,15 +242,15 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     binEdges_list = np.arange(0, 48, 1) # this way I have 48 bins from 0 to 47 : 48 bins = 48 layers 
 
     # hist of min_clusL both
-    axs[0].hist(min_clusL_arr_pi, bins=binEdges_list, range=(0,48), color='green', alpha=0.4, label=r'$\pi$')
-    axs[0].hist(min_clusL_arr_pho, bins=binEdges_list, range=(0,48), color='orange', alpha=0.4, label=r'$\gamma$')
+    axs[0].hist(min_clusL_arr_pi, bins=binEdges_list, range=(0,48), density=True, color='green', alpha=0.4, label=r'$\pi$')
+    axs[0].hist(min_clusL_arr_pho, bins=binEdges_list, range=(0,48), density=True, color='orange', alpha=0.4, label=r'$\gamma$')
     axs[0].legend()        
     axs[0].set_xlabel('min clusL')
     axs[0].set_ylabel('# trk')
 
     # hist of max_clusL both
-    axs[1].hist(max_clusL_arr_pi, bins=binEdges_list, range=(0,48), color='green', alpha=0.4, label=r'$\pi$')
-    axs[1].hist(max_clusL_arr_pho, bins=binEdges_list, range=(0,48), color='orange', alpha=0.4, label=r'$\gamma$')
+    axs[1].hist(max_clusL_arr_pi, bins=binEdges_list, range=(0,48), density=True, color='green', alpha=0.4, label=r'$\pi$')
+    axs[1].hist(max_clusL_arr_pho, bins=binEdges_list, range=(0,48), density=True, color='orange', alpha=0.4, label=r'$\gamma$')
     axs[1].legend()        
     axs[1].set_xlabel('max clusL')
     axs[1].set_ylabel('# trk')
@@ -262,8 +262,8 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
 
     # hist of shower extension both - inclusive
     fig0, axs0 = plt.subplots(1, 1, figsize=(20,10), dpi=80, tight_layout=True)
-    axs0.hist(extShower_arr_pi, bins=binEdges_list, range=(0,48), color='green', alpha=0.4, label=r'$\pi$') 
-    axs0.hist(extShower_arr_pho, bins=binEdges_list, range=(0,48), color='orange', alpha=0.4, label=r'$\gamma$')
+    axs0.hist(extShower_arr_pi, bins=binEdges_list, range=(0,48), density=True, color='green', alpha=0.4, label=r'$\pi$') 
+    axs0.hist(extShower_arr_pho, bins=binEdges_list, range=(0,48), density=True, color='orange', alpha=0.4, label=r'$\gamma$')
     axs0.legend()
     axs0.set_xlabel('shower extension')
     axs0.set_ylabel('# trk')
@@ -279,8 +279,8 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     axs1.flatten()
 
     for cat in range(n_eta_cat):
-        axs1.flatten()[cat].hist(min_clusL_arr_cat_eta_pi[cat], bins=binEdges_list, range=(0,48), color='green', alpha=0.4, label=r'$\pi$')
-        axs1.flatten()[cat].hist(min_clusL_arr_cat_eta_pho[cat], bins=binEdges_list, range=(0,48), color='orange', alpha=0.4, label=r'$\gamma$')
+        axs1.flatten()[cat].hist(min_clusL_arr_cat_eta_pi[cat], bins=binEdges_list, range=(0,48), density=True, color='green', alpha=0.4, label=r'$\pi$')
+        axs1.flatten()[cat].hist(min_clusL_arr_cat_eta_pho[cat], bins=binEdges_list, range=(0,48), density=True, color='orange', alpha=0.4, label=r'$\gamma$')
         axs1.flatten()[cat].legend()
         axs1.flatten()[cat].set_xlabel('min clusL')
         axs1.flatten()[cat].set_ylabel('# trk')
@@ -297,8 +297,8 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     axs2.flatten()
 
     for cat in range(n_eta_cat):
-        axs2.flatten()[cat].hist(max_clusL_arr_cat_eta_pi[cat], bins=binEdges_list, range=(0,48), color='green', alpha=0.4, label=r'$\pi$')
-        axs2.flatten()[cat].hist(max_clusL_arr_cat_eta_pho[cat], bins=binEdges_list, range=(0,48), color='orange', alpha=0.4, label=r'$\gamma$')
+        axs2.flatten()[cat].hist(max_clusL_arr_cat_eta_pi[cat], bins=binEdges_list, range=(0,48), density=True, color='green', alpha=0.4, label=r'$\pi$')
+        axs2.flatten()[cat].hist(max_clusL_arr_cat_eta_pho[cat], bins=binEdges_list, range=(0,48), density=True, color='orange', alpha=0.4, label=r'$\gamma$')
         axs2.flatten()[cat].legend()
         axs2.flatten()[cat].set_xlabel('max clusL')
         axs2.flatten()[cat].set_ylabel('# trk')
@@ -315,8 +315,8 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     axs3.flatten()
 
     for cat in range(n_eta_cat):
-        axs3.flatten()[cat].hist(extShower_arr_cat_eta_pi[cat], bins=binEdges_list, range=(0,48), color='green', alpha=0.4, label=r'$\pi$')
-        axs3.flatten()[cat].hist(extShower_arr_cat_eta_pho[cat], bins=binEdges_list, range=(0,48), color='orange', alpha=0.4, label=r'$\gamma$')
+        axs3.flatten()[cat].hist(extShower_arr_cat_eta_pi[cat], bins=binEdges_list, range=(0,48), density=True, color='green', alpha=0.4, label=r'$\pi$')
+        axs3.flatten()[cat].hist(extShower_arr_cat_eta_pho[cat], bins=binEdges_list, range=(0,48), density=True, color='orange', alpha=0.4, label=r'$\gamma$')
         axs3.flatten()[cat].legend()
         axs3.flatten()[cat].set_xlabel('shower extension')
         axs3.flatten()[cat].set_ylabel('# trk')
@@ -333,8 +333,8 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     axs4.flatten()
 
     for cat in range(n_en_cat):
-        axs4.flatten()[cat].hist(min_clusL_arr_cat_en_pi[cat], bins=binEdges_list, range=(0,48), color='green', alpha=0.4, label=r'$\pi$')
-        axs4.flatten()[cat].hist(min_clusL_arr_cat_en_pho[cat], bins=binEdges_list, range=(0,48), color='orange', alpha=0.4, label=r'$\gamma$')
+        axs4.flatten()[cat].hist(min_clusL_arr_cat_en_pi[cat], bins=binEdges_list, range=(0,48), density=True, color='green', alpha=0.4, label=r'$\pi$')
+        axs4.flatten()[cat].hist(min_clusL_arr_cat_en_pho[cat], bins=binEdges_list, range=(0,48), density=True, color='orange', alpha=0.4, label=r'$\gamma$')
         axs4.flatten()[cat].legend()
         axs4.flatten()[cat].set_xlabel('min clusL')
         axs4.flatten()[cat].set_ylabel('# trk')
@@ -351,8 +351,8 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     axs5.flatten()
 
     for cat in range(n_en_cat):
-        axs5.flatten()[cat].hist(max_clusL_arr_cat_en_pi[cat], bins=binEdges_list, range=(0,48), color='green', alpha=0.4, label=r'$\pi$')
-        axs5.flatten()[cat].hist(max_clusL_arr_cat_en_pho[cat], bins=binEdges_list, range=(0,48), color='orange', alpha=0.4, label=r'$\gamma$')
+        axs5.flatten()[cat].hist(max_clusL_arr_cat_en_pi[cat], bins=binEdges_list, range=(0,48), density=True, color='green', alpha=0.4, label=r'$\pi$')
+        axs5.flatten()[cat].hist(max_clusL_arr_cat_en_pho[cat], bins=binEdges_list, range=(0,48), density=True, color='orange', alpha=0.4, label=r'$\gamma$')
         axs5.flatten()[cat].legend()
         axs5.flatten()[cat].set_xlabel('max clusL')
         axs5.flatten()[cat].set_ylabel('# trk')
@@ -369,8 +369,8 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     axs6.flatten()
 
     for cat in range(n_en_cat):
-        axs6.flatten()[cat].hist(extShower_arr_cat_en_pi[cat], bins=binEdges_list, range=(0,48), color='green', alpha=0.4, label=r'$\pi$')
-        axs6.flatten()[cat].hist(extShower_arr_cat_en_pho[cat], bins=binEdges_list, range=(0,48), color='orange', alpha=0.4, label=r'$\gamma$')
+        axs6.flatten()[cat].hist(extShower_arr_cat_en_pi[cat], bins=binEdges_list, range=(0,48), density=True, color='green', alpha=0.4, label=r'$\pi$')
+        axs6.flatten()[cat].hist(extShower_arr_cat_en_pho[cat], bins=binEdges_list, range=(0,48), density=True, color='orange', alpha=0.4, label=r'$\gamma$')
         axs6.flatten()[cat].legend()
         axs6.flatten()[cat].set_xlabel('shower extension')
         axs6.flatten()[cat].set_ylabel('# trk')
@@ -1029,9 +1029,10 @@ if __name__ == "__main__" :
 
     ## plots
     print('doing plots...')
-    #doHisto(data_list_pho, data_list_pi, out_dir)
+    
+    doHisto(data_list_pho, data_list_pi, out_dir)
 
-    doENprofile(data_list_pho, data_list_pi, out_dir)
+    #doENprofile(data_list_pho, data_list_pi, out_dir)
 
     #doGunPlots(data_list_pho, data_list_pi, out_dir)
 
