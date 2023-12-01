@@ -652,25 +652,25 @@ def doGunPlots(data_list_pho: List[Data], data_list_pi: List[Data], out_dir: str
 
     fig, axs = plt.subplots(1, 3, figsize=(20,12), dpi=80, tight_layout=True)
     # plot eta
-    axs[0].hist(gun_matrix_pi[:,0], bins=50, range=(1.2,3.2),
+    axs[0].hist(gun_matrix_pi[:,0], bins=50, range=(1.2,3.2), density=True,
                 color='green', alpha=0.4, label=r'$\pi$')
-    axs[0].hist(gun_matrix_pho[:,0], bins=50, range=(1.2,3.2),
+    axs[0].hist(gun_matrix_pho[:,0], bins=50, range=(1.2,3.2), density=True,
                 color='orange', alpha=0.4, label=r'$\gamma$')
     axs[0].legend()
     axs[0].set_xlabel('eta')
     axs[0].set_ylabel('# trk')
     # plot phi
-    axs[1].hist(gun_matrix_pi[:,1], bins=50, range=(-4.,4.), 
+    axs[1].hist(gun_matrix_pi[:,1], bins=50, range=(-4.,4.), density=True,
                 color='green', alpha=0.4, label=r'$\pi$')
-    axs[1].hist(gun_matrix_pho[:,1], bins=50, range=(-4.,4.),
+    axs[1].hist(gun_matrix_pho[:,1], bins=50, range=(-4.,4.), density=True,
                 color='orange', alpha=0.4, label=r'$\gamma$')
     axs[1].legend()
     axs[1].set_xlabel('phi')
     axs[1].set_ylabel('# trk')
     # plot energy
-    axs[2].hist(gun_matrix_pi[:,2], bins=50, range=(0.,1200.),
+    axs[2].hist(gun_matrix_pi[:,2], bins=50, range=(0.,1200.), density=True,
                 color='green', alpha=0.4, label=r'$\pi$')
-    axs[2].hist(gun_matrix_pho[:,2], bins=50, range=(0.,1200.),
+    axs[2].hist(gun_matrix_pho[:,2], bins=50, range=(0.,1200.), density=True,
                 color='orange', alpha=0.4, label=r'$\gamma$')
     axs[2].legend()
     axs[2].set_xlabel('energy')
@@ -1020,8 +1020,8 @@ if __name__ == "__main__" :
 
     #doENprofile(data_list_pho, data_list_pi, out_dir)
 
-    #doGunPlots(data_list_pho, data_list_pi, out_dir)
+    doGunPlots(data_list_pho, data_list_pi, out_dir)
 
     #doMultiplicityPlots(data_list_pho, data_list_pi, out_dir)
 
-    doMultiplicityPlots_cat(data_list_pho, data_list_pi, out_dir)
+    #doMultiplicityPlots_cat(data_list_pho, data_list_pi, out_dir)
