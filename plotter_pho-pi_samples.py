@@ -512,7 +512,20 @@ def _energy_profile_per_cat(data_list: List[Data], cat_type: str, n_cat: int, n_
 
     # pad the arrays such that the final shape is n_cat x n_events x n_layers,
     # where n_events is the maximum number of events in a category
+    print(len(en_arr_frac_matrix))
+    print(len(en_arr_frac_matrix[0]))
+    print(len(en_arr_frac_matrix[0][0])) 
+    # the matrix has dimension n_cat x n_events x n_layers
+    # find the max lenght of the arrays in the list of events
     max_n_events = max([len(i) for i in en_arr_frac_matrix]) # maximum number of events in a category
+    print(max_n_events)
+    # which is the same as doing the following
+    # max_n_evt = -999
+    # for cat in range(n_cat):
+    #     if len(en_arr_frac_matrix[cat]) > max_n_evt:
+    #         max_n_evt = len(en_arr_frac_matrix[cat])
+    # print(max_n_evt)
+
     en_arr_frac_matrix_np = np.zeros((n_cat, max_n_events, n_layers)) # create a numpy array of zeros with the final shape
     for n, cat_matrix in enumerate(en_arr_frac_matrix):
 
@@ -544,7 +557,7 @@ def doENprofile(data_list_pho: List[Data], data_list_pi: List[Data], out_dir: st
 
     # plot energy profile
     fig, ax = plt.subplots(figsize=(17,10), dpi=80, tight_layout=True)
-    binEdges_list = np.arange(0, n_layers, 1) # this way I have 48 bins from 0 to 48 : 48 bins = 48 layers
+    binEdges_list = np.arange(0, n_layers, 1) #list of 48 elements, from 0 to 47
     ax.plot(binEdges_list, en_mean_arr_pi, linewidth=4, color='green', alpha=0.4, label=r'$\pi$')
     ax.plot(binEdges_list, en_mean_arr_pho, linewidth=4, color='orange', alpha=0.4, label=r'$\gamma$')
     ax.legend()
@@ -563,8 +576,8 @@ def doENprofile(data_list_pho: List[Data], data_list_pi: List[Data], out_dir: st
 
     # plot energy fraction in the hadronic part
     fig1, ax1 = plt.subplots(figsize=(12,8), dpi=80, tight_layout=True)
-    ax1.hist(fracH_arr_pi, bins=50, range=(0.,0.21), color='green', alpha=0.4, label=r'$\pi$')
-    ax1.hist(fracH_arr_pho, bins=50, range=(0.,0.21), color='orange', alpha=0.4, label=r'$\gamma$')
+    ax1.hist(fracH_arr_pi, bins=50, range=(0.,0.21), density=True, color='green', alpha=0.4, label=r'$\pi$')
+    ax1.hist(fracH_arr_pho, bins=50, range=(0.,0.21), density=True, color='orange', alpha=0.4, label=r'$\gamma$')
     ax1.legend()
     ax1.set_yscale('log')
     ax1.set_xlabel('Energy fraction in CEH')
@@ -1018,9 +1031,9 @@ if __name__ == "__main__" :
     print('doing plots...')
     #doHisto(data_list_pho, data_list_pi, out_dir)
 
-    #doENprofile(data_list_pho, data_list_pi, out_dir)
+    doENprofile(data_list_pho, data_list_pi, out_dir)
 
-    doGunPlots(data_list_pho, data_list_pi, out_dir)
+    #doGunPlots(data_list_pho, data_list_pi, out_dir)
 
     #doMultiplicityPlots(data_list_pho, data_list_pi, out_dir)
 
