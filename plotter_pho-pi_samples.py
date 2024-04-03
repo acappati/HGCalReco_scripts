@@ -134,17 +134,21 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     max_clusL_arr_pho = [] # array of all max_clusL
     extShower_arr_pho = [] # array for shower extension
     showerEn_arr_pho  = [] # array for energy
+    showerEta_arr_pho = [] # array for eta
 
     # define array of min_clusL and max_clusL for each eta bin
     min_clusL_arr_cat_eta_pho = [[] for i in range(n_eta_cat)]
     max_clusL_arr_cat_eta_pho = [[] for i in range(n_eta_cat)]
     extShower_arr_cat_eta_pho = [[] for i in range(n_eta_cat)]
     showerEn_arr_cat_eta_pho  = [[] for i in range(n_eta_cat)]
+    showerEta_arr_cat_eta_pho = [[] for i in range(n_eta_cat)]
 
     # define array of min_clusL and max_clusL for each pT bin
     min_clusL_arr_cat_en_pho = [[] for i in range(n_en_cat)]
     max_clusL_arr_cat_en_pho = [[] for i in range(n_en_cat)]
     extShower_arr_cat_en_pho = [[] for i in range(n_en_cat)]
+    showerEn_arr_cat_en_pho  = [[] for i in range(n_en_cat)]
+    showerEta_arr_cat_en_pho = [[] for i in range(n_en_cat)]
 
     # define array of strings for eta bins
     eta_bin_str = ['1.65 < eta < 1.75', '1.75 < eta < 1.85', '1.85 < eta < 1.95', '1.95 < eta < 2.05', '2.05 < eta < 2.15', '2.15 < eta < 2.35', '2.35 < eta < 2.55', '2.55 < eta < 2.75']
@@ -167,6 +171,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
             max_clusL_arr_pho.append(trackster_pho[5])
             extShower_arr_pho.append(abs(trackster_pho[5]-trackster_pho[4]))
             showerEn_arr_pho.append(trackster_pho[2])
+            showerEta_arr_pho.append(trackster_pho[0])
             
             # get the eta category number
             cat_eta_n_pho = _divide_eta_categ(trackster_pho[0]) 
@@ -175,6 +180,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
             max_clusL_arr_cat_eta_pho[cat_eta_n_pho].append(trackster_pho[5])
             extShower_arr_cat_eta_pho[cat_eta_n_pho].append(abs(trackster_pho[5]-trackster_pho[4]))
             showerEn_arr_cat_eta_pho[cat_eta_n_pho].append(trackster_pho[2])
+            showerEta_arr_cat_eta_pho[cat_eta_n_pho].append(trackster_pho[0])
             
             # get the energy category number
             cat_en_n_pho = _divide_en_categ(trackster_pho[2])
@@ -182,6 +188,8 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
             min_clusL_arr_cat_en_pho[cat_en_n_pho].append(trackster_pho[4])
             max_clusL_arr_cat_en_pho[cat_en_n_pho].append(trackster_pho[5])
             extShower_arr_cat_en_pho[cat_en_n_pho].append(abs(trackster_pho[5]-trackster_pho[4]))
+            showerEn_arr_cat_en_pho[cat_en_n_pho].append(trackster_pho[2])
+            showerEta_arr_cat_en_pho[cat_en_n_pho].append(trackster_pho[0])
 
 
             
@@ -190,17 +198,21 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     max_clusL_arr_pi = [] # array of all max_clusL
     extShower_arr_pi = [] # array for shower extension
     showerEn_arr_pi  = [] # array for energy
+    showerEta_arr_pi = [] # array for eta
 
     # define array of min_clusL and max_clusL for each eta bin
     min_clusL_arr_cat_eta_pi = [[] for i in range(n_eta_cat)]
     max_clusL_arr_cat_eta_pi = [[] for i in range(n_eta_cat)]
     extShower_arr_cat_eta_pi = [[] for i in range(n_eta_cat)]
     showerEn_arr_cat_eta_pi  = [[] for i in range(n_eta_cat)]
+    showerEta_arr_cat_eta_pi = [[] for i in range(n_eta_cat)]
 
     # define array of min_clusL and max_clusL for each pT bin
     min_clusL_arr_cat_en_pi = [[] for i in range(n_en_cat)]
     max_clusL_arr_cat_en_pi = [[] for i in range(n_en_cat)]
     extShower_arr_cat_en_pi = [[] for i in range(n_en_cat)]
+    showerEn_arr_cat_en_pi  = [[] for i in range(n_en_cat)]
+    showerEta_arr_cat_en_pi = [[] for i in range(n_en_cat)]
 
 
     # loop over files in data list
@@ -218,6 +230,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
             max_clusL_arr_pi.append(trackster_pi[5])
             extShower_arr_pi.append(abs(trackster_pi[5]-trackster_pi[4]))
             showerEn_arr_pi.append(trackster_pi[2])
+            showerEta_arr_pi.append(trackster_pi[0])
             
             # get the eta category number
             cat_eta_n_pi = _divide_eta_categ(trackster_pi[0]) 
@@ -226,6 +239,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
             max_clusL_arr_cat_eta_pi[cat_eta_n_pi].append(trackster_pi[5])
             extShower_arr_cat_eta_pi[cat_eta_n_pi].append(abs(trackster_pi[5]-trackster_pi[4]))
             showerEn_arr_cat_eta_pi[cat_eta_n_pi].append(trackster_pi[2])
+            showerEta_arr_cat_eta_pi[cat_eta_n_pi].append(trackster_pi[0])
             
             # get the energy category number
             cat_en_n_pi = _divide_en_categ(trackster_pi[2])
@@ -233,6 +247,8 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
             min_clusL_arr_cat_en_pi[cat_en_n_pi].append(trackster_pi[4])
             max_clusL_arr_cat_en_pi[cat_en_n_pi].append(trackster_pi[5])
             extShower_arr_cat_en_pi[cat_en_n_pi].append(abs(trackster_pi[5]-trackster_pi[4]))
+            showerEn_arr_cat_en_pi[cat_en_n_pi].append(trackster_pi[2])
+            showerEta_arr_cat_en_pi[cat_en_n_pi].append(trackster_pi[0])
 
 
 
@@ -327,6 +343,44 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
     plt.close(fig3)
 
 
+    # do plots in bins of eta: shower energy
+    # boundary between low and high density: 2.15 eta
+    fig3, axs3 = plt.subplots(4, 2, figsize=(20,20), dpi=80, tight_layout=True)
+    axs3.flatten()
+
+    for cat in range(n_eta_cat):
+        axs3.flatten()[cat].hist(showerEn_arr_cat_eta_pi[cat], bins=50, range=(0,1100), density=True, color='green', alpha=0.4, label=r'$\pi$')
+        axs3.flatten()[cat].hist(showerEn_arr_cat_eta_pho[cat], bins=50, range=(0,1100), density=True, color='orange', alpha=0.4, label=r'$\gamma$')
+        axs3.flatten()[cat].legend()
+        axs3.flatten()[cat].set_xlabel('shower energy')
+        axs3.flatten()[cat].set_ylabel('# trk')
+        axs3.flatten()[cat].set_yscale('log')
+        # add a box containing the eta range
+        axs3.flatten()[cat].text(0.7, 0.6, eta_bin_str[cat], transform=axs3.flatten()[cat].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    
+    plt.savefig(os.path.join(out_dir, 'showerEn_eta.png')) #save plot
+    plt.close(fig3)
+
+    # do plots in bins of eta: shower eta
+    # boundary between low and high density: 2.15 eta
+    fig3, axs3 = plt.subplots(4, 2, figsize=(20,20), dpi=80, tight_layout=True)
+    axs3.flatten()
+
+    for cat in range(n_eta_cat):
+        axs3.flatten()[cat].hist(showerEta_arr_cat_eta_pi[cat], bins=20, range=(1.5,3.1), density=True, color='green', alpha=0.4, label=r'$\pi$')
+        axs3.flatten()[cat].hist(showerEta_arr_cat_eta_pho[cat], bins=20, range=(1.5,3.1), density=True, color='orange', alpha=0.4, label=r'$\gamma$')
+        axs3.flatten()[cat].legend()
+        axs3.flatten()[cat].set_xlabel('shower eta')
+        axs3.flatten()[cat].set_ylabel('# trk')
+        axs3.flatten()[cat].set_yscale('log')
+        # add a box containing the eta range
+        axs3.flatten()[cat].text(0.7, 0.6, eta_bin_str[cat], transform=axs3.flatten()[cat].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+
+    plt.savefig(os.path.join(out_dir, 'showerEta_eta.png')) #save plot
+    plt.close(fig3)
+
+
+
     # do plots in bins of energy: min_clusL
     # boundary every 100 GeV
     fig4, axs4 = plt.subplots(3, 3, figsize=(20,20), dpi=80, tight_layout=True)
@@ -378,6 +432,43 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
         axs6.flatten()[cat].text(0.6, 0.6, en_bin_str[cat], transform=axs6.flatten()[cat].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
     plt.savefig(os.path.join(out_dir, 'extShower_en.png')) #save plot
+    plt.close(fig6)
+
+
+    # do plots in bins of energy: shower energy
+    # boundary every 100 GeV
+    fig6, axs6 = plt.subplots(3, 3, figsize=(20,20), dpi=80, tight_layout=True)
+    axs6.flatten()
+
+    for cat in range(n_en_cat):
+        axs6.flatten()[cat].hist(showerEn_arr_cat_en_pi[cat], bins=50, range=(0,1100), density=True, color='green', alpha=0.4, label=r'$\pi$')
+        axs6.flatten()[cat].hist(showerEn_arr_cat_en_pho[cat], bins=50, range=(0,1100), density=True, color='orange', alpha=0.4, label=r'$\gamma$')
+        axs6.flatten()[cat].legend()
+        axs6.flatten()[cat].set_xlabel('shower energy')
+        axs6.flatten()[cat].set_ylabel('# trk')
+        axs6.flatten()[cat].set_yscale('log')
+        # add a box containing the energy range
+        axs6.flatten()[cat].text(0.6, 0.6, en_bin_str[cat], transform=axs6.flatten()[cat].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    
+    plt.savefig(os.path.join(out_dir, 'showerEn_en.png')) #save plot
+    plt.close(fig6)
+
+    # do plots in bins of energy: shower eta
+    # boundary every 100 GeV
+    fig6, axs6 = plt.subplots(3, 3, figsize=(20,20), dpi=80, tight_layout=True)
+    axs6.flatten()
+
+    for cat in range(n_en_cat):
+        axs6.flatten()[cat].hist(showerEta_arr_cat_en_pi[cat], bins=20, range=(1.5,3.1), density=True, color='green', alpha=0.4, label=r'$\pi$')
+        axs6.flatten()[cat].hist(showerEta_arr_cat_en_pho[cat], bins=20, range=(1.5,3.1), density=True, color='orange', alpha=0.4, label=r'$\gamma$')
+        axs6.flatten()[cat].legend()
+        axs6.flatten()[cat].set_xlabel('shower eta')
+        axs6.flatten()[cat].set_ylabel('# trk')
+        axs6.flatten()[cat].set_yscale('log')
+        # add a box containing the energy range
+        axs6.flatten()[cat].text(0.6, 0.6, en_bin_str[cat], transform=axs6.flatten()[cat].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
+    
+    plt.savefig(os.path.join(out_dir, 'showerEta_en.png')) #save plot
     plt.close(fig6)
 
 
@@ -1070,14 +1161,14 @@ if __name__ == "__main__" :
     ## plots
     print('doing plots...')
     
-    #doHisto(data_list_pho, data_list_pi, out_dir)
+    doHisto(data_list_pho, data_list_pi, out_dir)
 
-    #doENprofile(data_list_pho, data_list_pi, out_dir)
+    doENprofile(data_list_pho, data_list_pi, out_dir)
 
-    #doGunPlots(data_list_pho, data_list_pi, out_dir)
+    doGunPlots(data_list_pho, data_list_pi, out_dir)
 
-    #doMultiplicityPlots(data_list_pho, data_list_pi, out_dir)
+    doMultiplicityPlots(data_list_pho, data_list_pi, out_dir)
 
-    #doMultiplicityPlots_cat(data_list_pho, data_list_pi, out_dir)
+    doMultiplicityPlots_cat(data_list_pho, data_list_pi, out_dir)
 
     doVisualizationPlots(data_list_pho, data_list_pi, out_dir)
