@@ -61,9 +61,9 @@ def _divide_eta_categ(trackster_eta, n_eta_cat : int =8) -> int:
     """
     # define list of eta bins numbers from 0 to n_eta_cat-1
     bin_n = [i for i in range(n_eta_cat)]
-    
+
     # boundary between low and high density: 2.15 eta
-    # 5 high density eta bins: 1.65 - 1.75 - 1.85 - 1.95 - 2.05 - 2.15  
+    # 5 high density eta bins: 1.65 - 1.75 - 1.85 - 1.95 - 2.05 - 2.15
     # 3 low density eta bins: 2.15 - 2.35 - 2.55 - 2.75
     # define list of eta bins boundaries
     bin_ed_list = [1.65, 1.75, 1.85, 1.95, 2.05, 2.15, 2.35, 2.55, 2.75]
@@ -87,7 +87,7 @@ def _divide_eta_categ(trackster_eta, n_eta_cat : int =8) -> int:
     else:
         #print('ERROR: eta out of range')
         return -1
-    
+
 
 def _divide_en_categ(trackster_en, n_en_cat : int =9) -> int:
     """
@@ -121,7 +121,7 @@ def _divide_en_categ(trackster_en, n_en_cat : int =9) -> int:
     else:
         print('ERROR: energy out of range')
         return -1
-       
+
 
 
 def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat : int =9):
@@ -162,26 +162,26 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
         for i_evt_pho in i_file_pho:
 
             # --- read 3D objects
-            # the clus3d_feat is a tensor of only 6 features: 
+            # the clus3d_feat is a tensor of only 6 features:
             # trkcluseta,trkclusphi,trkclusen,trkclustime, min(clusL),max(clusL)
             trackster_pho = i_evt_pho.clus3d_feat.numpy() # transform the tensor in numpy array
 
             # fill array of all min and max cluster Layer
-            min_clusL_arr_pho.append(trackster_pho[4]) 
+            min_clusL_arr_pho.append(trackster_pho[4])
             max_clusL_arr_pho.append(trackster_pho[5])
             extShower_arr_pho.append(abs(trackster_pho[5]-trackster_pho[4]))
             showerEn_arr_pho.append(trackster_pho[2])
             showerEta_arr_pho.append(trackster_pho[0])
-            
+
             # get the eta category number
-            cat_eta_n_pho = _divide_eta_categ(trackster_pho[0]) 
+            cat_eta_n_pho = _divide_eta_categ(trackster_pho[0])
             # divide in eta bins
             min_clusL_arr_cat_eta_pho[cat_eta_n_pho].append(trackster_pho[4])
             max_clusL_arr_cat_eta_pho[cat_eta_n_pho].append(trackster_pho[5])
             extShower_arr_cat_eta_pho[cat_eta_n_pho].append(abs(trackster_pho[5]-trackster_pho[4]))
             showerEn_arr_cat_eta_pho[cat_eta_n_pho].append(trackster_pho[2])
             showerEta_arr_cat_eta_pho[cat_eta_n_pho].append(trackster_pho[0])
-            
+
             # get the energy category number
             cat_en_n_pho = _divide_en_categ(trackster_pho[2])
             # divide in energy bins
@@ -192,7 +192,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
             showerEta_arr_cat_en_pho[cat_en_n_pho].append(trackster_pho[0])
 
 
-            
+
     ### PIONS
     min_clusL_arr_pi = [] # array of all min_clusL
     max_clusL_arr_pi = [] # array of all max_clusL
@@ -221,26 +221,26 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
         for i_evt_pi in i_file_pi:
 
             # --- read 3D objects
-            # the clus3d_feat is a tensor of only 6 features: 
+            # the clus3d_feat is a tensor of only 6 features:
             # trkcluseta,trkclusphi,trkclusen,trkclustime, min(clusL),max(clusL)
             trackster_pi = i_evt_pi.clus3d_feat.numpy() # transform the tensor in numpy array
 
              # fill array of all min and max cluster Layer
-            min_clusL_arr_pi.append(trackster_pi[4]) 
+            min_clusL_arr_pi.append(trackster_pi[4])
             max_clusL_arr_pi.append(trackster_pi[5])
             extShower_arr_pi.append(abs(trackster_pi[5]-trackster_pi[4]))
             showerEn_arr_pi.append(trackster_pi[2])
             showerEta_arr_pi.append(trackster_pi[0])
-            
+
             # get the eta category number
-            cat_eta_n_pi = _divide_eta_categ(trackster_pi[0]) 
+            cat_eta_n_pi = _divide_eta_categ(trackster_pi[0])
             # divide in eta bins
             min_clusL_arr_cat_eta_pi[cat_eta_n_pi].append(trackster_pi[4])
             max_clusL_arr_cat_eta_pi[cat_eta_n_pi].append(trackster_pi[5])
             extShower_arr_cat_eta_pi[cat_eta_n_pi].append(abs(trackster_pi[5]-trackster_pi[4]))
             showerEn_arr_cat_eta_pi[cat_eta_n_pi].append(trackster_pi[2])
             showerEta_arr_cat_eta_pi[cat_eta_n_pi].append(trackster_pi[0])
-            
+
             # get the energy category number
             cat_en_n_pi = _divide_en_categ(trackster_pi[2])
             # divide in energy bins
@@ -255,22 +255,22 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
 
     # histos min-max L - inclusive
     fig, axs = plt.subplots(1, 2, figsize=(20,10), dpi=80, tight_layout=True)
-    binEdges_list = np.arange(0, 48, 1) # this way I have 48 bins from 0 to 47 : 48 bins = 48 layers 
+    binEdges_list = np.arange(0, 48, 1) # this way I have 48 bins from 0 to 47 : 48 bins = 48 layers
 
     # hist of min_clusL both
     axs[0].hist(min_clusL_arr_pi, bins=binEdges_list, range=(0,48), density=True, color='green', alpha=0.4, label=r'$\pi$')
     axs[0].hist(min_clusL_arr_pho, bins=binEdges_list, range=(0,48), density=True, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs[0].legend()        
+    axs[0].legend()
     axs[0].set_xlabel('min clusL')
     axs[0].set_ylabel('# trk')
 
     # hist of max_clusL both
     axs[1].hist(max_clusL_arr_pi, bins=binEdges_list, range=(0,48), density=True, color='green', alpha=0.4, label=r'$\pi$')
     axs[1].hist(max_clusL_arr_pho, bins=binEdges_list, range=(0,48), density=True, color='orange', alpha=0.4, label=r'$\gamma$')
-    axs[1].legend()        
+    axs[1].legend()
     axs[1].set_xlabel('max clusL')
     axs[1].set_ylabel('# trk')
-    
+
     plt.savefig(os.path.join(out_dir, 'minmaxL.png')) #save plot
     plt.close(fig)
 
@@ -278,15 +278,15 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
 
     # hist of shower extension both - inclusive
     fig0, axs0 = plt.subplots(1, 1, figsize=(20,10), dpi=80, tight_layout=True)
-    axs0.hist(extShower_arr_pi, bins=binEdges_list, range=(0,48), density=True, color='green', alpha=0.4, label=r'$\pi$') 
+    axs0.hist(extShower_arr_pi, bins=binEdges_list, range=(0,48), density=True, color='green', alpha=0.4, label=r'$\pi$')
     axs0.hist(extShower_arr_pho, bins=binEdges_list, range=(0,48), density=True, color='orange', alpha=0.4, label=r'$\gamma$')
     axs0.legend()
     axs0.set_xlabel('shower extension')
     axs0.set_ylabel('# trk')
     plt.savefig(os.path.join(out_dir, 'extShower.png')) #save plot
     plt.close(fig0)
-    
-   
+
+
 
 
     ### do plots in bins of eta: min_clusL
@@ -302,7 +302,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
         axs1.flatten()[cat].set_ylabel('# trk')
         # add a box containing the eta range
         axs1.flatten()[cat].text(0.7, 0.6, eta_bin_str[cat], transform=axs1.flatten()[cat].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
-    
+
     plt.savefig(os.path.join(out_dir, 'minL_eta.png')) #save plot
     plt.close(fig1)
 
@@ -320,7 +320,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
         axs2.flatten()[cat].set_ylabel('# trk')
         # add a box containing the eta range
         axs2.flatten()[cat].text(0.7, 0.6, eta_bin_str[cat], transform=axs2.flatten()[cat].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
-    
+
     plt.savefig(os.path.join(out_dir, 'maxL_eta.png')) #save plot
     plt.close(fig2)
 
@@ -357,7 +357,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
         axs3.flatten()[cat].set_yscale('log')
         # add a box containing the eta range
         axs3.flatten()[cat].text(0.7, 0.6, eta_bin_str[cat], transform=axs3.flatten()[cat].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
-    
+
     plt.savefig(os.path.join(out_dir, 'showerEn_eta.png')) #save plot
     plt.close(fig3)
 
@@ -394,7 +394,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
         axs4.flatten()[cat].set_ylabel('# trk')
         # add a box containing the energy range
         axs4.flatten()[cat].text(0.6, 0.6, en_bin_str[cat], transform=axs4.flatten()[cat].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
-    
+
     plt.savefig(os.path.join(out_dir, 'minL_en.png')) #save plot
     plt.close(fig4)
 
@@ -449,7 +449,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
         axs6.flatten()[cat].set_yscale('log')
         # add a box containing the energy range
         axs6.flatten()[cat].text(0.6, 0.6, en_bin_str[cat], transform=axs6.flatten()[cat].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
-    
+
     plt.savefig(os.path.join(out_dir, 'showerEn_en.png')) #save plot
     plt.close(fig6)
 
@@ -467,7 +467,7 @@ def doHisto(data_list_pho, data_list_pi, out_dir, n_eta_cat : int =8, n_en_cat :
         axs6.flatten()[cat].set_yscale('log')
         # add a box containing the energy range
         axs6.flatten()[cat].text(0.6, 0.6, en_bin_str[cat], transform=axs6.flatten()[cat].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
-    
+
     plt.savefig(os.path.join(out_dir, 'showerEta_en.png')) #save plot
     plt.close(fig6)
 
@@ -531,13 +531,13 @@ def _energy_profile(data_list: List[Data], n_layers: int = 48) -> np.ndarray:
             # --- read 2D objects
             # layerClusterMatrix = matrix of all the LayerClusters in the file
             # LayerCluster features: clusX,clusY,clusZ,clusE,clusT,clusL
-            # (number of rows) 
+            # (number of rows)
             # with their features (number of columns)
             # there is one matrix of this kind for each event of the loadfile_pi
             layerClusterMatrix = i_evt.clus2d_feat.numpy() # transform the tensor in numpy array
 
             # --- read 3D objects
-            # the clus3d_feat is a tensor of only 6 features: 
+            # the clus3d_feat is a tensor of only 6 features:
             # trkcluseta,trkclusphi,trkclusen,trkclustime, min(clusL),max(clusL)
             trackster = i_evt.clus3d_feat.numpy() # transform the tensor in numpy array
 
@@ -548,10 +548,10 @@ def _energy_profile(data_list: List[Data], n_layers: int = 48) -> np.ndarray:
             # compute the sum of the energy of all LC per Layer
             en_sum_perL_arr = [np.sum(i, dtype=np.float32) for i in en_arr]
 
-            # compute the energy fraction per layer 
+            # compute the energy fraction per layer
             # divide by the total energy of the trackster
             en_frac_arr = [i/trackster[2] for i in en_sum_perL_arr] # there is an energy fraction per each layer
-            
+
             en_arr_frac_matrix.append(en_frac_arr) # append the array of energy fraction per layer to the list of arrays
 
     return np.array(en_arr_frac_matrix) # convert the list of arrays in a numpy object (THE ULTIMATE MATRIX!)
@@ -575,7 +575,7 @@ def _energy_profile_per_cat(data_list: List[Data], cat_type: str, n_cat: int, n_
             layerClusterMatrix = i_evt.clus2d_feat.numpy() # transform the tensor in numpy array
 
             # --- read 3D objects
-            # the clus3d_feat is a tensor of only 6 features: 
+            # the clus3d_feat is a tensor of only 6 features:
             # trkcluseta,trkclusphi,trkclusen,trkclustime, min(clusL),max(clusL)
             trackster = i_evt.clus3d_feat.numpy() # transform the tensor in numpy array
 
@@ -586,7 +586,7 @@ def _energy_profile_per_cat(data_list: List[Data], cat_type: str, n_cat: int, n_
                 cat_number = _divide_en_categ(trackster[2])
             else:
                 raise Exception('category type not recognized')
-            
+
 
             # loop over LC of the event
             for i_LC in range(len(layerClusterMatrix)): #loop over matrix rows
@@ -595,17 +595,17 @@ def _energy_profile_per_cat(data_list: List[Data], cat_type: str, n_cat: int, n_
             # compute the sum of the energy of all LC per Layer
             en_sum_perL_arr = [np.sum(i, dtype=np.float32) for i in en_arr]
 
-            # compute the energy fraction per layer 
+            # compute the energy fraction per layer
             # divide by the total energy of the trackster
             en_frac_arr = [i/trackster[2] for i in en_sum_perL_arr] # there is an energy fraction per each layer
-            
+
             en_arr_frac_matrix[cat_number].append(en_frac_arr) # append the array of energy fraction per layer to the list of arrays per each category
 
     # pad the arrays such that the final shape is n_cat x n_events x n_layers,
     # where n_events is the maximum number of events in a category
     print(len(en_arr_frac_matrix))
     print(len(en_arr_frac_matrix[0]))
-    print(len(en_arr_frac_matrix[0][0])) 
+    print(len(en_arr_frac_matrix[0][0]))
     # the matrix has dimension n_cat x n_events x n_layers
     # find the max lenght of the arrays in the list of events
     max_n_events = max([len(i) for i in en_arr_frac_matrix]) # maximum number of events in a category
@@ -676,12 +676,12 @@ def doENprofile(data_list_pho: List[Data], data_list_pi: List[Data], out_dir: st
 
     plt.savefig(os.path.join(out_dir, 'en_fracH.png')) #save plot
     plt.close(fig1)
-   
+
 
     # energy profile per CATEGORY
     en_arr_frac_pho_matrix_cat_eta = _energy_profile_per_cat(data_list_pho, 'eta_categ', n_eta_cat)
     en_arr_frac_pho_matrix_cat_en = _energy_profile_per_cat(data_list_pho, 'en_categ', n_en_cat)
-    
+
     en_arr_frac_pi_matrix_cat_eta = _energy_profile_per_cat(data_list_pi, 'eta_categ', n_eta_cat)
     en_arr_frac_pi_matrix_cat_en = _energy_profile_per_cat(data_list_pi, 'en_categ', n_en_cat)
 
@@ -734,7 +734,7 @@ def doENprofile(data_list_pho: List[Data], data_list_pi: List[Data], out_dir: st
 
 # function to plot features of the gun
 # trkguneta,trkgunphi,trkgunen : Gun properties eta,phi,energy
-def doGunPlots(data_list_pho: List[Data], data_list_pi: List[Data], out_dir: str) -> None: 
+def doGunPlots(data_list_pho: List[Data], data_list_pi: List[Data], out_dir: str) -> None:
 
     # pions
     gun_matrix_pi = []
@@ -750,50 +750,69 @@ def doGunPlots(data_list_pho: List[Data], data_list_pi: List[Data], out_dir: str
     for i_file in data_list_pho:
         for i_evt in i_file:
             gun_matrix_pho.append(i_evt.gun_feat.numpy())
-    
+
     gun_matrix_pho = np.vstack(gun_matrix_pho)
     print(gun_matrix_pho.shape)
 
-    fig, axs = plt.subplots(1, 3, figsize=(20,12), dpi=80, tight_layout=True)
+    # plot gun features
+    fig, axs = plt.subplots(3, 2, figsize=(20,20), dpi=80, tight_layout=True)
+    axs.flatten()
     # plot eta
-    axs[0].hist(gun_matrix_pi[:,0], bins=50, range=(1.2,3.2), density=True,
-                color='green', alpha=0.4, label=r'$\pi$')
-    axs[0].hist(gun_matrix_pho[:,0], bins=50, range=(1.2,3.2), density=True,
-                color='orange', alpha=0.4, label=r'$\gamma$')
-    axs[0].legend()
-    axs[0].set_xlabel('eta')
-    axs[0].set_ylabel('# trk')
+    axs.flatten()[0].hist(gun_matrix_pi[:,0], bins=50, range=(1.2,3.2),
+                density=True, color='green', alpha=0.4, label=r'$\pi$')
+    axs.flatten()[0].hist(gun_matrix_pho[:,0], bins=50, range=(1.2,3.2),
+                density=True, color='orange', alpha=0.4, label=r'$\gamma$')
+    axs.flatten()[0].legend()
+    axs.flatten()[0].set_xlabel('eta')
+    axs.flatten()[0].set_ylabel('# trk')
     # plot phi
-    axs[1].hist(gun_matrix_pi[:,1], bins=50, range=(-4.,4.), density=True,
-                color='green', alpha=0.4, label=r'$\pi$')
-    axs[1].hist(gun_matrix_pho[:,1], bins=50, range=(-4.,4.), density=True,
-                color='orange', alpha=0.4, label=r'$\gamma$')
-    axs[1].legend()
-    axs[1].set_xlabel('phi')
-    axs[1].set_ylabel('# trk')
-    # plot energy
-    axs[2].hist(gun_matrix_pi[:,2], bins=50, range=(0.,1200.), density=True,
-                color='green', alpha=0.4, label=r'$\pi$')
-    axs[2].hist(gun_matrix_pho[:,2], bins=50, range=(0.,1200.), density=True,
-                color='orange', alpha=0.4, label=r'$\gamma$')
-    axs[2].legend()
-    axs[2].set_xlabel('energy')
-    axs[2].set_ylabel('# trk')
+    axs.flatten()[1].hist(gun_matrix_pi[:,1], bins=50, range=(-4.,4.),
+                density=True, color='green', alpha=0.4, label=r'$\pi$')
+    axs.flatten()[1].hist(gun_matrix_pho[:,1], bins=50, range=(-4.,4.),
+                density=True, color='orange', alpha=0.4, label=r'$\gamma$')
+    axs.flatten()[1].legend()
+    axs.flatten()[1].set_xlabel('phi')
+    axs.flatten()[1].set_ylabel('# trk')
+    # plot energy in EM part of HGCal
+    axs.flatten()[2].hist(gun_matrix_pi[:,2], bins=50, range=(0.,1200.),
+                density=True, color='green', alpha=0.4, label=r'$\pi$')
+    axs.flatten()[2].hist(gun_matrix_pho[:,2], bins=50, range=(0.,1200.),
+                density=True, color='orange', alpha=0.4, label=r'$\gamma$')
+    axs.flatten()[2].legend()
+    axs.flatten()[2].set_xlabel('energy in CEE')
+    axs.flatten()[2].set_ylabel('# trk')
+    # plot total energy
+    axs.flatten()[3].hist(gun_matrix_pi[:,3], bins=50, range=(0.,1200.),
+                density=True, color='green', alpha=0.4, label=r'$\pi$')
+    axs.flatten()[3].hist(gun_matrix_pho[:,3], bins=50, range=(0.,1200.),
+                density=True, color='orange', alpha=0.4, label=r'$\gamma$')
+    axs.flatten()[3].legend()
+    axs.flatten()[3].set_xlabel('total energy')
+    axs.flatten()[3].set_ylabel('# trk')
+    # plot ratio
+    axs.flatten()[4].hist(gun_matrix_pi[:,4], bins=50, range=(0.,100.),
+                density=True, color='green', alpha=0.4, label=r'$\pi$')
+    axs.flatten()[4].hist(gun_matrix_pho[:,4], bins=50, range=(0.,100.),
+                density=True, color='orange', alpha=0.4, label=r'$\gamma$')
+    axs.flatten()[4].legend()
+    axs.flatten()[4].set_xlabel('ratio')
+    axs.flatten()[4].set_ylabel('# trk')
+
 
     plt.savefig(os.path.join(out_dir, 'gunFeats.png')) #save plot
     plt.close(fig)
-    
+
 
 # function to plot LC multiplicity
 # we want the average multiplicity of LC per layer
-def doMultiplicityPlots(data_list_pho: List[Data], data_list_pi: List[Data], out_dir: str, n_layers: int = 48) -> None: 
+def doMultiplicityPlots(data_list_pho: List[Data], data_list_pi: List[Data], out_dir: str, n_layers: int = 48) -> None:
 
     # --- pions
     mult_matrix_pi = [[] for _ in range(n_layers)] # array of arrays of multiplicity per layer (per each event)
-    
+
     for i_file in data_list_pi:
         for i_evt in i_file:
-            
+
             # create array for each Layer
             counter_arr_pi = np.zeros((n_layers,), dtype=int) # array of zeros of length n_layers (one element per layer)
             # shape of the array: (48,) - array of 48 components
@@ -803,7 +822,7 @@ def doMultiplicityPlots(data_list_pho: List[Data], data_list_pi: List[Data], out
             # --- read 2D objects
             # layerClusterMatrix = matrix of all the LayerClusters in the file
             # LayerCluster features: clusX,clusY,clusZ,clusE,clusT,clusL
-            # (number of rows) 
+            # (number of rows)
             # with their features (number of columns)
             # there is one matrix of this kind for each event of the loadfile_pi
             layerClusterMatrix_pi = i_evt.clus2d_feat.numpy()
@@ -820,7 +839,7 @@ def doMultiplicityPlots(data_list_pho: List[Data], data_list_pi: List[Data], out
 
     # multiplicity matrix
     mult_matrix_pi = np.array(mult_matrix_pi)
-    print(mult_matrix_pi.shape)    
+    print(mult_matrix_pi.shape)
 
     # array with mean per layer of the multiplicity
     # define array that contains mean of multiplicity per layer
@@ -850,8 +869,8 @@ def doMultiplicityPlots(data_list_pho: List[Data], data_list_pi: List[Data], out
 
     for i_file in data_list_pho:
         for i_evt in i_file:
-            
-            # create array for each Layer 
+
+            # create array for each Layer
             counter_arr_pho = np.zeros((n_layers,), dtype=int) # array of zeros of length n_layers (one element per layer)
 
             # --- read 2D objects
@@ -894,7 +913,7 @@ def doMultiplicityPlots(data_list_pho: List[Data], data_list_pi: List[Data], out
 
     # plot multiplicity mean
     fig, ax = plt.subplots(figsize=(16,10), dpi=80, tight_layout=True)
-    layer_list = np.arange(0, n_layers, 1) 
+    layer_list = np.arange(0, n_layers, 1)
     ax.plot(layer_list, mult_arr_pi, linewidth=4, color='green', alpha=0.4, label=r'$\pi$')
     ax.plot(layer_list, mult_arr_pho, linewidth=4, color='orange', alpha=0.4, label=r'$\gamma$')
     ax.legend()
@@ -916,7 +935,7 @@ def doMultiplicityPlots(data_list_pho: List[Data], data_list_pi: List[Data], out
 
 
 
-# function to compute multiplicity in categories 
+# function to compute multiplicity in categories
 def doMultiplicityPlots_cat(data_list_pho: List[Data], data_list_pi: List[Data], out_dir: str, n_layers: int = 48, n_en_cat : int =9) -> None:
 
     # define list of strings for energy bins
@@ -930,7 +949,7 @@ def doMultiplicityPlots_cat(data_list_pho: List[Data], data_list_pi: List[Data],
         for i_evt in i_file:
 
             # create array of zeros of lenghts n_layer
-            counter_arr_pi = np.zeros((n_layers,), dtype=int) 
+            counter_arr_pi = np.zeros((n_layers,), dtype=int)
 
             # --- read 2D objects
             layerClusterMatrix_pi = i_evt.clus2d_feat.numpy()
@@ -948,7 +967,7 @@ def doMultiplicityPlots_cat(data_list_pho: List[Data], data_list_pi: List[Data],
             # append the array of multiplicity per layer to the list of arrays
             for i_L in range(n_layers):
                 mult_matrix_pi[cat_number][i_L].append(counter_arr_pi[i_L])
-            
+
     # multiplicity matrix
     #print(mult_matrix_pi.shape)
     print(len(mult_matrix_pi))
@@ -960,7 +979,7 @@ def doMultiplicityPlots_cat(data_list_pho: List[Data], data_list_pi: List[Data],
     max_len = -999
     for cat in range(n_en_cat):
         for layer in range(n_layers):
-            #print(len(mult_matrix_pi[cat][layer]))  
+            #print(len(mult_matrix_pi[cat][layer]))
             #print(max_len)
             if len(mult_matrix_pi[cat][layer]) > max_len:
                 max_len = len(mult_matrix_pi[cat][layer])
@@ -1006,7 +1025,7 @@ def doMultiplicityPlots_cat(data_list_pho: List[Data], data_list_pi: List[Data],
         for i_evt in i_file:
 
             # create array of zeros of lenghts n_layer
-            counter_arr_pho = np.zeros((n_layers,), dtype=int) 
+            counter_arr_pho = np.zeros((n_layers,), dtype=int)
 
             # --- read 2D objects
             layerClusterMatrix_pho = i_evt.clus2d_feat.numpy()
@@ -1035,7 +1054,7 @@ def doMultiplicityPlots_cat(data_list_pho: List[Data], data_list_pi: List[Data],
     max_len_pho = -999
     for cat in range(n_en_cat):
         for layer in range(n_layers):
-            #print(len(mult_matrix_pho[cat][layer]))  
+            #print(len(mult_matrix_pho[cat][layer]))
             #print(max_len_pho)
             if len(mult_matrix_pho[cat][layer]) > max_len_pho:
                 max_len_pho = len(mult_matrix_pho[cat][layer])
@@ -1099,7 +1118,7 @@ def doMultiplicityPlots_cat(data_list_pho: List[Data], data_list_pi: List[Data],
     plt.savefig(os.path.join(out_dir, 'mult_95_cat.png')) #save plot
     plt.close(fig)
 
-    
+
 # function to plot visualization plots
 def doVisualizationPlots(data_list_pho: List[Data], data_list_pi: List[Data], out_dir: str) -> None:
 
@@ -1111,7 +1130,7 @@ def doVisualizationPlots(data_list_pho: List[Data], data_list_pi: List[Data], ou
     for i_file_pi in data_list_pi:
         for i_evt_pi in i_file_pi:
             trackster_pi = i_evt_pi.clus3d_feat.numpy()
-    
+
             shower_en_pi.append(trackster_pi[2])
             shower_eta_pi.append(trackster_pi[0])
 
@@ -1123,16 +1142,16 @@ def doVisualizationPlots(data_list_pho: List[Data], data_list_pi: List[Data], ou
     for i_file_pho in data_list_pho:
         for i_evt_pho in i_file_pho:
             trackster_pho = i_evt_pho.clus3d_feat.numpy()
-    
+
             shower_en_pho.append(trackster_pho[2])
             shower_eta_pho.append(trackster_pho[0])
-    
-    # plot eta vs energy 
-    fig, axs = plt.subplots(1, 2, figsize=(20,10), tight_layout=True)  
+
+    # plot eta vs energy
+    fig, axs = plt.subplots(1, 2, figsize=(20,10), tight_layout=True)
     axs[0].hist2d(shower_en_pho, shower_eta_pho, bins=50, range=((0,1200),(1.2,3.2)), density=True, cmap='Oranges')
     axs[0].set_xlabel('Energy')
     axs[0].set_ylabel('eta')
-    axs[0].set_title(r'$\gamma$')  
+    axs[0].set_title(r'$\gamma$')
     axs[1].hist2d(shower_en_pi, shower_eta_pi, bins=50, range=((0,1200),(1.2,3.2)), density=True, cmap='Greens')
     axs[1].set_xlabel('Energy')
     axs[1].set_ylabel('eta')
@@ -1140,7 +1159,7 @@ def doVisualizationPlots(data_list_pho: List[Data], data_list_pi: List[Data], ou
     plt.savefig(os.path.join(out_dir, 'eta_en_trackster.png')) #save plot
     plt.close(fig)
 
-    
+
 
 if __name__ == "__main__" :
 
@@ -1151,24 +1170,24 @@ if __name__ == "__main__" :
     os.makedirs(out_dir, exist_ok=True) #check if output dir exist
 
     ## input files photons
-    inpath_pho = '/grid_mnt/data__data.polcms/cms/sghosh/NEWPID_DATA/ntup_pho_frac0p8/'
+    inpath_pho = '/grid_mnt/data__data.polcms/cms/sghosh/NEWPID_TICLDUMPER_DATA/ntup_pho_21052024/'
     data_list_pho = openFiles(inpath_pho, desc='Loading photon files')
 
     ## input files pions
-    inpath_pi = '/grid_mnt/data__data.polcms/cms/sghosh/NEWPID_DATA/ntup_pi_frac0p8/'
+    inpath_pi = '/grid_mnt/data__data.polcms/cms/sghosh/NEWPID_TICLDUMPER_DATA/ntup_pi_21052024/'
     data_list_pi = openFiles(inpath_pi, desc='Loading pions files')
 
     ## plots
     print('doing plots...')
-    
-    doHisto(data_list_pho, data_list_pi, out_dir)
 
-    doENprofile(data_list_pho, data_list_pi, out_dir)
+    #doHisto(data_list_pho, data_list_pi, out_dir)
+
+    #doENprofile(data_list_pho, data_list_pi, out_dir)
 
     doGunPlots(data_list_pho, data_list_pi, out_dir)
 
-    doMultiplicityPlots(data_list_pho, data_list_pi, out_dir)
+    #doMultiplicityPlots(data_list_pho, data_list_pi, out_dir)
 
-    doMultiplicityPlots_cat(data_list_pho, data_list_pi, out_dir)
+    #doMultiplicityPlots_cat(data_list_pho, data_list_pi, out_dir)
 
-    doVisualizationPlots(data_list_pho, data_list_pi, out_dir)
+    #doVisualizationPlots(data_list_pho, data_list_pi, out_dir)
