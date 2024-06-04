@@ -790,9 +790,9 @@ def doGunPlots(data_list_pho: List[Data], data_list_pi: List[Data], out_dir: str
     axs.flatten()[3].set_xlabel('total energy')
     axs.flatten()[3].set_ylabel('# trk')
     # plot ratio
-    axs.flatten()[4].hist(gun_matrix_pi[:,4], bins=50, range=(0.,100.),
+    axs.flatten()[4].hist(gun_matrix_pi[:,4], bins=50, range=(0.,5.),
                 density=True, color='green', alpha=0.4, label=r'$\pi$')
-    axs.flatten()[4].hist(gun_matrix_pho[:,4], bins=50, range=(0.,100.),
+    axs.flatten()[4].hist(gun_matrix_pho[:,4], bins=50, range=(0.,5.),
                 density=True, color='orange', alpha=0.4, label=r'$\gamma$')
     axs.flatten()[4].legend()
     axs.flatten()[4].set_xlabel('ratio')
