@@ -12,6 +12,9 @@ from .openFiles import openFiles
 from .plotENprofile import doENprofile
 from .plotGun import doGunPlots
 from .plotHisto import doHisto
+from .plotMultiplicity import doMultiplicityPlots
+from .plotMultiplicity_cat import doMultiplicityPlots_cat
+from .plotVisualization import doVisualizationPlots
 
 # Set the license and package information
 __license__ = ''
@@ -25,5 +28,8 @@ __all__ = ['openFiles',
            '_energy_profile',
            '_energy_profile_per_cat',
            'doENprofile',
-           'doGunPlots'
+           'doGunPlots',
+           'doMultiplicityPlots',
+           'doMultiplicityPlots_cat',
+           'doVisualizationPlots'
         ]
