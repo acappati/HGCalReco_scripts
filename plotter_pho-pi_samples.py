@@ -18,11 +18,7 @@ from torch_geometric.data import Data
 from tqdm import tqdm as tqdm
 
 # import modules
-from plotter_functions import (_divide_en_categ, _divide_eta_categ,
-                               _energy_profile, _energy_profile_per_cat,
-                               doENprofile, doGunPlots, doHisto,
-                               doMultiplicityPlots, doMultiplicityPlots_cat,
-                               doVisualizationPlots, openFiles)
+from plotter_functions import *
 
 plt.style.use(hep.style.CMS)
 mpl.use('agg')
