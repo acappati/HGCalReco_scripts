@@ -6,8 +6,10 @@ This module contains the functions that are used to plot quantities of interest
 
 # import the functions
 from .category import _divide_en_categ, _divide_eta_categ
+from .energy_profile_cat import _energy_profile_per_cat
 from .energyProfile import _energy_profile
 from .openFiles import openFiles
+from .plotENprofile import doENprofile
 from .plotHisto import doHisto
 
 # Set the license and package information
@@ -19,5 +21,7 @@ __all__ = ['openFiles',
            '_divide_eta_categ',
            '_divide_en_categ',
            'doHisto',
-           '_energy_profile'
+           '_energy_profile',
+           '_energy_profile_per_cat',
+           'doENprofile'
         ]

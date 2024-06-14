@@ -2,7 +2,6 @@
 function to compute the energy profile of the trackster
 """
 
-
 from typing import List
 
 import matplotlib as mpl
