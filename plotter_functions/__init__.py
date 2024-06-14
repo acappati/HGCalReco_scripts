@@ -6,6 +6,7 @@ This module contains the functions that are used to plot quantities of interest
 
 # import the functions
 from .category import _divide_en_categ, _divide_eta_categ
+from .energyProfile import _energy_profile
 from .openFiles import openFiles
 from .plotHisto import doHisto
 
@@ -17,5 +18,6 @@ __url__ = ''
 __all__ = ['openFiles',
            '_divide_eta_categ',
            '_divide_en_categ',
-           'doHisto'
+           'doHisto',
+           '_energy_profile'
         ]
