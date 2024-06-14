@@ -10,6 +10,7 @@ from .energy_profile_cat import _energy_profile_per_cat
 from .energyProfile import _energy_profile
 from .openFiles import openFiles
 from .plotENprofile import doENprofile
+from .plotGun import doGunPlots
 from .plotHisto import doHisto
 
 # Set the license and package information
@@ -23,5 +24,6 @@ __all__ = ['openFiles',
            'doHisto',
            '_energy_profile',
            '_energy_profile_per_cat',
-           'doENprofile'
+           'doENprofile',
+           'doGunPlots'
         ]
