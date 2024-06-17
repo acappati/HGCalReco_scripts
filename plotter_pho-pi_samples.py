@@ -67,8 +67,8 @@ if __name__ == "__main__" :
     data_list_pho = openFiles(inpath_pho, desc='Loading photon files')
 
     ## input files pions
-    # inpath_pi = '/grid_mnt/data__data.polcms/cms/sghosh/NEWPID_TICLDUMPER_DATA/ntup_pi_21052024/'
-    # data_list_pi = openFiles(inpath_pi, desc='Loading pions files')
+    inpath_pi = '/grid_mnt/data__data.polcms/cms/sghosh/NEWPID_TICLDUMPER_DATA/ntup_pi_21052024/'
+    data_list_pi = openFiles(inpath_pi, desc='Loading pions files')
 
     ## plots
     print('doing plots...')
@@ -92,5 +92,10 @@ if __name__ == "__main__" :
     #doVisualizationPlots(data_list_pho, data_list_pi, out_dir)
 
     # CAUTION: it produces a loooot of plots
-    print('checking shower extension...')
-    checkShowerExt(data_list_pho, out_dir)
+    #print('checking shower extension...')
+    #checkShowerExt(data_list_pho, out_dir)
+
+    print('checking fraction CEH for photons...')
+    checkFractionCEH(data_list_pho, out_dir, 'orange')
+    print('checking fraction CEH for pions...')
+    checkFractionCEH(data_list_pi, out_dir, 'green')

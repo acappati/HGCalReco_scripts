@@ -6,6 +6,7 @@ This module contains the functions that are used to plot quantities of interest
 
 # import the functions
 from .category import _divide_en_categ, _divide_eta_categ
+from .checkFractionCEH import checkFractionCEH
 from .checkShowerExt import checkShowerExt, findMinima
 from .energy_profile_cat import _energy_profile_per_cat
 from .energyProfile import _energy_profile
@@ -34,5 +35,6 @@ __all__ = ['openFiles',
            'doMultiplicityPlots_cat',
            'doVisualizationPlots',
            'checkShowerExt',
-           'findMinima'
+           'findMinima',
+           'checkFractionCEH'
         ]

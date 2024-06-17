@@ -54,8 +54,8 @@ def doENprofile(data_list_pho: List[Data], data_list_pi: List[Data], out_dir: st
     # compute the energy fraction in the hadronic part of HGCal
     # consider the last 22 layers
     # compute the energy fraction per each trackster
-    fracH_arr_pho = en_arr_frac_pho_matrix[:,27:].sum(axis=1)/en_arr_frac_pho_matrix.sum(axis=1)
-    fracH_arr_pi = en_arr_frac_pi_matrix[:,27:].sum(axis=1)/en_arr_frac_pi_matrix.sum(axis=1)
+    fracH_arr_pho = en_arr_frac_pho_matrix[:,26:].sum(axis=1)/en_arr_frac_pho_matrix.sum(axis=1)
+    fracH_arr_pi = en_arr_frac_pi_matrix[:,26:].sum(axis=1)/en_arr_frac_pi_matrix.sum(axis=1)
 
     # plot energy fraction in the hadronic part
     fig1, ax1 = plt.subplots(figsize=(12,8), dpi=80, tight_layout=True)
