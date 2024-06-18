@@ -95,7 +95,10 @@ if __name__ == "__main__" :
     #print('checking shower extension...')
     #checkShowerExt(data_list_pho, out_dir)
 
-    print('checking fraction CEH for photons...')
-    checkFractionCEH(data_list_pho, out_dir, 'orange')
-    print('checking fraction CEH for pions...')
-    checkFractionCEH(data_list_pi, out_dir, 'green')
+    print('plotting fraction in CEH ...')
+    plotFractionCEH(data_list_pho, data_list_pi, out_dir)
+
+    # print('checking fraction CEH for photons...')
+    # checkFractionCEH(data_list_pho, out_dir, 'orange')
+    # print('checking fraction CEH for pions...')
+    # checkFractionCEH(data_list_pi, out_dir, 'green')

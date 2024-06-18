@@ -12,6 +12,7 @@ from .energy_profile_cat import _energy_profile_per_cat
 from .energyProfile import _energy_profile
 from .openFiles import openFiles
 from .plotENprofile import doENprofile
+from .plotFractionCEH import plotFractionCEH
 from .plotGun import doGunPlots
 from .plotHisto import doHisto
 from .plotMultiplicity import doMultiplicityPlots
@@ -36,5 +37,6 @@ __all__ = ['openFiles',
            'doVisualizationPlots',
            'checkShowerExt',
            'findMinima',
-           'checkFractionCEH'
+           'checkFractionCEH',
+           'plotFractionCEH'
         ]

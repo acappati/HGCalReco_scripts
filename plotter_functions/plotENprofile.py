@@ -51,23 +51,24 @@ def doENprofile(data_list_pho: List[Data], data_list_pi: List[Data], out_dir: st
     plt.close(fig)
 
 
-    # compute the energy fraction in the hadronic part of HGCal
-    # consider the last 22 layers
-    # compute the energy fraction per each trackster
-    fracH_arr_pho = en_arr_frac_pho_matrix[:,26:].sum(axis=1)/en_arr_frac_pho_matrix.sum(axis=1)
-    fracH_arr_pi = en_arr_frac_pi_matrix[:,26:].sum(axis=1)/en_arr_frac_pi_matrix.sum(axis=1)
+    # not super correct
+    # # compute the energy fraction in the hadronic part of HGCal
+    # # consider the last 22 layers
+    # # compute the energy fraction per each trackster
+    # fracH_arr_pho = en_arr_frac_pho_matrix[:,26:].sum(axis=1)/en_arr_frac_pho_matrix.sum(axis=1)
+    # fracH_arr_pi = en_arr_frac_pi_matrix[:,26:].sum(axis=1)/en_arr_frac_pi_matrix.sum(axis=1)
 
-    # plot energy fraction in the hadronic part
-    fig1, ax1 = plt.subplots(figsize=(12,8), dpi=80, tight_layout=True)
-    ax1.hist(fracH_arr_pi, bins=50, range=(0.,0.21), density=True, color='green', alpha=0.4, label=r'$\pi$')
-    ax1.hist(fracH_arr_pho, bins=50, range=(0.,0.21), density=True, color='orange', alpha=0.4, label=r'$\gamma$')
-    ax1.legend()
-    ax1.set_yscale('log')
-    ax1.set_xlabel('Energy fraction in CEH')
-    ax1.set_ylabel('# tracksters')
+    # # plot energy fraction in the hadronic part
+    # fig1, ax1 = plt.subplots(figsize=(12,8), dpi=80, tight_layout=True)
+    # ax1.hist(fracH_arr_pi, bins=50, range=(0.,0.21), density=True, color='green', alpha=0.4, label=r'$\pi$')
+    # ax1.hist(fracH_arr_pho, bins=50, range=(0.,0.21), density=True, color='orange', alpha=0.4, label=r'$\gamma$')
+    # ax1.legend()
+    # ax1.set_yscale('log')
+    # ax1.set_xlabel('Energy fraction in CEH')
+    # ax1.set_ylabel('# tracksters')
 
-    plt.savefig(os.path.join(out_dir, 'en_fracH.png')) #save plot
-    plt.close(fig1)
+    # plt.savefig(os.path.join(out_dir, 'en_fracH.png')) #save plot
+    # plt.close(fig1)
 
 
     # energy profile per CATEGORY
