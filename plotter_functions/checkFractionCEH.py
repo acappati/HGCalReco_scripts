@@ -17,7 +17,7 @@ plt.style.use(hep.style.CMS)
 mpl.use('agg')
 
 
-def checkFractionCEH(data_list, out_dir, color_histo, n_layers: int = 48):
+def checkFractionCEH(data_list, out_dir, color_histo):
     """
     function to check events with a large fraction of energy in the hadronic part of the calorimeter
     """
@@ -41,10 +41,6 @@ def checkFractionCEH(data_list, out_dir, color_histo, n_layers: int = 48):
         # loop over all events in one file
         for i_evt in i_file:
 
-            # energy array for each Layer of all LC
-            # create an array of 48 empty arrays
-            en_arr = [[] for _ in range(n_layers)]
-
             # --- read 2D objects
             # layerClusterMatrix = matrix of all the LayerClusters in the file
             # LayerCluster features: clusX,clusY,clusZ,clusE,clusT,clusL
@@ -58,22 +54,13 @@ def checkFractionCEH(data_list, out_dir, color_histo, n_layers: int = 48):
             # trkcluseta,trkclusphi,trkclusen,trkclustime, min(clusL),max(clusL)
             trackster = i_evt.clus3d_feat.numpy() # transform the tensor in numpy array
 
-            # loop over LC of the event
-            for i_LC in range(len(layerClusterMatrix)): #loop over matrix rows
-                en_arr[int(layerClusterMatrix[i_LC,5])].append(layerClusterMatrix[i_LC,3]) # fill array of all energies of all LCs in all events. there is one array per Layer
-
-            # compute the sum of the energy of all LC per Layer
-            en_sum_perL_arr = [np.sum(i, dtype=np.float32) for i in en_arr]
-
-            # compute the energy fraction per layer
-            # divide by the total energy of the trackster
-            en_frac_arr = [i/trackster[2] for i in en_sum_perL_arr] # there is an energy fraction per each layer
+            # --- read gun properties
+            gun = i_evt.gun_feat.numpy() # transform the tensor in numpy array
 
 
-            # compute the energy fraction in the hadronic part of HGCal
+            ## compute the energy fraction in the hadronic part of HGCal
             # consider the last 22 layers
-            # compute the energy fraction per each trackster
-            fracH = np.sum(en_frac_arr[26:])/np.sum(en_frac_arr)
+            fracH = np.sum(layerClusterMatrix[layerClusterMatrix[:,5]> 26][:,3])/np.sum(layerClusterMatrix[:,3])
 
             #print('fraction of energy in the hadronic part:', fracH)
 
@@ -81,6 +68,7 @@ def checkFractionCEH(data_list, out_dir, color_histo, n_layers: int = 48):
             if fracH > limit_value:
 
                 print('Event with large fraction of energy in the hadronic part')
+                print('fraction of energy in the hadronic part:', fracH)
                 print('trackster quantities:')
                 print('eta:', trackster[0])
                 print('phi:', trackster[1])
@@ -88,8 +76,18 @@ def checkFractionCEH(data_list, out_dir, color_histo, n_layers: int = 48):
                 print('time:', trackster[3])
                 print('min(clusL):', trackster[4])
                 print('max(clusL):', trackster[5])
-                print('fraction of energy in the hadronic part:', fracH)
                 print('')
+                print('LayerCluster quantities:')
+                print('sum of LC energy:', np.sum(layerClusterMatrix[:,3]))
+                print('')
+                print('gun quantities:')
+                print('eta:', gun[0])
+                print('phi:', gun[1])
+                print('energy:', gun[2])
+                print('tot energy:', gun[3])
+                print('ratio:', gun[4])
+
+
 
                 # plot 2D clusters
                 fig, axs = plt.subplots(1, 3, figsize=(20,12),dpi=80)
@@ -111,6 +109,7 @@ def checkFractionCEH(data_list, out_dir, color_histo, n_layers: int = 48):
                 # add pad with trackster info
                 my_box = dict(boxstyle='round', facecolor='white', alpha=0.5)
                 my_text = 'FracH: '+str(fracH)+'\n'
+                my_text += '\n'
                 my_text += 'Trackster quantities: \n'
                 my_text += 'eta: '+str(trackster[0])+'\n'
                 my_text += 'phi: '+str(trackster[1])+'\n'
@@ -118,7 +117,19 @@ def checkFractionCEH(data_list, out_dir, color_histo, n_layers: int = 48):
                 my_text += 'time: '+str(trackster[3])+'\n'
                 my_text += 'min(clusL): '+str(trackster[4])+'\n'
                 my_text += 'max(clusL): '+str(trackster[5])+'\n'
-                my_text += 'shower extension: '+str(abs(trackster[5]-trackster[4]))
+                my_text += 'shower extension: '+str(abs(trackster[5]-trackster[4]))+'\n'
+                my_text += '\n'
+                my_text += 'LayerCluster quantities: \n'
+                my_text += 'sum of LC energy: '+str(np.sum(layerClusterMatrix[:,3]))+'\n'
+                my_text += '\n'
+                my_text += 'Gun quantities: \n'
+                my_text += 'eta: '+str(gun[0])+'\n'
+                my_text += 'phi: '+str(gun[1])+'\n'
+                my_text += 'energy: '+str(gun[2])+'\n'
+                my_text += 'tot energy: '+str(gun[3])+'\n'
+                my_text += 'ratio: '+str(gun[4])
+
+
                 axs[2].text(1.04, 0.8, my_text, transform=axs[2].transAxes, fontsize=16, verticalalignment='top', bbox=my_box)
 
 

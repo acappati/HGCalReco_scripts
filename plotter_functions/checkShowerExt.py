@@ -169,6 +169,9 @@ def checkShowerExt(data_list, out_dir, norm=True) -> None :
                 # --- read 2D objects
                 layerClusterMatrix = i_evt.clus2d_feat.numpy()
 
+                # --- read gun properties
+                gun = i_evt.gun_feat.numpy()
+
                 # plot 2D clusters
                 fig, axs = plt.subplots(1, 3, figsize=(20,12),dpi=80)
 
@@ -188,6 +191,7 @@ def checkShowerExt(data_list, out_dir, norm=True) -> None :
 
                 # add category info
                 my_box = dict(boxstyle='round', facecolor='white', alpha=0.5)
+
                 axs[2].text(1.04, 0.9, en_bin_str[cat_en_n], transform=axs[2].transAxes, fontsize=16, verticalalignment='top', bbox=my_box)
 
                 # add pad with trackster info
@@ -198,7 +202,18 @@ def checkShowerExt(data_list, out_dir, norm=True) -> None :
                 my_text += 'time: '+str(trackster[3])+'\n'
                 my_text += 'min(clusL): '+str(trackster[4])+'\n'
                 my_text += 'max(clusL): '+str(trackster[5])+'\n'
-                my_text += 'shower extension: '+str(abs(trackster[5]-trackster[4]))
+                my_text += 'shower extension: '+str(abs(trackster[5]-trackster[4]))+'\n'
+                my_text += '\n'
+                my_text += 'LayerCluster quantities: \n'
+                my_text += 'sum of LC energy: '+str(np.sum(layerClusterMatrix[:,3]))+'\n'
+                my_text += '\n'
+                my_text += 'Gun quantities: \n'
+                my_text += 'eta: '+str(gun[0])+'\n'
+                my_text += 'phi: '+str(gun[1])+'\n'
+                my_text += 'energy: '+str(gun[2])+'\n'
+                my_text += 'tot energy: '+str(gun[3])+'\n'
+                my_text += 'ratio: '+str(gun[4])
+
                 axs[2].text(1.04, 0.8, my_text, transform=axs[2].transAxes, fontsize=16, verticalalignment='top', bbox=my_box)
 
 

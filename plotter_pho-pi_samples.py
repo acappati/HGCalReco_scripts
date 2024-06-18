@@ -91,12 +91,12 @@ if __name__ == "__main__" :
     #print('doing visualization plots...')
     #doVisualizationPlots(data_list_pho, data_list_pi, out_dir)
 
-    # CAUTION: it produces a loooot of plots
-    #print('checking shower extension...')
-    #checkShowerExt(data_list_pho, out_dir)
+    ## CAUTION: it produces a loooot of plots
+    print('checking shower extension...')
+    checkShowerExt(data_list_pho, out_dir)
 
-    print('plotting fraction in CEH ...')
-    plotFractionCEH(data_list_pho, data_list_pi, out_dir)
+    # print('plotting fraction in CEH ...')
+    # plotFractionCEH(data_list_pho, data_list_pi, out_dir)
 
     # print('checking fraction CEH for photons...')
     # checkFractionCEH(data_list_pho, out_dir, 'orange')
