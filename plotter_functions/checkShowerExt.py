@@ -60,7 +60,7 @@ def findMinima(data_list, out_dir, norm=True, n_en_cat : int =9) -> list :
 
 
     binEdges_list = np.arange(0, 48, 1) # this way I have 48 bins from 0 to 47 : 48 bins = 48 layers
-    minima_list = [10., 17., 18., 19., 20., 20., 20., 20., 21.] # chosen by eye
+    minima_list = [10., 15., 17., 18., 19., 19., 19., 20., 20.] # chosen by eye
 
     # do plots in bins of energy: shower extension
     # boundary every 100 GeV
