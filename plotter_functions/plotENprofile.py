@@ -26,11 +26,11 @@ def doENprofile(data_list_pho: List[Data], data_list_pi: List[Data], out_dir: st
     function to compute the energy profile
     """
     ### PHOTONS
-    print('creating fraction matrix for photons...')
+    print('[plotENprofile]: creating fraction matrix for photons...')
     en_arr_frac_pho_matrix = _energy_profile(data_list_pho)
 
     ### PIONS
-    print('creating fraction matrix for pion...')
+    print('[plotENprofile]: creating fraction matrix for pion...')
     en_arr_frac_pi_matrix = _energy_profile(data_list_pi)
 
 
@@ -82,7 +82,7 @@ def doENprofile(data_list_pho: List[Data], data_list_pi: List[Data], out_dir: st
     # sum over the events axis
     # (this object has shape [ncat][nevents][nlayer])
     # the most left index is the most internal (thus =0)
-    print('creating fraction matrix for category...')
+    print('[plotENprofile]: creating fraction matrix for category...')
     en_mean_arr_pho_cat_eta = en_arr_frac_pho_matrix_cat_eta.mean(axis=1)
     en_mean_arr_pi_cat_eta = en_arr_frac_pi_matrix_cat_eta.mean(axis=1)
     en_mean_arr_pho_cat_en = en_arr_frac_pho_matrix_cat_en.mean(axis=1)

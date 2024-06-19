@@ -26,6 +26,12 @@ def doHisto(data_list_pho, data_list_pi, out_dir, norm=True, n_eta_cat : int =8,
     function to do histograms from the training samples
     """
 
+    if norm:
+        nameAppendix = '_w_norm'
+    else:
+        nameAppendix = '_wo_norm'
+
+
     ### PHOTONS
     min_clusL_arr_pho = [] # array of all min_clusL
     max_clusL_arr_pho = [] # array of all max_clusL
@@ -168,7 +174,8 @@ def doHisto(data_list_pho, data_list_pi, out_dir, norm=True, n_eta_cat : int =8,
     axs[1].set_xlabel('max clusL')
     axs[1].set_ylabel('# trk')
 
-    plt.savefig(os.path.join(out_dir, 'minmaxL.png')) #save plot
+    plotname = 'minmaxL' + nameAppendix + '.png'
+    plt.savefig(os.path.join(out_dir, plotname)) #save plot
     plt.close(fig)
 
 
@@ -180,7 +187,9 @@ def doHisto(data_list_pho, data_list_pi, out_dir, norm=True, n_eta_cat : int =8,
     axs0.legend()
     axs0.set_xlabel('shower extension')
     axs0.set_ylabel('# trk')
-    plt.savefig(os.path.join(out_dir, 'extShower.png')) #save plot
+
+    plotname = 'extShower' + nameAppendix + '.png'
+    plt.savefig(os.path.join(out_dir, plotname)) #save plot
     plt.close(fig0)
 
 
@@ -200,7 +209,8 @@ def doHisto(data_list_pho, data_list_pi, out_dir, norm=True, n_eta_cat : int =8,
         # add a box containing the eta range
         axs1.flatten()[cat].text(0.7, 0.6, eta_bin_str[cat], transform=axs1.flatten()[cat].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
-    plt.savefig(os.path.join(out_dir, 'minL_eta.png')) #save plot
+    plotname = 'minL_eta' + nameAppendix + '.png'
+    plt.savefig(os.path.join(out_dir, plotname)) #save plot
     plt.close(fig1)
 
 
@@ -218,7 +228,8 @@ def doHisto(data_list_pho, data_list_pi, out_dir, norm=True, n_eta_cat : int =8,
         # add a box containing the eta range
         axs2.flatten()[cat].text(0.7, 0.6, eta_bin_str[cat], transform=axs2.flatten()[cat].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
-    plt.savefig(os.path.join(out_dir, 'maxL_eta.png')) #save plot
+    plotname = 'maxL_eta' + nameAppendix + '.png'
+    plt.savefig(os.path.join(out_dir, plotname)) #save plot
     plt.close(fig2)
 
 
@@ -236,7 +247,8 @@ def doHisto(data_list_pho, data_list_pi, out_dir, norm=True, n_eta_cat : int =8,
         # add a box containing the eta range
         axs3.flatten()[cat].text(0.7, 0.6, eta_bin_str[cat], transform=axs3.flatten()[cat].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
-    plt.savefig(os.path.join(out_dir, 'extShower_eta.png')) #save plot
+    plotname = 'extShower_eta' + nameAppendix + '.png'
+    plt.savefig(os.path.join(out_dir, plotname)) #save plot
     plt.close(fig3)
 
 
@@ -255,7 +267,8 @@ def doHisto(data_list_pho, data_list_pi, out_dir, norm=True, n_eta_cat : int =8,
         # add a box containing the eta range
         axs3.flatten()[cat].text(0.7, 0.6, eta_bin_str[cat], transform=axs3.flatten()[cat].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
-    plt.savefig(os.path.join(out_dir, 'showerEn_eta.png')) #save plot
+    plotname = 'showerEn_eta' + nameAppendix + '.png'
+    plt.savefig(os.path.join(out_dir, plotname)) #save plot
     plt.close(fig3)
 
     # do plots in bins of eta: shower eta
@@ -273,7 +286,8 @@ def doHisto(data_list_pho, data_list_pi, out_dir, norm=True, n_eta_cat : int =8,
         # add a box containing the eta range
         axs3.flatten()[cat].text(0.7, 0.6, eta_bin_str[cat], transform=axs3.flatten()[cat].transAxes, fontsize=16, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
-    plt.savefig(os.path.join(out_dir, 'showerEta_eta.png')) #save plot
+    plotname = 'showerEta_eta' + nameAppendix + '.png'
+    plt.savefig(os.path.join(out_dir, plotname)) #save plot
     plt.close(fig3)
 
 
@@ -292,7 +306,8 @@ def doHisto(data_list_pho, data_list_pi, out_dir, norm=True, n_eta_cat : int =8,
         # add a box containing the energy range
         axs4.flatten()[cat].text(0.6, 0.6, en_bin_str[cat], transform=axs4.flatten()[cat].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
-    plt.savefig(os.path.join(out_dir, 'minL_en.png')) #save plot
+    plotname = 'minL_en' + nameAppendix + '.png'
+    plt.savefig(os.path.join(out_dir, plotname)) #save plot
     plt.close(fig4)
 
 
@@ -310,7 +325,8 @@ def doHisto(data_list_pho, data_list_pi, out_dir, norm=True, n_eta_cat : int =8,
         # add a box containing the energy range
         axs5.flatten()[cat].text(0.6, 0.6, en_bin_str[cat], transform=axs5.flatten()[cat].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
-    plt.savefig(os.path.join(out_dir, 'maxL_en.png')) #save plot
+    plotname = 'maxL_en' + nameAppendix + '.png'
+    plt.savefig(os.path.join(out_dir, plotname)) #save plot
     plt.close(fig4)
 
 
@@ -328,7 +344,8 @@ def doHisto(data_list_pho, data_list_pi, out_dir, norm=True, n_eta_cat : int =8,
         # add a box containing the energy range
         axs6.flatten()[cat].text(0.6, 0.6, en_bin_str[cat], transform=axs6.flatten()[cat].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
-    plt.savefig(os.path.join(out_dir, 'extShower_en.png')) #save plot
+    plotname = 'extShower_en' + nameAppendix + '.png'
+    plt.savefig(os.path.join(out_dir, plotname)) #save plot
     plt.close(fig6)
 
 
@@ -347,7 +364,8 @@ def doHisto(data_list_pho, data_list_pi, out_dir, norm=True, n_eta_cat : int =8,
         # add a box containing the energy range
         axs6.flatten()[cat].text(0.6, 0.6, en_bin_str[cat], transform=axs6.flatten()[cat].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
-    plt.savefig(os.path.join(out_dir, 'showerEn_en.png')) #save plot
+    plotname = 'showerEn_en' + nameAppendix + '.png'
+    plt.savefig(os.path.join(out_dir, plotname)) #save plot
     plt.close(fig6)
 
     # do plots in bins of energy: shower eta
@@ -365,7 +383,8 @@ def doHisto(data_list_pho, data_list_pi, out_dir, norm=True, n_eta_cat : int =8,
         # add a box containing the energy range
         axs6.flatten()[cat].text(0.6, 0.6, en_bin_str[cat], transform=axs6.flatten()[cat].transAxes, fontsize=14, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
 
-    plt.savefig(os.path.join(out_dir, 'showerEta_en.png')) #save plot
+    plotname = 'showerEta_en' + nameAppendix + '.png'
+    plt.savefig(os.path.join(out_dir, plotname)) #save plot
     plt.close(fig6)
 
 

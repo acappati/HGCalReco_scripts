@@ -63,41 +63,43 @@ if __name__ == "__main__" :
 
 
     ## input files photons
-    inpath_pho = '/grid_mnt/data__data.polcms/cms/sghosh/NEWPID_TICLDUMPER_DATA/ntup_pho_21052024/'
+    inpath_pho = '/grid_mnt/data__data.polcms/cms/sghosh/NEWPID_TICLDUMPER_DATA/ntup_pho_18082024/'
     data_list_pho = openFiles(inpath_pho, desc='Loading photon files')
 
     ## input files pions
-    inpath_pi = '/grid_mnt/data__data.polcms/cms/sghosh/NEWPID_TICLDUMPER_DATA/ntup_pi_21052024/'
+    inpath_pi = '/grid_mnt/data__data.polcms/cms/sghosh/NEWPID_TICLDUMPER_DATA/ntup_pi_18062024/'
     data_list_pi = openFiles(inpath_pi, desc='Loading pions files')
 
     ## plots
     print('doing plots...')
 
-    #print('doing histos...')
-    #doHisto(data_list_pho, data_list_pi, out_dir, False)
+    print('doing histos...')
+    doHisto(data_list_pho, data_list_pi, out_dir, norm=False)
+    doHisto(data_list_pho, data_list_pi, out_dir, norm=True)
 
-    #print('doing ENprofile...')
-    #doENprofile(data_list_pho, data_list_pi, out_dir)
+    print('doing ENprofile...')
+    doENprofile(data_list_pho, data_list_pi, out_dir)
 
-    #print('doing Gun plots...')
-    #doGunPlots(data_list_pho, data_list_pi, out_dir)
+    print('doing Gun plots...')
+    doGunPlots(data_list_pho, data_list_pi, out_dir)
 
-    #print('doing mult plot...')
-    #doMultiplicityPlots(data_list_pho, data_list_pi, out_dir)
+    print('doing mult plot...')
+    doMultiplicityPlots(data_list_pho, data_list_pi, out_dir)
 
-    #print('doing mult plot per category...')
-    #doMultiplicityPlots_cat(data_list_pho, data_list_pi, out_dir)
+    print('doing mult plot per category...')
+    doMultiplicityPlots_cat(data_list_pho, data_list_pi, out_dir)
 
-    #print('doing visualization plots...')
-    #doVisualizationPlots(data_list_pho, data_list_pi, out_dir)
+    print('doing visualization plots...')
+    doVisualizationPlots(data_list_pho, data_list_pi, out_dir)
 
     ## CAUTION: it produces a loooot of plots
-    print('checking shower extension...')
-    checkShowerExt(data_list_pho, out_dir)
+    # print('checking shower extension...')
+    # checkShowerExt(data_list_pho, out_dir)
 
-    # print('plotting fraction in CEH ...')
-    # plotFractionCEH(data_list_pho, data_list_pi, out_dir)
+    print('plotting fraction in CEH ...')
+    plotFractionCEH(data_list_pho, data_list_pi, out_dir)
 
+    ## CAUTION: it produces a loooot of plots
     # print('checking fraction CEH for photons...')
     # checkFractionCEH(data_list_pho, out_dir, 'orange')
     # print('checking fraction CEH for pions...')

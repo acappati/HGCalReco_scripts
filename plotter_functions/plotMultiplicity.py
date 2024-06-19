@@ -113,6 +113,10 @@ def doMultiplicityPlots(data_list_pho: List[Data], data_list_pi: List[Data], out
     #print(mult_arr_pho_95)
 
     # plot multiplicity per layer
+    # create out dir for plots of multiplicity per layer
+    out_dir_mult_layer = out_dir+'/'+'mult_layer'
+    os.makedirs(out_dir_mult_layer, exist_ok=True) #check if output dir exist
+
     x_ticks = np.arange(0, 21, 2, dtype=int) # ticks for x axis - from 0 to 21 (excluded) with step 2
     for i_L in range(n_layers):
         fig1, ax1 = plt.subplots(figsize=(12,10), tight_layout=True)
@@ -123,7 +127,7 @@ def doMultiplicityPlots(data_list_pho: List[Data], data_list_pi: List[Data], out
         ax1.set_xlabel('Multiplicity')
         ax1.set_ylabel('# LC')
         ax1.set_title('Layer '+str(i_L))
-        plt.savefig(os.path.join(out_dir, 'mult_layer'+str(i_L)+'.png')) #save plot
+        plt.savefig(os.path.join(out_dir_mult_layer, 'mult_layer'+str(i_L)+'.png')) #save plot
         plt.close(fig1)
 
 
