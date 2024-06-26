@@ -18,6 +18,7 @@ from .plotHisto import doHisto
 from .plotMultiplicity import doMultiplicityPlots
 from .plotMultiplicity_cat import doMultiplicityPlots_cat
 from .plotVisualization import doVisualizationPlots
+from .traincheck_pi_all import plot_traincheck_all, traincheck_all
 from .traincheck_pi_CEEshowerExt import (plot_showerExtCEE,
                                          traincheck_showerExtCEE)
 from .traincheck_pi_enFracCEE import plot_enFracCEE, traincheck_enFracCEE
@@ -45,5 +46,7 @@ __all__ = ['openFiles',
            'traincheck_showerExtCEE',
            'plot_showerExtCEE',
            'traincheck_enFracCEE',
-           'plot_enFracCEE'
+           'plot_enFracCEE',
+           'traincheck_all',
+           'plot_traincheck_all'
         ]

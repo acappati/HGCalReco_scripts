@@ -19,7 +19,7 @@ from tqdm import tqdm as tqdm
 
 # import modules
 from plotter_functions import *
-from plotter_functions import traincheck_pi_CEEshowerExt
+from plotter_functions import traincheck_pi_all, traincheck_pi_CEEshowerExt
 
 plt.style.use(hep.style.CMS)
 mpl.use('agg')
@@ -117,5 +117,8 @@ if __name__ == "__main__" :
     # print('checking early showering pions')
     # plot_showerExtCEE(data_list_pi, out_dir)
 
-    print('checking pions with enough energy in CEE')
-    plot_enFracCEE(data_list_pi, out_dir)
+    # print('checking pions with enough energy in CEE')
+    # plot_enFracCEE(data_list_pi, out_dir)
+
+    print('checking pions with enough energy in CEE and shower extension')
+    plot_traincheck_all(data_list_pi, out_dir)
