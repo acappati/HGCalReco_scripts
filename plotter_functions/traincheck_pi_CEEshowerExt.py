@@ -1,5 +1,6 @@
 """
 function to check pions with long enough shower extension in CEE
+and to decide cuts to apply to training samples (to make pions resemble photons)
 """
 
 import os
@@ -8,8 +9,6 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import mplhep as hep
 import numpy as np
-from scipy.signal import argrelmin, find_peaks
-from scipy.stats import gaussian_kde
 #import pandas as pd
 from tqdm import tqdm as tqdm
 
@@ -70,40 +69,28 @@ def plot_showerExtCEE(data_list, out_dir) -> None:
 
 
     print('[traincheck_showerExt] Plotting events')
-    # --- fancy colors for the plot
-    # get the color map
-    colormap = plt.colormaps.get_cmap('viridis')
-    # number of colors = number of events
-    num_colors = len(LCtensor_list)
-    # Create the color palette by sampling colors from the colormap
-    color_palette = [colormap(i) for i in np.linspace(0, 1, num_colors)]
-    #print(color_palette) # it returns (r,g,b,a), where a is in [0,1]
-
 
     # plot 2D clusters
     fig, axs = plt.subplots(1, 3, figsize=(20,12),dpi=80)
 
-    ## counter for color list
-    icolor = 0
 
     # loop over events saved in the list of tensors
-    for iLCtensor in range(0,len(LCtensor_list)):
+    for iLCtensor in range(0,100): #len(LCtensor_list)
 
         # plot the scatter plot of the LCs in the events
         # --- Layer number vs x scatter plot
-        axs[0].scatter(LCtensor_list[iLCtensor][:,0],LCtensor_list[iLCtensor][:,5],s=LCtensor_list[iLCtensor][:,3], color=color_palette[icolor], alpha=0.4)
+        axs[0].scatter(LCtensor_list[iLCtensor][:,0],LCtensor_list[iLCtensor][:,5],s=LCtensor_list[iLCtensor][:,3], alpha=0.4)
         axs[0].set_xlabel('x (cm)')
         axs[0].set_ylabel('Layer number')
         # --- Layer number vs y scatter plot
-        axs[1].scatter(LCtensor_list[iLCtensor][:,1],LCtensor_list[iLCtensor][:,5],s=LCtensor_list[iLCtensor][:,3], color=color_palette[icolor], alpha=0.4)
+        axs[1].scatter(LCtensor_list[iLCtensor][:,1],LCtensor_list[iLCtensor][:,5],s=LCtensor_list[iLCtensor][:,3], alpha=0.4)
         axs[1].set_xlabel('y (cm)')
         axs[1].set_ylabel('Layer number')
         # --- y vs x scatter plot
-        axs[2].scatter(LCtensor_list[iLCtensor][:,0],LCtensor_list[iLCtensor][:,1],s=LCtensor_list[iLCtensor][:,3], color=color_palette[icolor], alpha=0.4)
+        axs[2].scatter(LCtensor_list[iLCtensor][:,0],LCtensor_list[iLCtensor][:,1],s=LCtensor_list[iLCtensor][:,3], alpha=0.4)
         axs[2].set_xlabel('x (cm)')
         axs[2].set_ylabel('y (cm)')
 
-        icolor = icolor +1 ## counter for color list
 
     plt.tight_layout()
     plt.savefig(os.path.join(out_dir, 'traincheck_pi_ShowerExt.png')) #save plot
