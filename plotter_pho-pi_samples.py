@@ -114,5 +114,8 @@ if __name__ == "__main__" :
 
     ### --- checks for training samples
 
-    print('checking early showering pions')
-    plot_showerExtCEE(data_list_pi, out_dir)
+    # print('checking early showering pions')
+    # plot_showerExtCEE(data_list_pi, out_dir)
+
+    print('checking pions with enough energy in CEE')
+    plot_enFracCEE(data_list_pi, out_dir)

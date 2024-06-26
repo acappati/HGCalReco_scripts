@@ -20,6 +20,7 @@ from .plotMultiplicity_cat import doMultiplicityPlots_cat
 from .plotVisualization import doVisualizationPlots
 from .traincheck_pi_CEEshowerExt import (plot_showerExtCEE,
                                          traincheck_showerExtCEE)
+from .traincheck_pi_enFracCEE import plot_enFracCEE, traincheck_enFracCEE
 
 # Set the license and package information
 __license__ = ''
@@ -42,5 +43,7 @@ __all__ = ['openFiles',
            'checkFractionCEH',
            'plotFractionCEH',
            'traincheck_showerExtCEE',
-           'plot_showerExtCEE'
+           'plot_showerExtCEE',
+           'traincheck_enFracCEE',
+           'plot_enFracCEE'
         ]
