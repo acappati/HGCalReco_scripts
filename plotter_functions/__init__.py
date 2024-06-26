@@ -18,6 +18,8 @@ from .plotHisto import doHisto
 from .plotMultiplicity import doMultiplicityPlots
 from .plotMultiplicity_cat import doMultiplicityPlots_cat
 from .plotVisualization import doVisualizationPlots
+from .traincheck_pi_CEEshowerExt import (plot_showerExtCEE,
+                                         traincheck_showerExtCEE)
 
 # Set the license and package information
 __license__ = ''
@@ -38,5 +40,7 @@ __all__ = ['openFiles',
            'checkShowerExt',
            'findMinima',
            'checkFractionCEH',
-           'plotFractionCEH'
+           'plotFractionCEH',
+           'traincheck_showerExtCEE',
+           'plot_showerExtCEE'
         ]
