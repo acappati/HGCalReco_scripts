@@ -7,19 +7,14 @@
 
 import os
 from datetime import date
-from typing import List
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import mplhep as hep
-import numpy as np
-#import pandas as pd
-from torch_geometric.data import Data
 from tqdm import tqdm as tqdm
 
-# import modules
 from plotter_functions import *
-from plotter_functions import traincheck_pi_all, traincheck_pi_CEEshowerExt
+from tools import *
 
 plt.style.use(hep.style.CMS)
 mpl.use('agg')
@@ -71,32 +66,33 @@ if __name__ == "__main__" :
     inpath_pi = '/grid_mnt/data__data.polcms/cms/sghosh/NEWPID_TICLDUMPER_DATA/ntup_pi_18062024/'
     data_list_pi = openFiles(inpath_pi, desc='Loading pions files')
 
+
     ## plots
     print('doing plots...')
 
     ### --- standard plots
 
-    # print('doing histos...')
-    # doHisto(data_list_pho, data_list_pi, out_dir, norm=False)
-    # doHisto(data_list_pho, data_list_pi, out_dir, norm=True)
+    print('doing histos...')
+    doHisto(data_list_pho, data_list_pi, out_dir, norm=False)
+    doHisto(data_list_pho, data_list_pi, out_dir, norm=True)
 
-    # print('doing ENprofile...')
-    # doENprofile(data_list_pho, data_list_pi, out_dir)
+    print('doing ENprofile...')
+    doENprofile(data_list_pho, data_list_pi, out_dir)
 
-    # print('doing Gun plots...')
-    # doGunPlots(data_list_pho, data_list_pi, out_dir)
+    print('doing Gun plots...')
+    doGunPlots(data_list_pho, data_list_pi, out_dir)
 
-    # print('doing mult plot...')
-    # doMultiplicityPlots(data_list_pho, data_list_pi, out_dir)
+    print('doing mult plot...')
+    doMultiplicityPlots(data_list_pho, data_list_pi, out_dir)
 
-    # print('doing mult plot per category...')
-    # doMultiplicityPlots_cat(data_list_pho, data_list_pi, out_dir)
+    print('doing mult plot per category...')
+    doMultiplicityPlots_cat(data_list_pho, data_list_pi, out_dir)
 
-    # print('doing visualization plots...')
-    # doVisualizationPlots(data_list_pho, data_list_pi, out_dir)
+    print('doing visualization plots...')
+    doVisualizationPlots(data_list_pho, data_list_pi, out_dir)
 
-    # print('plotting fraction in CEH ...')
-    # plotFractionCEH(data_list_pho, data_list_pi, out_dir)
+    print('plotting fraction in CEH ...')
+    plotFractionCEH(data_list_pho, data_list_pi, out_dir)
 
 
     ### --- checks for special events
@@ -114,11 +110,11 @@ if __name__ == "__main__" :
 
     ### --- checks for training samples
 
-    # print('checking early showering pions')
-    # plot_showerExtCEE(data_list_pi, out_dir)
+    print('checking early showering pions')
+    plot_showerExtCEE(data_list_pi, out_dir)
 
-    # print('checking pions with enough energy in CEE')
-    # plot_enFracCEE(data_list_pi, out_dir)
+    print('checking pions with enough energy in CEE')
+    plot_enFracCEE(data_list_pi, out_dir)
 
     print('checking pions with enough energy in CEE and shower extension')
     plot_traincheck_all(data_list_pi, out_dir)

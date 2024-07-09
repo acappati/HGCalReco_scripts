@@ -10,7 +10,6 @@ from .checkFractionCEH import checkFractionCEH
 from .checkShowerExt import checkShowerExt, findMinima
 from .energy_profile_cat import _energy_profile_per_cat
 from .energyProfile import _energy_profile
-from .openFiles import openFiles
 from .plotENprofile import doENprofile
 from .plotFractionCEH import plotFractionCEH
 from .plotGun import doGunPlots
@@ -28,8 +27,7 @@ __license__ = ''
 __url__ = ''
 
 # package import
-__all__ = ['openFiles',
-           '_divide_eta_categ',
+__all__ = ['_divide_eta_categ',
            '_divide_en_categ',
            'doHisto',
            '_energy_profile',

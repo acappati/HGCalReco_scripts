@@ -3,16 +3,10 @@
 import glob
 from typing import List
 
-import matplotlib as mpl
-import matplotlib.pyplot as plt
-import mplhep as hep
 import torch
 #import pandas as pd
 from torch_geometric.data import Data
 from tqdm import tqdm as tqdm
-
-plt.style.use(hep.style.CMS)
-mpl.use('agg')
 
 
 
