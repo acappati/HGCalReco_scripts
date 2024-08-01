@@ -18,9 +18,11 @@ from tools.openFiles import openFiles
 
 class PhoPiDataset(Dataset):
 
-    def __init__(self, pho_dir: str, pi_dir: str):
+    def __init__(self, pho_dir: str, pi_dir: str, num_LC: int = 150, label: bool = False):
         self.pho_dir = pho_dir
         self.pi_dir = pi_dir
+        self.num_LC = num_LC
+        self.label = label
 
         # Placeholder lists
         self.prepared = False
@@ -28,13 +30,16 @@ class PhoPiDataset(Dataset):
         self.labels = None
 
 
-    def _make_training_datasets_pi(self, data_list: List[Data]) -> List[np.ndarray]:
+    def _make_training_datasets_pi(self, data_list: List[Data]) -> Tuple[List[np.ndarray], List[np.ndarray]]:
         """
-        function to make pions more photon-like (applying some selection)
+        function to select pions more photon-like (applying some selection)
+        and store pions in lists of LCs
         """
 
         # loop over files in data list
-        survived_evt_list = []
+        pi_pholike_evt_list = [] #list of LC for photon-like pions
+        pi_pilike_evt_list = [] #list of LC for not photon-like pions
+
         for i_file in data_list:
             # loop over all events in one file
             for i_evt in i_file:
@@ -53,10 +58,6 @@ class PhoPiDataset(Dataset):
                 # - len(np.unique(LCmatrix[LCmatrix[:,5] < 27][:,5])): count the number of unique layers
                 nlayers = len(np.unique(LCmatrix[LCmatrix[:,5] < 27][:,5]))
 
-                # then require to have at least 10 layers in CEE
-                if nlayers < 10:
-                    continue
-
                 # --- select only events with 70% energy in the CEE
                 # consider CEE limit: layer 27 is the first layer of CEH
                 # if layer numbering starts from 1
@@ -67,15 +68,16 @@ class PhoPiDataset(Dataset):
                 # - np.sum(LCmatrix[:,3]): sum of energy of all LCs
                 fracCEE = np.sum(LCmatrix[LCmatrix[:,5]< 27][:,3])/np.sum(LCmatrix[:,3])
 
-                # then require to have at least 70% of energy in CEE
-                if fracCEE < 0.7:
 
-                    continue
+                # then require to have at least 10 layers in CEE
+                # and to have at least 70% of energy in CEE
+                if (nlayers < 10) and (fracCEE < 0.7):
+                    pi_pholike_evt_list.append(LCmatrix)
+                else:
+                    pi_pilike_evt_list.append(LCmatrix)
 
-                # Whatever gets here has survived the selection
-                survived_evt_list.append(LCmatrix)
 
-        return survived_evt_list
+        return pi_pholike_evt_list, pi_pilike_evt_list
 
 
     def prepare_data(self) -> 'PhoPiDataset':
@@ -86,19 +88,20 @@ class PhoPiDataset(Dataset):
 
         # Select pions
         pi_data = openFiles(self.pi_dir)
-        pi_data = self._make_training_datasets_pi(pi_data)
-        pi_labels = [0] * len(pi_data)
+        pi_data_pholike, pi_data_pilike = self._make_training_datasets_pi(pi_data)
+        pi_labels = [0] * (len(pi_data_pholike) + len(pi_data_pilike)) #FIXME assign different labels to pholike and pilike (maybe not)
 
         # Save the data
-        self.data = pho_data + pi_data
+        self.data = pho_data + pi_data_pholike + pi_data_pilike # this is a list of tensors (of LCs)
         self.labels = pho_labels + pi_labels
         self.prepared = True
 
         # Save max shape
-        max_shape = max([i.shape[0] for i in self.data])
+        #max_shape = max([i.shape[0] for i in self.data])
+        max_shape = self.num_LC
 
         # Pad each entry to the max shape
-        self.data = [np.pad(i, ((0, max_shape - i.shape[0]), (0, 0))) for i in self.data]
+        #self.data = [np.pad(i, ((0, max_shape - i.shape[0]), (0, 0))) for i in self.data] #FIXME : this is not working, understand how to cut tensors of LCs to max 150 lines, and if they are shorter, pad with zeros -> see how Shamik does it in his code
 
         # To select the data later...
         # pho = self.data[self.labels == 1]
