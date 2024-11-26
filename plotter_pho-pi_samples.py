@@ -59,7 +59,8 @@ if __name__ == "__main__" :
 
 
     ## input files photons
-    inpath_pho = '/grid_mnt/data__data.polcms/cms/sghosh/NEWPID_TICLDUMPER_DATA/ntup_pho_18082024/'
+    # inpath_pho = '/grid_mnt/data__data.polcms/cms/sghosh/NEWPID_TICLDUMPER_DATA/ntup_pho_18082024/'
+    inpath_pho = '/grid_mnt/data__data.polcms/cms/sghosh/NEWPID_TICLDUMPER_DATA/S2Rmin_pho2to15_27092024/' # low pt pho 2-15 GeV
     data_list_pho = openFiles(inpath_pho, desc='Loading photon files')
 
     ## input files pions
@@ -110,11 +111,11 @@ if __name__ == "__main__" :
 
     ### --- checks for training samples
 
-    print('checking early showering pions')
-    plot_showerExtCEE(data_list_pi, out_dir)
+    # print('checking early showering pions')
+    # plot_showerExtCEE(data_list_pi, out_dir)
 
-    print('checking pions with enough energy in CEE')
-    plot_enFracCEE(data_list_pi, out_dir)
+    # print('checking pions with enough energy in CEE')
+    # plot_enFracCEE(data_list_pi, out_dir)
 
-    print('checking pions with enough energy in CEE and shower extension')
-    plot_traincheck_all(data_list_pi, out_dir)
+    # print('checking pions with enough energy in CEE and shower extension')
+    # plot_traincheck_all(data_list_pi, out_dir)
