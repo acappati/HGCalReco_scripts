@@ -31,92 +31,79 @@ def dogunmatrix(data_list: List[Data]) -> Tensor:
         for i_evt in i_file:
             gun_matrix.append(i_evt.gun_feat.numpy())
 
+    gun_matrix = np.vstack(gun_matrix)
+
     return gun_matrix
 
 
 
 def doGunPlots(data_dict: Dict[str, List[Data]],
-               out_dir: str) -> None:
+               out_dir: str,
+               norm: bool = True) -> None:
     '''
     function to plot features of the gun
     trkguneta,trkgunphi,trkgunen : Gun properties eta,phi,energy
     '''
 
     # take matrix of gun properties
-    matrix_list = []
+    matrix_dict = {}
     for key in data_dict:
         gun_matrix = dogunmatrix(data_dict[key])
-        matrix_list.append(gun_matrix)
+        matrix_dict[key] = gun_matrix
 
-        gun_matrix = np.vstack(gun_matrix)
         print(key, gun_matrix.shape)
 
+    print(matrix_dict.keys())
 
 
+    if norm:
+        nameAppendix = '_w_norm'
+    else:
+        nameAppendix = '_wo_norm'
 
 
-    # # pions
-    # gun_matrix_pi = []
-    # for i_file in data_list_pi:
-    #     for i_evt in i_file:
-    #         gun_matrix_pi.append(i_evt.gun_feat.numpy())
+    # --- plot gun features
 
-    # gun_matrix_pi = np.vstack(gun_matrix_pi)
-    # print(gun_matrix_pi.shape)
+    # plot total energy
+    fig, axs = plt.subplots(figsize=(8,6), layout="constrained")
 
-    # # photons
-    # gun_matrix_pho = []
-    # for i_file in data_list_pho:
-    #     for i_evt in i_file:
-    #         gun_matrix_pho.append(i_evt.gun_feat.numpy())
+    for key, value in matrix_dict.items():
+        axs.hist(value[:,3], bins=120, range=(0.,1200.),
+                 density=norm, histtype='step', label=key)
+    axs.legend()
+    axs.set_xlabel('total energy')
+    axs.set_ylabel('# trk')
 
-    # gun_matrix_pho = np.vstack(gun_matrix_pho)
-    # print(gun_matrix_pho.shape)
+    plotname = 'gun_energy' + nameAppendix + '.png'
+    plt.savefig(os.path.join(out_dir, plotname)) #save plot
+    plt.close(fig)
 
-    # # plot gun features
-    # fig, axs = plt.subplots(3, 2, figsize=(20,20), dpi=80, tight_layout=True)
-    # axs.flatten()
-    # # plot eta
-    # axs.flatten()[0].hist(gun_matrix_pi[:,0], bins=50, range=(1.2,3.2),
-    #             density=True, color='green', alpha=0.4, label=r'$\pi$')
-    # axs.flatten()[0].hist(gun_matrix_pho[:,0], bins=50, range=(1.2,3.2),
-    #             density=True, color='orange', alpha=0.4, label=r'$\gamma$')
-    # axs.flatten()[0].legend()
-    # axs.flatten()[0].set_xlabel('eta')
-    # axs.flatten()[0].set_ylabel('# trk')
+
+    # plot eta
+    fig, axs = plt.subplots(figsize=(8,6), layout="constrained")
+
+    for key, value in matrix_dict.items():
+        axs.hist(value[:,0], bins=50, range=(1.2,3.2),
+                 density=norm, histtype='step', label=key)
+    axs.legend()
+    axs.set_xlabel('eta')
+    axs.set_ylabel('# trk')
+
+    plotname = 'gun_eta' + nameAppendix + '.png'
+    plt.savefig(os.path.join(out_dir, plotname)) #save plot
+    plt.close(fig)
+
+
     # # plot phi
-    # axs.flatten()[1].hist(gun_matrix_pi[:,1], bins=50, range=(-4.,4.),
-    #             density=True, color='green', alpha=0.4, label=r'$\pi$')
-    # axs.flatten()[1].hist(gun_matrix_pho[:,1], bins=50, range=(-4.,4.),
-    #             density=True, color='orange', alpha=0.4, label=r'$\gamma$')
-    # axs.flatten()[1].legend()
-    # axs.flatten()[1].set_xlabel('phi')
-    # axs.flatten()[1].set_ylabel('# trk')
-    # # plot energy in EM part of HGCal
-    # axs.flatten()[2].hist(gun_matrix_pi[:,2], bins=50, range=(0.,1200.),
-    #             density=True, color='green', alpha=0.4, label=r'$\pi$')
-    # axs.flatten()[2].hist(gun_matrix_pho[:,2], bins=50, range=(0.,1200.),
-    #             density=True, color='orange', alpha=0.4, label=r'$\gamma$')
-    # axs.flatten()[2].legend()
-    # axs.flatten()[2].set_xlabel('energy in CEE')
-    # axs.flatten()[2].set_ylabel('# trk')
-    # # plot total energy
-    # axs.flatten()[3].hist(gun_matrix_pi[:,3], bins=50, range=(0.,1200.),
-    #             density=True, color='green', alpha=0.4, label=r'$\pi$')
-    # axs.flatten()[3].hist(gun_matrix_pho[:,3], bins=50, range=(0.,1200.),
-    #             density=True, color='orange', alpha=0.4, label=r'$\gamma$')
-    # axs.flatten()[3].legend()
-    # axs.flatten()[3].set_xlabel('total energy')
-    # axs.flatten()[3].set_ylabel('# trk')
-    # # plot ratio
-    # axs.flatten()[4].hist(gun_matrix_pi[:,4], bins=50, range=(0.,5.),
-    #             density=True, color='green', alpha=0.4, label=r'$\pi$')
-    # axs.flatten()[4].hist(gun_matrix_pho[:,4], bins=50, range=(0.,5.),
-    #             density=True, color='orange', alpha=0.4, label=r'$\gamma$')
-    # axs.flatten()[4].legend()
-    # axs.flatten()[4].set_xlabel('ratio')
-    # axs.flatten()[4].set_ylabel('# trk')
+    fig, axs = plt.subplots(figsize=(8,6), layout="constrained")
 
+    for key, value in matrix_dict.items():
+        axs.hist(value[:,1], bins=50, range=(-4.,4.),
+                 density=norm, histtype='step', label=key)
+    axs.legend()
+    axs.set_xlabel('phi')
+    axs.set_ylabel('# trk')
 
-    # plt.savefig(os.path.join(out_dir, 'gunFeats.png')) #save plot
-    # plt.close(fig)
+    plotname = 'gun_phi' + nameAppendix + '.png'
+    plt.savefig(os.path.join(out_dir, plotname)) #save plot
+    plt.close(fig)
