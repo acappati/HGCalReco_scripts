@@ -182,7 +182,7 @@ def doHisto(data_dict: Dict[str, List[Data]],
         # add a box containing the eta range
         axs1.flatten()[cat].text(
             0.7,
-            0.6,
+            0.2,
             eta_bin_str[cat],
             transform=axs1.flatten()[cat].transAxes,
             fontsize=16,
@@ -216,7 +216,7 @@ def doHisto(data_dict: Dict[str, List[Data]],
         # add a box containing the eta range
         axs2.flatten()[cat].text(
             0.7,
-            0.6,
+            0.2,
             eta_bin_str[cat],
             transform=axs2.flatten()[cat].transAxes,
             fontsize=16,
@@ -250,7 +250,7 @@ def doHisto(data_dict: Dict[str, List[Data]],
         # add a box containing the eta range
         axs3.flatten()[cat].text(
             0.7,
-            0.6,
+            0.2,
             eta_bin_str[cat],
             transform=axs3.flatten()[cat].transAxes,
             fontsize=16,
@@ -285,7 +285,7 @@ def doHisto(data_dict: Dict[str, List[Data]],
         # add a box containing the eta range
         axs3.flatten()[cat].text(
             0.7,
-            0.6,
+            0.2,
             eta_bin_str[cat],
             transform=axs3.flatten()[cat].transAxes,
             fontsize=16,
@@ -320,7 +320,7 @@ def doHisto(data_dict: Dict[str, List[Data]],
         # add a box containing the eta range
         axs3.flatten()[cat].text(
             0.7,
-            0.6,
+            0.2,
             eta_bin_str[cat],
             transform=axs3.flatten()[cat].transAxes,
             fontsize=16,
@@ -354,7 +354,7 @@ def doHisto(data_dict: Dict[str, List[Data]],
         # add a box containing the energy range
         axs4.flatten()[cat].text(
             0.6,
-            0.6,
+            0.3,
             en_bin_str[cat],
             transform=axs4.flatten()[cat].transAxes,
             fontsize=14,
@@ -388,7 +388,7 @@ def doHisto(data_dict: Dict[str, List[Data]],
         # add a box containing the energy range
         axs5.flatten()[cat].text(
             0.6,
-            0.6,
+            0.3,
             en_bin_str[cat],
             transform=axs5.flatten()[cat].transAxes,
             fontsize=14,
@@ -422,7 +422,7 @@ def doHisto(data_dict: Dict[str, List[Data]],
         # add a box containing the energy range
         axs6.flatten()[cat].text(
             0.6,
-            0.6,
+            0.3,
             en_bin_str[cat],
             transform=axs6.flatten()[cat].transAxes,
             fontsize=14,
@@ -457,7 +457,7 @@ def doHisto(data_dict: Dict[str, List[Data]],
         # add a box containing the energy range
         axs6.flatten()[cat].text(
             0.6,
-            0.6,
+            0.3,
             en_bin_str[cat],
             transform=axs6.flatten()[cat].transAxes,
             fontsize=14,
@@ -492,7 +492,7 @@ def doHisto(data_dict: Dict[str, List[Data]],
         # add a box containing the energy range
         axs6.flatten()[cat].text(
             0.6,
-            0.6,
+            0.3,
             en_bin_str[cat],
             transform=axs6.flatten()[cat].transAxes,
             fontsize=14,
