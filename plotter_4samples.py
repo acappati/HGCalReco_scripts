@@ -90,49 +90,8 @@ if __name__ == "__main__" :
 
     ### --- standard plots
 
-    # print('doing histos...')
-    # doHisto(data_list_pho, data_list_pi, out_dir, norm=False)
-    # doHisto(data_list_pho, data_list_pi, out_dir, norm=True)
-
-    # print('doing ENprofile...')
-    # doENprofile(data_list_pho, data_list_pi, out_dir)
+    print('doing histos...')
+    doHisto(data_dict, out_dir, norm=True)
 
     print('doing Gun plots...')
-    doGunPlots(data_dict, out_dir)
-
-    # print('doing mult plot...')
-    # doMultiplicityPlots(data_list_pho, data_list_pi, out_dir)
-
-    # print('doing mult plot per category...')
-    # doMultiplicityPlots_cat(data_list_pho, data_list_pi, out_dir)
-
-    # print('doing visualization plots...')
-    # doVisualizationPlots(data_list_pho, data_list_pi, out_dir)
-
-    # print('plotting fraction in CEH ...')
-    # plotFractionCEH(data_list_pho, data_list_pi, out_dir)
-
-
-    ### --- checks for special events
-
-    # ## CAUTION: it produces a loooot of plots
-    # print('checking shower extension...')
-    # checkShowerExt(data_list_pho, out_dir)
-
-    # ## CAUTION: it produces a loooot of plots
-    # print('checking fraction CEH for photons...')
-    # checkFractionCEH(data_list_pho, out_dir, 'orange')
-    # print('checking fraction CEH for pions...')
-    # checkFractionCEH(data_list_pi, out_dir, 'green')
-
-
-    ### --- checks for training samples
-
-    # print('checking early showering pions')
-    # plot_showerExtCEE(data_list_pi, out_dir)
-
-    # print('checking pions with enough energy in CEE')
-    # plot_enFracCEE(data_list_pi, out_dir)
-
-    # print('checking pions with enough energy in CEE and shower extension')
-    # plot_traincheck_all(data_list_pi, out_dir)
+    doGunPlots(data_dict, out_dir, norm=True)

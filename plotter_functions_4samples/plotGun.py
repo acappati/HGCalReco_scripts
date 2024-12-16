@@ -73,6 +73,7 @@ def doGunPlots(data_dict: Dict[str, List[Data]],
     axs.legend()
     axs.set_xlabel('total energy')
     axs.set_ylabel('# trk')
+    axs.set_yscale('log')
 
     plotname = 'gun_energy' + nameAppendix + '.png'
     plt.savefig(os.path.join(out_dir, plotname)) #save plot
