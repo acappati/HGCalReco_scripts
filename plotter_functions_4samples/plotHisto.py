@@ -130,16 +130,26 @@ def doHisto(data_dict: Dict[str, List[Data]],
 
     # hist of min_clusL
     for key, value in min_clusL_dict.items():
-        axs[0].hist(value, bins=50, range=(0, 50),
-                    density=norm, histtype='step', label=key)
+        axs[0].hist(value,
+                    bins=50,
+                    range=(0, 50),
+                    density=norm,
+                    histtype='step',
+                    linewidth=2,
+                    label=key)
     axs[0].legend()
     axs[0].set_xlabel('min clusL')
     axs[0].set_ylabel('# trk')
 
     # hist of max_clusL
     for key, value in max_clusL_dict.items():
-        axs[1].hist(value, bins=50, range=(0, 50),
-                    density=norm, histtype='step', label=key)
+        axs[1].hist(value,
+                    bins=50,
+                    range=(0, 50),
+                    density=norm,
+                    histtype='step',
+                    linewidth=2,
+                    label=key)
     axs[1].legend()
     axs[1].set_xlabel('max clusL')
     axs[1].set_ylabel('# trk')
@@ -151,8 +161,13 @@ def doHisto(data_dict: Dict[str, List[Data]],
     # hist of shower extension - inclusive
     fig0, axs0 = plt.subplots(1, 1, figsize=(20,10), dpi=80, tight_layout=True)
     for key, value in extShower_dict.items():
-        axs0.hist(value, bins=50, range=(0, 50),
-                    density=norm, histtype='step', label=key)
+        axs0.hist(value,
+                  bins=50,
+                  range=(0, 50),
+                  density=norm,
+                  histtype='step',
+                  linewidth=2,
+                  label=key)
     axs0.legend()
     axs0.set_xlabel('shower extension')
     axs0.set_ylabel('# trk')
@@ -170,12 +185,12 @@ def doHisto(data_dict: Dict[str, List[Data]],
     for cat in range(n_eta_cat):
         for key in min_clusL_cat_eta_dict[cat]:
             axs1.flatten()[cat].hist(min_clusL_cat_eta_dict[cat][key],
-                                    bins=50,
-                                    range=(0, 50),
-                                    density=norm,
-                                    histtype='step',
-                                    label=key
-                                    )
+                                     bins=50,
+                                     range=(0, 50),
+                                     density=norm,
+                                     histtype='step',
+                                     linewidth=2,
+                                     label=key)
         axs1.flatten()[cat].legend()
         axs1.flatten()[cat].set_xlabel('min clusL')
         axs1.flatten()[cat].set_ylabel('# trk')
@@ -204,12 +219,12 @@ def doHisto(data_dict: Dict[str, List[Data]],
     for cat in range(n_eta_cat):
         for key in max_clusL_cat_eta_dict[cat]:
             axs2.flatten()[cat].hist(max_clusL_cat_eta_dict[cat][key],
-                                    bins=50,
-                                    range=(0, 50),
-                                    density=norm,
-                                    histtype='step',
-                                    label=key
-                                    )
+                                     bins=50,
+                                     range=(0, 50),
+                                     density=norm,
+                                     histtype='step',
+                                     linewidth=2,
+                                     label=key)
         axs2.flatten()[cat].legend()
         axs2.flatten()[cat].set_xlabel('max clusL')
         axs2.flatten()[cat].set_ylabel('# trk')
@@ -238,12 +253,12 @@ def doHisto(data_dict: Dict[str, List[Data]],
     for cat in range(n_eta_cat):
         for key in extShower_cat_eta_dict[cat]:
             axs3.flatten()[cat].hist(extShower_cat_eta_dict[cat][key],
-                                    bins=50,
-                                    range=(0, 50),
-                                    density=norm,
-                                    histtype='step',
-                                    label=key
-                                    )
+                                     bins=50,
+                                     range=(0, 50),
+                                     density=norm,
+                                     histtype='step',
+                                     linewidth=2,
+                                     label=key)
         axs3.flatten()[cat].legend()
         axs3.flatten()[cat].set_xlabel('shower extension')
         axs3.flatten()[cat].set_ylabel('# trk')
@@ -272,12 +287,12 @@ def doHisto(data_dict: Dict[str, List[Data]],
     for cat in range(n_eta_cat):
         for key in showerEn_cat_eta_dict[cat]:
             axs3.flatten()[cat].hist(showerEn_cat_eta_dict[cat][key],
-                                    bins=55,
-                                    range=(0, 1100),
-                                    density=norm,
-                                    histtype='step',
-                                    label=key
-                                    )
+                                     bins=55,
+                                     range=(0, 1100),
+                                     density=norm,
+                                     histtype='step',
+                                     linewidth=2,
+                                     label=key)
         axs3.flatten()[cat].legend()
         axs3.flatten()[cat].set_xlabel('shower energy')
         axs3.flatten()[cat].set_ylabel('# trk')
@@ -307,12 +322,12 @@ def doHisto(data_dict: Dict[str, List[Data]],
     for cat in range(n_eta_cat):
         for key in showerEta_cat_eta_dict[cat]:
             axs3.flatten()[cat].hist(showerEta_cat_eta_dict[cat][key],
-                                    bins=48,
-                                    range=(1.5, 3.1),
-                                    density=norm,
-                                    histtype='step',
-                                    label=key
-                                    )
+                                     bins=48,
+                                     range=(1.5, 3.1),
+                                     density=norm,
+                                     histtype='step',
+                                     linewidth=2,
+                                     label=key)
         axs3.flatten()[cat].legend()
         axs3.flatten()[cat].set_xlabel('shower eta')
         axs3.flatten()[cat].set_ylabel('# trk')
@@ -342,12 +357,12 @@ def doHisto(data_dict: Dict[str, List[Data]],
     for cat in range(n_en_cat):
         for key in min_clusL_cat_en_dict[cat]:
             axs4.flatten()[cat].hist(min_clusL_cat_en_dict[cat][key],
-                                    bins=50,
-                                    range=(0, 50),
-                                    density=norm,
-                                    histtype='step',
-                                    label=key
-                                    )
+                                     bins=50,
+                                     range=(0, 50),
+                                     density=norm,
+                                     histtype='step',
+                                     linewidth=2,
+                                     label=key)
         axs4.flatten()[cat].legend()
         axs4.flatten()[cat].set_xlabel('min clusL')
         axs4.flatten()[cat].set_ylabel('# trk')
@@ -376,12 +391,12 @@ def doHisto(data_dict: Dict[str, List[Data]],
     for cat in range(n_en_cat):
         for key in max_clusL_cat_en_dict[cat]:
             axs5.flatten()[cat].hist(max_clusL_cat_en_dict[cat][key],
-                                    bins=50,
-                                    range=(0, 50),
-                                    density=norm,
-                                    histtype='step',
-                                    label=key
-                                    )
+                                     bins=50,
+                                     range=(0, 50),
+                                     density=norm,
+                                     histtype='step',
+                                     linewidth=2,
+                                     label=key)
         axs5.flatten()[cat].legend()
         axs5.flatten()[cat].set_xlabel('max clusL')
         axs5.flatten()[cat].set_ylabel('# trk')
@@ -410,12 +425,12 @@ def doHisto(data_dict: Dict[str, List[Data]],
     for cat in range(n_en_cat):
         for key in extShower_cat_en_dict[cat]:
             axs6.flatten()[cat].hist(extShower_cat_en_dict[cat][key],
-                                    bins=50,
-                                    range=(0, 50),
-                                    density=norm,
-                                    histtype='step',
-                                    label=key
-                                    )
+                                     bins=50,
+                                     range=(0, 50),
+                                     density=norm,
+                                     histtype='step',
+                                     linewidth=2,
+                                     label=key)
         axs6.flatten()[cat].legend()
         axs6.flatten()[cat].set_xlabel('shower extension')
         axs6.flatten()[cat].set_ylabel('# trk')
@@ -444,12 +459,12 @@ def doHisto(data_dict: Dict[str, List[Data]],
     for cat in range(n_en_cat):
         for key in showerEn_cat_en_dict[cat]:
             axs6.flatten()[cat].hist(showerEn_cat_en_dict[cat][key],
-                                    bins=55,
-                                    range=(0, 1100),
-                                    density=norm,
-                                    histtype='step',
-                                    label=key
-                                    )
+                                     bins=55,
+                                     range=(0, 1100),
+                                     density=norm,
+                                     histtype='step',
+                                     linewidth=2,
+                                     label=key)
         axs6.flatten()[cat].legend()
         axs6.flatten()[cat].set_xlabel('shower energy')
         axs6.flatten()[cat].set_ylabel('# trk')
@@ -479,12 +494,12 @@ def doHisto(data_dict: Dict[str, List[Data]],
     for cat in range(n_en_cat):
         for key in showerEta_cat_en_dict[cat]:
             axs6.flatten()[cat].hist(showerEta_cat_en_dict[cat][key],
-                                    bins=48,
-                                    range=(1.5, 3.1),
-                                    density=norm,
-                                    histtype='step',
-                                    label=key
-                                    )
+                                     bins=48,
+                                     range=(1.5, 3.1),
+                                     density=norm,
+                                     histtype='step',
+                                     linewidth=2,
+                                     label=key)
         axs6.flatten()[cat].legend()
         axs6.flatten()[cat].set_xlabel('shower eta')
         axs6.flatten()[cat].set_ylabel('# trk')

@@ -23,7 +23,7 @@ mpl.use('agg')
 
 def dogunmatrix(data_list: List[Data]) -> Tensor:
     '''
-    function that reads
+    function that reads data and returns the matrix
     '''
 
     gun_matrix = []
@@ -69,7 +69,7 @@ def doGunPlots(data_dict: Dict[str, List[Data]],
 
     for key, value in matrix_dict.items():
         axs.hist(value[:,3], bins=120, range=(0.,1200.),
-                 density=norm, histtype='step', label=key)
+                 density=norm, histtype='step', linewidth=2, label=key)
     axs.legend()
     axs.set_xlabel('total energy')
     axs.set_ylabel('# trk')
@@ -85,7 +85,7 @@ def doGunPlots(data_dict: Dict[str, List[Data]],
 
     for key, value in matrix_dict.items():
         axs.hist(value[:,0], bins=50, range=(1.2,3.2),
-                 density=norm, histtype='step', label=key)
+                 density=norm, histtype='step', linewidth=2, label=key)
     axs.legend()
     axs.set_xlabel('eta')
     axs.set_ylabel('# trk')
@@ -100,7 +100,7 @@ def doGunPlots(data_dict: Dict[str, List[Data]],
 
     for key, value in matrix_dict.items():
         axs.hist(value[:,1], bins=50, range=(-4.,4.),
-                 density=norm, histtype='step', label=key)
+                 density=norm, histtype='step', linewidth=2, label=key)
     axs.legend()
     axs.set_xlabel('phi')
     axs.set_ylabel('# trk')

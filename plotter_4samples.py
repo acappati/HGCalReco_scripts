@@ -95,3 +95,7 @@ if __name__ == "__main__" :
 
     print('doing Gun plots...')
     doGunPlots(data_dict, out_dir, norm=True)
+
+    #TODO
+    #print('plot baricenter...')
+    #doBarycenter(data_dict, out_dir, norm=True)
