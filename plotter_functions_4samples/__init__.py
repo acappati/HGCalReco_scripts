@@ -6,6 +6,7 @@ This module contains the functions that are used to plot quantities of interest
 
 # import the functions
 from .category import _divide_en_categ, _divide_eta_categ
+from .plotBarycenter import doBarycenter
 from .plotGun import doGunPlots
 from .plotHisto import doHisto
 
@@ -17,5 +18,6 @@ __url__ = ''
 __all__ = ['_divide_eta_categ',
            '_divide_en_categ',
            'doGunPlots',
-           'doHisto'
+           'doHisto',
+           'doBarycenter'
         ]

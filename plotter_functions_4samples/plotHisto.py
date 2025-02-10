@@ -39,21 +39,21 @@ def doHisto(data_dict: Dict[str, List[Data]],
     else:
         nameAppendix = '_wo_norm'
 
-    ### PHOTONS
+    # define dictionaries for each variable
     min_clusL_dict = {k: [] for k in data_dict.keys()} # dict of all min_clusL
     max_clusL_dict = {k: [] for k in data_dict.keys()} # dict of all max_clusL
     extShower_dict = {k: [] for k in data_dict.keys()} # dict for shower ext
     showerEn_dict  = {k: [] for k in data_dict.keys()} # dict for energy
     showerEta_dict = {k: [] for k in data_dict.keys()} # dict for eta
 
-    # define dictionaries of min_clusL and max_clusL for each eta bin
+    # define dictionaries for each eta bin
     min_clusL_cat_eta_dict = [{k: [] for k in data_dict.keys()} for _ in range(n_eta_cat)]
     max_clusL_cat_eta_dict = [{k: [] for k in data_dict.keys()} for _ in range(n_eta_cat)]
     extShower_cat_eta_dict = [{k: [] for k in data_dict.keys()} for _ in range(n_eta_cat)]
     showerEn_cat_eta_dict  = [{k: [] for k in data_dict.keys()} for _ in range(n_eta_cat)]
     showerEta_cat_eta_dict = [{k: [] for k in data_dict.keys()} for _ in range(n_eta_cat)]
 
-    # define dictionaries of min_clusL and max_clusL for each pT bin
+    # define dictionaries for each pT bin
     min_clusL_cat_en_dict = [{k: [] for k in data_dict.keys()} for _ in range(n_en_cat)]
     max_clusL_cat_en_dict = [{k: [] for k in data_dict.keys()} for _ in range(n_en_cat)]
     extShower_cat_en_dict = [{k: [] for k in data_dict.keys()} for _ in range(n_en_cat)]

@@ -90,12 +90,11 @@ if __name__ == "__main__" :
 
     ### --- standard plots
 
-    print('doing histos...')
-    doHisto(data_dict, out_dir, norm=True)
+    #print('doing histos...')
+    #doHisto(data_dict, out_dir, norm=True)
 
-    print('doing Gun plots...')
-    doGunPlots(data_dict, out_dir, norm=True)
+    #print('doing Gun plots...')
+    #doGunPlots(data_dict, out_dir, norm=True)
 
-    #TODO
-    #print('plot baricenter...')
-    #doBarycenter(data_dict, out_dir, norm=True)
+    print('plot barycenter...')
+    doBarycenter(data_dict, out_dir, norm=True)
